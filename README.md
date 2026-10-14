@@ -50,12 +50,18 @@ It gives workers a private, offline tool to track their overtime hours, preview 
 - **Cutoff Filters**: Filter by **Current Cutoff**, **Previous Cutoff**, or **All Records**.
 - **Totals Summary**: Instant sum of total hours and total payable amount.
 
-### 💾 4. Safe JSON Backup & Restore
+### ⚙️ 4. Universal & Customizable Payroll Cutoff Schedule
+- **Flexible Pay Frequencies**: Fully supports **Semi-Monthly (2x/month)**, **Monthly (1x/month)**, and **Weekly** payroll cycles.
+- **Custom Cutoff Days**: Set any day configuration (e.g. traditional 1st–15th/16th–End, BPO/corporate 11th–25th/26th–10th, or custom dates).
+- **Live Schedule Preview**: Real-time confirmation box showing active cutoff dates, days left, and estimated payday before saving.
+- **Whole-App Synchronization**: Dashboard, DTR Sheet filters, Trend Charts, and Widget automatically adapt to your chosen schedule.
+
+### 💾 5. Safe JSON Backup & Restore
 - **Export Anywhere**: Export your complete history and settings into a clean JSON file to Google Drive, phone storage, or messaging apps.
 - **Import with Confidence**: Restore your data on a new phone with choice of **Merge with Existing** or **Replace All**.
 - **100% Offline & Private**: Zero cloud requirements, zero tracking, and no account signup. Your data stays strictly on your device.
 
-### 📲 5. Home Screen Glanceable Widget
+### 📲 6. Home Screen Glanceable Widget
 - Keep your current cutoff earnings and hours rendered pinned directly to your Android home screen without even launching the app.
 
 ---
