@@ -88,9 +88,20 @@ data class AppSettings(
     val currencySymbol: String = "₱",
     val defaultStartHour: Int = 17, // 5:00 PM
     val defaultStartMinute: Int = 0,
-    val reminderEnabled: Boolean = true,
+    val reminderEnabled: Boolean = false,
     val reminderHour: Int = 20, // 8:00 PM
-    val reminderMinute: Int = 0
+    val reminderMinute: Int = 0,
+    // Cutoff schedule configuration:
+    // frequency: "SEMI_MONTHLY", "MONTHLY", "WEEKLY"
+    val cutoffFrequency: String = "SEMI_MONTHLY",
+    // Semi-monthly: 1st cutoff ends on this day (e.g., 15)
+    val cutoffFirstEndDay: Int = 15,
+    // Semi-monthly: 2nd cutoff ends on this day (0 = end of month, or e.g. 10 if 26th-10th)
+    val cutoffSecondEndDay: Int = 0,
+    // Monthly: cutoff day (0 = end of month, or e.g. 25 for 26th-25th)
+    val cutoffMonthlyEndDay: Int = 0,
+    // Weekly: start day of week (Calendar.MONDAY = 2, Calendar.SUNDAY = 1, etc.)
+    val cutoffWeeklyStartDay: Int = java.util.Calendar.MONDAY
 ) {
     fun toJsonObject(): JSONObject {
         return JSONObject().apply {
@@ -101,6 +112,11 @@ data class AppSettings(
             put("reminderEnabled", reminderEnabled)
             put("reminderHour", reminderHour)
             put("reminderMinute", reminderMinute)
+            put("cutoffFrequency", cutoffFrequency)
+            put("cutoffFirstEndDay", cutoffFirstEndDay)
+            put("cutoffSecondEndDay", cutoffSecondEndDay)
+            put("cutoffMonthlyEndDay", cutoffMonthlyEndDay)
+            put("cutoffWeeklyStartDay", cutoffWeeklyStartDay)
         }
     }
 
@@ -111,9 +127,14 @@ data class AppSettings(
                 currencySymbol = json.optString("currencySymbol", "₱"),
                 defaultStartHour = json.optInt("defaultStartHour", 17),
                 defaultStartMinute = json.optInt("defaultStartMinute", 0),
-                reminderEnabled = json.optBoolean("reminderEnabled", true),
+                reminderEnabled = json.optBoolean("reminderEnabled", false),
                 reminderHour = json.optInt("reminderHour", 20),
-                reminderMinute = json.optInt("reminderMinute", 0)
+                reminderMinute = json.optInt("reminderMinute", 0),
+                cutoffFrequency = json.optString("cutoffFrequency", "SEMI_MONTHLY"),
+                cutoffFirstEndDay = json.optInt("cutoffFirstEndDay", 15),
+                cutoffSecondEndDay = json.optInt("cutoffSecondEndDay", 0),
+                cutoffMonthlyEndDay = json.optInt("cutoffMonthlyEndDay", 0),
+                cutoffWeeklyStartDay = json.optInt("cutoffWeeklyStartDay", java.util.Calendar.MONDAY)
             )
         }
     }

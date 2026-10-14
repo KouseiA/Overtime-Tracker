@@ -92,38 +92,18 @@ class OvertimeWidgetProvider : AppWidgetProvider() {
                 val currentMonth = now.get(Calendar.MONTH)
                 val currentDay = now.get(Calendar.DAY_OF_MONTH)
                 val maxDaysInMonth = now.getActualMaximum(Calendar.DAY_OF_MONTH)
-                val isFirstHalf = currentDay <= 15
-
-                val fullMonthFormat = SimpleDateFormat("MMMM", Locale.getDefault())
-                val fullMonthName = fullMonthFormat.format(now.time).uppercase(Locale.US)
-
-                val cutoffTitle: String
-
-                if (isFirstHalf) {
-                    val daysLeft = 15 - currentDay
-                    val daysText = if (daysLeft == 1) "1 DAY LEFT" else "$daysLeft DAYS LEFT"
-                    cutoffTitle = "$fullMonthName 1 – 15 · $daysText"
-                } else {
-                    val daysLeft = maxDaysInMonth - currentDay
-                    val daysText = if (daysLeft == 1) "1 DAY LEFT" else "$daysLeft DAYS LEFT"
-                    cutoffTitle = "$fullMonthName 16 – $maxDaysInMonth · $daysText"
-                }
+                val currentPeriod = com.example.ottracker.data.CutoffHelper.getCurrentCutoff(now.timeInMillis, settings)
+                val daysLeft = currentPeriod.daysRemaining
+                val daysText = if (daysLeft == 1) "1 DAY LEFT" else "$daysLeft DAYS LEFT"
+                val cutoffTitle = "${currentPeriod.title.uppercase(Locale.US)} · $daysText"
 
                 var cutoffHours = 0.0
                 var cutoffPay = 0.0
 
-                val recCal = Calendar.getInstance()
                 for (rec in records) {
-                    recCal.timeInMillis = rec.startTimeMillis
-                    if (recCal.get(Calendar.YEAR) == currentYear && recCal.get(Calendar.MONTH) == currentMonth) {
-                        val day = recCal.get(Calendar.DAY_OF_MONTH)
-                        if (isFirstHalf && day in 1..15) {
-                            cutoffHours += rec.durationHours
-                            cutoffPay += rec.totalPay
-                        } else if (!isFirstHalf && day >= 16) {
-                            cutoffHours += rec.durationHours
-                            cutoffPay += rec.totalPay
-                        }
+                    if (rec.startTimeMillis in currentPeriod.startMillis..currentPeriod.endMillis) {
+                        cutoffHours += rec.durationHours
+                        cutoffPay += rec.totalPay
                     }
                 }
 

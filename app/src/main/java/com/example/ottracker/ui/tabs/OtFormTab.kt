@@ -87,43 +87,20 @@ fun OtFormTab(
     // 0 = Current Cutoff, 1 = Previous Cutoff, 2 = All Records
     var selectedFilterIndex by remember { mutableIntStateOf(0) }
 
-    val now = Calendar.getInstance()
-    val currentMonth = now.get(Calendar.MONTH)
-    val currentYear = now.get(Calendar.YEAR)
-    val isFirstHalf = now.get(Calendar.DAY_OF_MONTH) <= 15
-
-    val filteredRecords = remember(records, selectedFilterIndex) {
-        // Reuse a single Calendar instance for all record comparisons to avoid allocation per record
-        val recCal = Calendar.getInstance()
+    val filteredRecords = remember(records, selectedFilterIndex, settings) {
+        val nowMillis = System.currentTimeMillis()
         when (selectedFilterIndex) {
             0 -> { // Current Cutoff
+                val currentPeriod = com.example.ottracker.data.CutoffHelper.getCurrentCutoff(nowMillis, settings)
                 records.filter { rec ->
-                    recCal.timeInMillis = rec.startTimeMillis
-                    val matchYear = recCal.get(Calendar.YEAR) == currentYear
-                    val matchMonth = recCal.get(Calendar.MONTH) == currentMonth
-                    val day = recCal.get(Calendar.DAY_OF_MONTH)
-                    if (isFirstHalf) {
-                        matchYear && matchMonth && day in 1..15
-                    } else {
-                        matchYear && matchMonth && day >= 16
-                    }
+                    rec.startTimeMillis in currentPeriod.startMillis..currentPeriod.endMillis
                 }.sortedBy { it.startTimeMillis }
             }
             1 -> { // Previous Cutoff
-                if (isFirstHalf) {
-                    val prevMonthCal = Calendar.getInstance().apply { add(Calendar.MONTH, -1) }
-                    val prevMonth = prevMonthCal.get(Calendar.MONTH)
-                    val prevYear = prevMonthCal.get(Calendar.YEAR)
-                    records.filter { rec ->
-                        recCal.timeInMillis = rec.startTimeMillis
-                        recCal.get(Calendar.YEAR) == prevYear && recCal.get(Calendar.MONTH) == prevMonth && recCal.get(Calendar.DAY_OF_MONTH) >= 16
-                    }.sortedBy { it.startTimeMillis }
-                } else {
-                    records.filter { rec ->
-                        recCal.timeInMillis = rec.startTimeMillis
-                        recCal.get(Calendar.YEAR) == currentYear && recCal.get(Calendar.MONTH) == currentMonth && recCal.get(Calendar.DAY_OF_MONTH) in 1..15
-                    }.sortedBy { it.startTimeMillis }
-                }
+                val prevPeriod = com.example.ottracker.data.CutoffHelper.getPreviousCutoff(nowMillis, settings)
+                records.filter { rec ->
+                    rec.startTimeMillis in prevPeriod.startMillis..prevPeriod.endMillis
+                }.sortedBy { it.startTimeMillis }
             }
             else -> records.sortedBy { it.startTimeMillis }
         }

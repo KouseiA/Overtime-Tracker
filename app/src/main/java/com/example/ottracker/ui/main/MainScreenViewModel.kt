@@ -130,58 +130,11 @@ class MainScreenViewModel(private val repository: OvertimeRepository) : ViewMode
         }.timeInMillis
 
         val monthNameFormat = SimpleDateFormat("MMM", Locale.getDefault())
-        val currentMonthName = monthNameFormat.format(now.time)
 
-        // Current cutoff metadata
-        val currentCutoffTitle: String
-        val currentPaydayText: String
-        val daysRemainingInCutoff: Int
-        val nextMonthName = monthNameFormat.format(
-            Calendar.getInstance().apply { add(Calendar.MONTH, 1) }.time
-        )
-
-        if (isFirstHalf) {
-            currentCutoffTitle = "$currentMonthName 1 – 15"
-            currentPaydayText = "Payday: $currentMonthName 20"
-            daysRemainingInCutoff = 15 - currentDay
-        } else {
-            currentCutoffTitle = "$currentMonthName 16 – $maxDaysInMonth"
-            currentPaydayText = "Payday: $nextMonthName 5"
-            daysRemainingInCutoff = maxDaysInMonth - currentDay
-        }
-
-        // Previous cutoff metadata
-        val prevCutoffTitle: String
-        val prevPaydayText: String
-        val prevMonthCal = Calendar.getInstance().apply { add(Calendar.MONTH, -1) }
-        val prevMonthName = monthNameFormat.format(prevMonthCal.time)
-        val prevMonthMaxDays = prevMonthCal.getActualMaximum(Calendar.DAY_OF_MONTH)
-        val prevMonthIndex = prevMonthCal.get(Calendar.MONTH)
-        val prevMonthYear = prevMonthCal.get(Calendar.YEAR)
-
-        if (isFirstHalf) {
-            prevCutoffTitle = "$prevMonthName 16 – $prevMonthMaxDays"
-            prevPaydayText = "Paid on: $currentMonthName 5"
-        } else {
-            prevCutoffTitle = "$currentMonthName 1 – 15"
-            prevPaydayText = "Paid on: $currentMonthName 20"
-        }
-
-        // ── Pre-compute 6-cutoff period keys for bucket lookup ───────────────
-        val cutoffPeriods = mutableListOf<Triple<Int, Int, Boolean>>()
-        var stepYear = currentYear
-        var stepMonth = currentMonth
-        var stepIsFirstHalf = isFirstHalf
-        for (i in 0 until 6) {
-            cutoffPeriods.add(Triple(stepYear, stepMonth, stepIsFirstHalf))
-            if (stepIsFirstHalf) {
-                if (stepMonth == 0) { stepMonth = 11; stepYear -= 1 } else { stepMonth -= 1 }
-                stepIsFirstHalf = false
-            } else {
-                stepIsFirstHalf = true
-            }
-        }
-        cutoffPeriods.reverse()
+        // ── Flexible Cutoff calculation via CutoffHelper ──────────────────────
+        val currentCutoffPeriod = com.example.ottracker.data.CutoffHelper.getCurrentCutoff(now.timeInMillis, settings)
+        val prevCutoffPeriod = com.example.ottracker.data.CutoffHelper.getPreviousCutoff(now.timeInMillis, settings)
+        val recentCutoffPeriods = com.example.ottracker.data.CutoffHelper.getRecentCutoffPeriods(6, settings, now.timeInMillis)
 
         // Pre-compute 6-month period keys
         data class MonthKey(val year: Int, val month: Int)
@@ -191,9 +144,8 @@ class MainScreenViewModel(private val repository: OvertimeRepository) : ViewMode
             monthPeriods.add(MonthKey(mCal.get(Calendar.YEAR), mCal.get(Calendar.MONTH)))
         }
 
-        // Initialize trend accumulators — only for the 6 periods we care about
-        val cutoffAccum = HashMap<String, DoubleArray>(12)
-        for ((y, m, fh) in cutoffPeriods) cutoffAccum["${y}_${m}_$fh"] = doubleArrayOf(0.0, 0.0)
+        // Initialize trend accumulators — 6 cutoff periods and 6 calendar months
+        val cutoffAccum = Array(recentCutoffPeriods.size) { doubleArrayOf(0.0, 0.0) }
         val monthAccum = HashMap<String, DoubleArray>(12)
         for (mk in monthPeriods) monthAccum["${mk.year}_${mk.month}"] = doubleArrayOf(0.0, 0.0)
 
@@ -212,45 +164,45 @@ class MainScreenViewModel(private val repository: OvertimeRepository) : ViewMode
             recCal.timeInMillis = rec.startTimeMillis
             val recYear = recCal.get(Calendar.YEAR)
             val recMonth = recCal.get(Calendar.MONTH)
-            val recDay = recCal.get(Calendar.DAY_OF_MONTH)
             val hours = rec.durationHours
             val pay = rec.totalPay
 
             totalH += hours
             totalP += pay
 
+            // Current & Previous Cutoff matching via precise time window
+            if (rec.startTimeMillis in currentCutoffPeriod.startMillis..currentCutoffPeriod.endMillis) {
+                cutoffHours += hours
+                cutoffPay += pay
+            }
+            if (rec.startTimeMillis in prevCutoffPeriod.startMillis..prevCutoffPeriod.endMillis) {
+                prevCutoffHours += hours
+                prevCutoffPay += pay
+            }
+
             // Week check
             if (rec.startTimeMillis in startOfWeekMillis until endOfWeekMillis) {
                 weekH += hours; weekP += pay
             }
 
-            if (recYear == currentYear) {
-                if (recMonth == currentMonth) {
-                    // Current cutoff
-                    if (isFirstHalf && recDay in 1..15) { cutoffHours += hours; cutoffPay += pay }
-                    else if (!isFirstHalf && recDay >= 16) { cutoffHours += hours; cutoffPay += pay }
-                    monthH += hours; monthP += pay
-                }
-                if (recCal.get(Calendar.DAY_OF_YEAR) == currentDayOfYear) {
-                    todayH += hours; todayP += pay
-                }
+            // Month check (calendar month)
+            if (recYear == currentYear && recMonth == currentMonth) {
+                monthH += hours; monthP += pay
             }
 
-            // Previous cutoff (single-pass instead of separate loop)
-            if (isFirstHalf) {
-                if (recYear == prevMonthYear && recMonth == prevMonthIndex && recDay >= 16) {
-                    prevCutoffHours += hours; prevCutoffPay += pay
-                }
-            } else {
-                if (recYear == currentYear && recMonth == currentMonth && recDay in 1..15) {
-                    prevCutoffHours += hours; prevCutoffPay += pay
-                }
+            // Today check
+            if (recYear == currentYear && recCal.get(Calendar.DAY_OF_YEAR) == currentDayOfYear) {
+                todayH += hours; todayP += pay
             }
 
-            // Bucket into cutoff trend (O(1) HashMap lookup instead of nested loop)
-            val recIsFirstHalf = recDay <= 15
-            cutoffAccum["${recYear}_${recMonth}_$recIsFirstHalf"]?.let { arr ->
-                arr[0] += hours; arr[1] += pay
+            // Bucket into cutoff trend periods
+            for (i in recentCutoffPeriods.indices) {
+                val period = recentCutoffPeriods[i]
+                if (rec.startTimeMillis in period.startMillis..period.endMillis) {
+                    cutoffAccum[i][0] += hours
+                    cutoffAccum[i][1] += pay
+                    break
+                }
             }
 
             // Bucket into monthly trend
@@ -259,20 +211,19 @@ class MainScreenViewModel(private val repository: OvertimeRepository) : ViewMode
             }
         }
 
-        // ── Build cutoff trend list from pre-accumulated buckets ─────────────
-        val cutoffTrends = cutoffPeriods.map { (y, m, firstHalf) ->
-            val tempCal = Calendar.getInstance().apply {
-                set(Calendar.YEAR, y); set(Calendar.MONTH, m); set(Calendar.DAY_OF_MONTH, 1)
-            }
-            val mName = monthNameFormat.format(tempCal.time)
-            val maxD = tempCal.getActualMaximum(Calendar.DAY_OF_MONTH)
-            val arr = cutoffAccum["${y}_${m}_$firstHalf"] ?: doubleArrayOf(0.0, 0.0)
-
+        // ── Build cutoff trend list from recentCutoffPeriods ───────────────────
+        val cutoffTrends = recentCutoffPeriods.mapIndexed { index, period ->
+            val arr = cutoffAccum[index]
             ChartBarData(
-                id = "c_${y}_${m}_$firstHalf",
-                label = if (firstHalf) "$mName 1" else "$mName 2",
-                subLabel = if (firstHalf) "1–15" else "16–$maxD",
-                fullTitle = if (firstHalf) "$mName 1–15, $y" else "$mName 16–$maxD, $y",
+                id = "c_$index",
+                label = period.title.substringBefore(" –").trim(),
+                subLabel = period.title.substringAfter("–").trim(),
+                fullTitle = period.title,
+                hours = arr[0],
+                pay = arr[1],
+                isCurrent = (index == recentCutoffPeriods.lastIndex)
+            )
+        }
                 hours = arr[0],
                 pay = arr[1],
                 isCurrent = (y == currentYear && m == currentMonth && firstHalf == isFirstHalf)
@@ -300,15 +251,15 @@ class MainScreenViewModel(private val repository: OvertimeRepository) : ViewMode
 
         return DashboardStats(
             currentCutoff = CutoffInfo(
-                title = currentCutoffTitle,
-                payday = currentPaydayText,
+                title = currentCutoffPeriod.title,
+                payday = currentCutoffPeriod.paydayText,
                 hours = cutoffHours,
                 pay = cutoffPay,
-                daysRemaining = daysRemainingInCutoff
+                daysRemaining = currentCutoffPeriod.daysRemaining
             ),
             previousCutoff = CutoffInfo(
-                title = prevCutoffTitle,
-                payday = prevPaydayText,
+                title = prevCutoffPeriod.title,
+                payday = prevCutoffPeriod.paydayText,
                 hours = prevCutoffHours,
                 pay = prevCutoffPay
             ),

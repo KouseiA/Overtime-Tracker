@@ -420,10 +420,13 @@ fun SettingsTab(
             }
         }
 
-        // 2. Cutoff Schedule Explanation Card
+        // 2. Interactive Payroll Cutoff Schedule Card
         item {
             NeoCard(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(18.dp)) {
+                Column(
+                    modifier = Modifier.padding(18.dp),
+                    verticalArrangement = Arrangement.spacedBy(14.dp)
+                ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             Icons.Default.CalendarToday,
@@ -432,35 +435,265 @@ fun SettingsTab(
                             modifier = Modifier.size(20.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "Payroll Cutoff Schedule",
-                            style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.Bold,
-                            color = onSurface
-                        )
+                        Column {
+                            Text(
+                                text = "Payroll Cutoff Schedule",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = onSurface
+                            )
+                            Text(
+                                text = "Customize your pay cycle and cutoff dates",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = onSurfaceVariant
+                            )
+                        }
                     }
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    // ── Frequency Selector Chips ─────────────────────────────
+                    Text(
+                        text = "Pay Frequency",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = onSurface
+                    )
 
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text("1st – 15th of the month", modifier = Modifier.weight(1f, fill = false), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold, color = onSurface)
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text("Paid on the 20th", style = MaterialTheme.typography.bodyMedium, color = onSurface, fontWeight = FontWeight.Bold)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        val frequencies = listOf(
+                            "SEMI_MONTHLY" to "2x / Mo",
+                            "MONTHLY" to "Monthly",
+                            "WEEKLY" to "Weekly"
+                        )
+                        frequencies.forEach { (freqKey, label) ->
+                            val isSelected = settings.cutoffFrequency.equals(freqKey, ignoreCase = true)
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .border(
+                                        width = if (isSelected) 2.dp else 1.dp,
+                                        color = if (isSelected) onSurface else outline,
+                                        shape = RoundedCornerShape(10.dp)
+                                    )
+                                    .background(
+                                        color = if (isSelected) GoldAccent else MaterialTheme.colorScheme.surfaceVariant,
+                                        shape = RoundedCornerShape(10.dp)
+                                    )
+                                    .clickable {
+                                        onSaveSettings(settings.copy(cutoffFrequency = freqKey))
+                                    }
+                                    .padding(vertical = 10.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = label,
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = if (isSelected) FontWeight.Black else FontWeight.SemiBold,
+                                    color = if (isSelected) Color.Black else onSurface
+                                )
+                            }
                         }
-                        HorizontalDivider(color = outline)
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text("16th – End of month", modifier = Modifier.weight(1f, fill = false), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold, color = onSurface)
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text("Paid on the 5th (next mo.)", style = MaterialTheme.typography.bodyMedium, color = onSurface, fontWeight = FontWeight.Bold)
+                    }
+
+                    // ── Frequency-Specific Inputs ────────────────────────────
+                    when (settings.cutoffFrequency.uppercase(Locale.US)) {
+                        "SEMI_MONTHLY" -> {
+                            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                                Text(
+                                    text = "Cutoff End Days (e.g., 15 & 0 for End of Month, or 25 & 10)",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = onSurfaceVariant
+                                )
+
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                                ) {
+                                    OutlinedTextField(
+                                        value = if (settings.cutoffFirstEndDay > 0) settings.cutoffFirstEndDay.toString() else "",
+                                        onValueChange = { str ->
+                                            val day = str.filter { it.isDigit() }.toIntOrNull() ?: 15
+                                            val valid = day.coerceIn(1, 28)
+                                            onSaveSettings(settings.copy(cutoffFirstEndDay = valid))
+                                        },
+                                        label = { Text("1st Cutoff End Day", color = onSurfaceVariant) },
+                                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                        modifier = Modifier.weight(1f),
+                                        singleLine = true,
+                                        shape = RoundedCornerShape(10.dp),
+                                        colors = OutlinedTextFieldDefaults.colors(
+                                            focusedBorderColor = onSurface,
+                                            unfocusedBorderColor = outline,
+                                            focusedTextColor = onSurface,
+                                            unfocusedTextColor = onSurface
+                                        )
+                                    )
+
+                                    OutlinedTextField(
+                                        value = if (settings.cutoffSecondEndDay == 0) "0" else settings.cutoffSecondEndDay.toString(),
+                                        onValueChange = { str ->
+                                            val day = str.filter { it.isDigit() }.toIntOrNull() ?: 0
+                                            val valid = day.coerceIn(0, 31)
+                                            onSaveSettings(settings.copy(cutoffSecondEndDay = valid))
+                                        },
+                                        label = { Text("2nd End (0=Last Day)", color = onSurfaceVariant) },
+                                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                        modifier = Modifier.weight(1f),
+                                        singleLine = true,
+                                        shape = RoundedCornerShape(10.dp),
+                                        colors = OutlinedTextFieldDefaults.colors(
+                                            focusedBorderColor = onSurface,
+                                            unfocusedBorderColor = outline,
+                                            focusedTextColor = onSurface,
+                                            unfocusedTextColor = onSurface
+                                        )
+                                    )
+                                }
+                            }
+                        }
+
+                        "MONTHLY" -> {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Text(
+                                    text = "Monthly Cutoff Day (0 = Last day of the calendar month)",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = onSurfaceVariant
+                                )
+
+                                OutlinedTextField(
+                                    value = if (settings.cutoffMonthlyEndDay == 0) "0" else settings.cutoffMonthlyEndDay.toString(),
+                                    onValueChange = { str ->
+                                        val day = str.filter { it.isDigit() }.toIntOrNull() ?: 0
+                                        val valid = day.coerceIn(0, 31)
+                                        onSaveSettings(settings.copy(cutoffMonthlyEndDay = valid))
+                                    },
+                                    label = { Text("Cutoff Day (0 = End of Month)", color = onSurfaceVariant) },
+                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                    modifier = Modifier.fillMaxWidth(),
+                                    singleLine = true,
+                                    shape = RoundedCornerShape(10.dp),
+                                    colors = OutlinedTextFieldDefaults.colors(
+                                        focusedBorderColor = onSurface,
+                                        unfocusedBorderColor = outline,
+                                        focusedTextColor = onSurface,
+                                        unfocusedTextColor = onSurface
+                                    )
+                                )
+                            }
+                        }
+
+                        "WEEKLY" -> {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Text(
+                                    text = "Week Starts On",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = onSurfaceVariant
+                                )
+
+                                val daysOfWeek = listOf(
+                                    Calendar.MONDAY to "Mon",
+                                    Calendar.TUESDAY to "Tue",
+                                    Calendar.WEDNESDAY to "Wed",
+                                    Calendar.THURSDAY to "Thu",
+                                    Calendar.FRIDAY to "Fri",
+                                    Calendar.SATURDAY to "Sat",
+                                    Calendar.SUNDAY to "Sun"
+                                )
+
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                ) {
+                                    daysOfWeek.forEach { (calDay, label) ->
+                                        val isSelected = settings.cutoffWeeklyStartDay == calDay
+                                        Box(
+                                            modifier = Modifier
+                                                .weight(1f)
+                                                .border(
+                                                    width = if (isSelected) 2.dp else 1.dp,
+                                                    color = if (isSelected) onSurface else outline,
+                                                    shape = RoundedCornerShape(8.dp)
+                                                )
+                                                .background(
+                                                    color = if (isSelected) GoldAccent else MaterialTheme.colorScheme.surfaceVariant,
+                                                    shape = RoundedCornerShape(8.dp)
+                                                )
+                                                .clickable {
+                                                    onSaveSettings(settings.copy(cutoffWeeklyStartDay = calDay))
+                                                }
+                                                .padding(vertical = 8.dp),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Text(
+                                                text = label,
+                                                style = MaterialTheme.typography.labelSmall,
+                                                fontWeight = if (isSelected) FontWeight.Black else FontWeight.Normal,
+                                                color = if (isSelected) Color.Black else onSurface
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // ── Real-Time Schedule Preview Box ───────────────────────
+                    val previewCurrent = com.example.ottracker.data.CutoffHelper.getCurrentCutoff(System.currentTimeMillis(), settings)
+                    val previewPrev = com.example.ottracker.data.CutoffHelper.getPreviousCutoff(System.currentTimeMillis(), settings)
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(1.dp, outline, RoundedCornerShape(12.dp))
+                            .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(12.dp))
+                            .padding(14.dp)
+                    ) {
+                        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "Active Cutoff Period",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = onSurfaceVariant
+                                )
+                                Text(
+                                    text = "${previewCurrent.daysRemaining} days left",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    color = onSurface
+                                )
+                            }
+                            Text(
+                                text = previewCurrent.title,
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Black,
+                                color = onSurface
+                            )
+                            Text(
+                                text = previewCurrent.paydayText,
+                                style = MaterialTheme.typography.bodySmall,
+                                fontWeight = FontWeight.SemiBold,
+                                color = onSurfaceVariant
+                            )
+
+                            HorizontalDivider(color = outline.copy(alpha = 0.5f))
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = "Previous Cutoff: ${previewPrev.title}",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = onSurfaceVariant
+                                )
+                            }
                         }
                     }
                 }
