@@ -60,7 +60,7 @@ class MainScreenViewModel(private val repository: OvertimeRepository) : ViewMode
         repository.records,
         repository.settings
     ) { records, settings ->
-        val stats = calculateWarehouseStats(records)
+        val stats = calculateWarehouseStats(records, settings)
         MainUiState(
             records = records,
             settings = settings,
@@ -106,7 +106,7 @@ class MainScreenViewModel(private val repository: OvertimeRepository) : ViewMode
         }
     }
 
-    private fun calculateWarehouseStats(records: List<OvertimeRecord>): DashboardStats {
+    private fun calculateWarehouseStats(records: List<OvertimeRecord>, settings: AppSettings): DashboardStats {
         val now = Calendar.getInstance()
         val currentYear = now.get(Calendar.YEAR)
         val currentMonth = now.get(Calendar.MONTH)
@@ -222,11 +222,6 @@ class MainScreenViewModel(private val repository: OvertimeRepository) : ViewMode
                 hours = arr[0],
                 pay = arr[1],
                 isCurrent = (index == recentCutoffPeriods.lastIndex)
-            )
-        }
-                hours = arr[0],
-                pay = arr[1],
-                isCurrent = (y == currentYear && m == currentMonth && firstHalf == isFirstHalf)
             )
         }
 
