@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">OT Tracker</string>
+    <string name="widget_description">Glance at your current cutoff hours and overtime payout</string>
+</resources>
