@@ -96,15 +96,11 @@ It gives workers a private, offline tool to track their overtime hours, preview 
 git clone https://github.com/KouseiA/Overtime-Tracker.git
 cd Overtime-Tracker
 
-# Build Debug APK
-./gradlew assembleDebug
-
 # Build Production Release APK (minified with R8)
 ./gradlew assembleRelease
 ```
-Compiled APKs will be located in:
-- Debug: `app/build/outputs/apk/debug/app-debug.apk`
-- Release: `app/build/outputs/apk/release/app-release.apk`
+Compiled APK will be located in:
+- `app/build/outputs/apk/release/app-release.apk`
 
 ---
 
