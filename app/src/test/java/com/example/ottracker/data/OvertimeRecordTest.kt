@@ -24,7 +24,7 @@ class OvertimeRecordTest {
             startTimeMillis = start,
             endTimeMillis = end,
             hourlyRate = 93.75,
-            isHoliday = false,
+            overtimeType = OvertimeType.REGULAR,
             nightDiffRate = 0.20
         )
         assertTrue(record.hasNightDifferential)
@@ -62,7 +62,7 @@ class OvertimeRecordTest {
             startTimeMillis = start,
             endTimeMillis = end,
             hourlyRate = 93.75,
-            isHoliday = true,
+            overtimeType = OvertimeType.SPECIAL_HOLIDAY,
             nightDiffRate = 0.20
         )
         assertEquals(121.875, record.effectiveDayRate, 0.001)
@@ -82,7 +82,7 @@ class OvertimeRecordTest {
             startTimeMillis = start,
             endTimeMillis = end,
             hourlyRate = 93.75,
-            isHoliday = false,
+            overtimeType = OvertimeType.REGULAR,
             nightDiffRate = 0.20
         )
         assertTrue(record.hasNightDifferential)

@@ -50,10 +50,11 @@ It gives workers a private, offline tool to track their overtime hours, preview 
 - **Cutoff Filters**: Filter by **Current Cutoff**, **Previous Cutoff**, or **All Records**.
 - **Totals Summary**: Instant sum of total hours and total payable amount.
 
-### ⚙️ 4. Universal & Customizable Payroll Cutoff Schedule
+### ⚙️ 4. Universal & Visual Payroll Cutoff Schedule
+- **Interactive Calendar Cycle Visualizer**: Live monthly calendar grid with distinct color-coded cycle highlights (Gold for Cycle 1, Slate for Cycle 2), active cutoff boundary marks, and a today tracker.
+- **1-Tap Quick Presets**: Instant selection for Standard 15th/End (*1st–15th & 16th–End*), BPO/Corporate (*11th–25th & 26th–10th*), or dedicated End-of-Month buttons.
+- **Visual Day-Grid Picker Dialog**: Tap-to-pick calendar day dialog eliminating confusing raw numbers or manual integer typing.
 - **Flexible Pay Frequencies**: Fully supports **Semi-Monthly (2x/month)**, **Monthly (1x/month)**, and **Weekly** payroll cycles.
-- **Custom Cutoff Days**: Set any day configuration (e.g. traditional 1st–15th/16th–End, BPO/corporate 11th–25th/26th–10th, or custom dates).
-- **Live Schedule Preview**: Real-time confirmation box showing active cutoff dates, days left, and estimated payday before saving.
 - **Whole-App Synchronization**: Dashboard, DTR Sheet filters, Trend Charts, and Widget automatically adapt to your chosen schedule.
 
 ### 💾 5. Safe JSON Backup & Restore
