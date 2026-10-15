@@ -519,10 +519,27 @@ fun CalendarTab(
                                         )
                                     }
                                 }
+                                if (record.hasNightDifferential) {
+                                    Spacer(modifier = Modifier.width(6.dp))
+                                    Surface(
+                                        color = Color(0xFF312E81).copy(alpha = 0.35f),
+                                        shape = RoundedCornerShape(4.dp),
+                                        border = BorderStroke(1.dp, Color(0xFF6366F1))
+                                    ) {
+                                        Text(
+                                            text = "🌙 ${String.format(Locale.US, "%.1f", record.nightOtHours)}h NIGHT (+20%)",
+                                            fontSize = 9.sp,
+                                            fontWeight = FontWeight.Black,
+                                            color = Color(0xFFA5B4FC),
+                                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
+                                        )
+                                    }
+                                }
                             }
                             Spacer(modifier = Modifier.height(2.dp))
+                            val nightBreakdownText = if (record.hasNightDifferential) " (${String.format(Locale.US, "%.1f", record.dayOtHours)}h Day + ${String.format(Locale.US, "%.1f", record.nightOtHours)}h Night)" else ""
                             Text(
-                                text = "${record.formattedTimeRange}  ·  ${record.formattedHoursDecimal}${if (record.isHoliday) "  ·  @ ${settings.currencySymbol}${String.format(Locale.US, "%.2f", record.effectiveHourlyRate)}/hr" else ""}",
+                                text = "${record.formattedTimeRange}  ·  ${record.formattedHoursDecimal}$nightBreakdownText${if (record.isHoliday) "  ·  @ ${settings.currencySymbol}${String.format(Locale.US, "%.2f", record.effectiveHourlyRate)}/hr" else ""}",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = onSurfaceVariant
                             )
