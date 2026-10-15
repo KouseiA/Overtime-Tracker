@@ -13,11 +13,9 @@ data class OvertimeRecord(
     val endTimeMillis: Long,
     val hourlyRate: Double = 93.75, // Default warehouse OT rate
     val isHoliday: Boolean = false, // Holiday OT category (+30%)
-    val notes: String = ""
+    val notes: String = "",
+    val nightDiffRate: Double = 0.20 // Night Shift Differential rate (default +20%)
 ) {
-    val effectiveHourlyRate: Double
-        get() = if (isHoliday) hourlyRate * 1.30 else hourlyRate
-
     val durationMinutes: Long
         get() = maxOf(0L, (endTimeMillis - startTimeMillis) / (1000 * 60))
 
@@ -25,8 +23,57 @@ data class OvertimeRecord(
     val durationHours: Double
         get() = kotlin.math.floor(durationMinutes / 30.0).toInt() * 0.5
 
+    // Splitting 30-min increments between Day OT (06:00 - 22:00) and Night OT (22:00 - 06:00)
+    private fun computeOtSplit(): Pair<Double, Double> {
+        val totalBlocks = (durationMinutes / 30).toInt()
+        if (totalBlocks <= 0) return Pair(0.0, 0.0)
+
+        var dayBlocks = 0
+        var nightBlocks = 0
+        val cal = java.util.Calendar.getInstance()
+
+        for (i in 0 until totalBlocks) {
+            val midpointMillis = startTimeMillis + (i * 30L + 15L) * 60L * 1000L
+            cal.timeInMillis = midpointMillis
+            val hour = cal.get(java.util.Calendar.HOUR_OF_DAY)
+            if (hour >= 22 || hour < 6) {
+                nightBlocks++
+            } else {
+                dayBlocks++
+            }
+        }
+        return Pair(dayBlocks * 0.5, nightBlocks * 0.5)
+    }
+
+    val dayOtHours: Double
+        get() = computeOtSplit().first
+
+    val nightOtHours: Double
+        get() = computeOtSplit().second
+
+    val hasNightDifferential: Boolean
+        get() = nightOtHours > 0.0
+
+    val effectiveDayRate: Double
+        get() = if (isHoliday) hourlyRate * 1.30 else hourlyRate
+
+    val effectiveHourlyRate: Double
+        get() = effectiveDayRate
+
+    val effectiveNightRate: Double
+        get() = effectiveDayRate * (1.0 + nightDiffRate)
+
+    val dayPay: Double
+        get() = dayOtHours * effectiveDayRate
+
+    val nightPay: Double
+        get() = nightOtHours * effectiveNightRate
+
     val totalPay: Double
-        get() = durationHours * effectiveHourlyRate
+        get() = dayPay + nightPay
+
+    val formattedFormula: String
+        get() = String.format(Locale.US, "₱%.2f × %.2f = ₱%.2f/hr", effectiveDayRate, 1.0 + nightDiffRate, effectiveNightRate)
 
     val formattedHoursDecimal: String
         get() = String.format(Locale.US, "%.2f hrs", durationHours)
@@ -60,6 +107,7 @@ data class OvertimeRecord(
             put("hourlyRate", hourlyRate)
             put("isHoliday", isHoliday)
             put("notes", notes)
+            put("nightDiffRate", nightDiffRate)
         }
     }
 
@@ -77,7 +125,8 @@ data class OvertimeRecord(
                 endTimeMillis = json.optLong("endTimeMillis", System.currentTimeMillis()),
                 hourlyRate = json.optDouble("hourlyRate", 93.75),
                 isHoliday = json.optBoolean("isHoliday", false),
-                notes = json.optString("notes", "")
+                notes = json.optString("notes", ""),
+                nightDiffRate = json.optDouble("nightDiffRate", 0.20)
             )
         }
     }
