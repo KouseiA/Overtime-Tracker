@@ -38,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
@@ -107,6 +108,8 @@ fun OtFormTab(
     }
 
     val totalHours = filteredRecords.sumOf { it.durationHours }
+    val totalDayHours = filteredRecords.sumOf { it.dayOtHours }
+    val totalNightHours = filteredRecords.sumOf { it.nightOtHours }
     val totalPay = filteredRecords.sumOf { it.totalPay }
 
     val cutoffTitle = when (selectedFilterIndex) {
@@ -480,17 +483,30 @@ fun OtFormTab(
                             VerticalDivider(modifier = Modifier.fillMaxHeight(), thickness = 1.dp, color = outline)
 
                             // Column 4: TOTAL HOURS (e.g. 3.00h)
-                            Text(
-                                text = "${String.format(Locale.US, "%.2f", record.durationHours)}h",
+                            Column(
                                 modifier = Modifier
                                     .weight(0.85f)
                                     .padding(horizontal = 2.dp),
-                                textAlign = TextAlign.Center,
-                                fontWeight = FontWeight.Black,
-                                fontSize = 12.5.sp,
-                                maxLines = 1,
-                                color = onSurface
-                            )
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = "${String.format(Locale.US, "%.2f", record.durationHours)}h",
+                                    textAlign = TextAlign.Center,
+                                    fontWeight = FontWeight.Black,
+                                    fontSize = 12.sp,
+                                    maxLines = 1,
+                                    color = onSurface
+                                )
+                                if (record.hasNightDifferential) {
+                                    Text(
+                                        text = "🌙 ${String.format(Locale.US, "%.1f", record.nightOtHours)}h",
+                                        fontWeight = FontWeight.ExtraBold,
+                                        fontSize = 8.5.sp,
+                                        maxLines = 1,
+                                        color = Color(0xFFA5B4FC)
+                                    )
+                                }
+                            }
 
                             VerticalDivider(modifier = Modifier.fillMaxHeight(), thickness = 1.dp, color = outline)
 
@@ -516,6 +532,14 @@ fun OtFormTab(
                                         fontSize = 8.5.sp,
                                         maxLines = 1,
                                         color = GoldAccent
+                                    )
+                                } else if (record.hasNightDifferential) {
+                                    Text(
+                                        text = "+20% NSD",
+                                        fontWeight = FontWeight.Black,
+                                        fontSize = 8.5.sp,
+                                        maxLines = 1,
+                                        color = Color(0xFFA5B4FC)
                                     )
                                 }
                             }
@@ -621,6 +645,14 @@ fun OtFormTab(
                                     fontWeight = FontWeight.Black,
                                     color = onSurface
                                 )
+                                if (totalNightHours > 0.0) {
+                                    Text(
+                                        text = "${String.format(Locale.US, "%.1f", totalDayHours)}h Day · ${String.format(Locale.US, "%.1f", totalNightHours)}h Night (+20%)",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color(0xFFA5B4FC)
+                                    )
+                                }
                                 Text(
                                     text = "${filteredRecords.size} Total Shifts Logged",
                                     style = MaterialTheme.typography.bodySmall,
