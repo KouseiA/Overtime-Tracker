@@ -18,3 +18,7 @@ app/build/
 # Build Artifacts
 *.apk
 *.aab
+
+# Graphify
+graphify-out/
+.graphify_cache/
