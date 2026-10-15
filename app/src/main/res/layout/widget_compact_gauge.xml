@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_compact_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_compact_bg"
+    android:padding="10dp">
+
+    <!-- Top Badge / Header -->
+    <TextView
+        android:id="@+id/widget_compact_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/widget_pill_badge_bg"
+        android:gravity="center"
+        android:letterSpacing="0.06"
+        android:paddingStart="8dp"
+        android:paddingTop="3dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="3dp"
+        android:text="CURRENT CUTOFF"
+        android:textColor="@color/widget_gold_accent"
+        android:textSize="9sp"
+        android:textStyle="bold" />
+
+    <!-- Center Progress Ring & Stats Container -->
+    <RelativeLayout
+        android:id="@+id/widget_compact_center_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <!-- Dynamic Circular Progress Ring -->
+        <ImageView
+            android:id="@+id/widget_compact_gauge_img"
+            android:layout_width="118dp"
+            android:layout_height="118dp"
+            android:layout_centerInParent="true"
+            android:contentDescription="Overtime Progress Ring"
+            android:scaleType="fitCenter" />
+
+        <!-- In-Ring Metrics -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/widget_compact_pay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:text="₱0"
+                android:textColor="#FFFFFF"
+                android:textSize="21sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/widget_compact_hours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:text="0.0 hrs"
+                android:textColor="@color/widget_text_muted"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- Bottom Action Button: Quick Add OT -->
+    <TextView
+        android:id="@+id/widget_compact_add_btn"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/widget_gold_circle_btn"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="+"
+        android:textColor="#0F172A"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

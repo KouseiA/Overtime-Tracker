@@ -2,6 +2,7 @@ package com.example.ottracker.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.ottracker.widget.CompactGaugeWidgetProvider
 import com.example.ottracker.widget.OvertimeWidgetProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -37,6 +38,7 @@ class OvertimeRepository(context: Context) {
         _settings.value = newSettings
         prefs.edit().putString(KEY_SETTINGS, newSettings.toJsonObject().toString()).apply()
         OvertimeWidgetProvider.updateAllWidgets(appContext)
+        CompactGaugeWidgetProvider.updateAllWidgets(appContext)
     }
 
     private fun loadRecords() {
@@ -82,6 +84,7 @@ class OvertimeRepository(context: Context) {
         list.forEach { array.put(it.toJsonObject()) }
         prefs.edit().putString(KEY_RECORDS, array.toString()).apply()
         OvertimeWidgetProvider.updateAllWidgets(appContext)
+        CompactGaugeWidgetProvider.updateAllWidgets(appContext)
     }
 
     fun exportBackupJson(): String {

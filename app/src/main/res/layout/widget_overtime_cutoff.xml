@@ -110,7 +110,7 @@
                 android:paddingEnd="12dp"
                 android:paddingBottom="7dp"
                 android:text="LOG OT +"
-                android:textColor="@color/widget_badge_text"
+                android:textColor="#0F172A"
                 android:textSize="11sp"
                 android:textStyle="bold" />
         </RelativeLayout>
