@@ -152,7 +152,10 @@ data class AppSettings(
     // Weekly: start day of week (Calendar.MONDAY = 2, Calendar.SUNDAY = 1, etc.)
     val cutoffWeeklyStartDay: Int = java.util.Calendar.MONDAY,
     // Target OT Hours per Cutoff (for progress tracking & 2x2 widget circular gauge)
-    val targetOtHours: Double = 30.0
+    val targetOtHours: Double = 30.0,
+    // Night Shift Differential settings (10:00 PM - 6:00 AM)
+    val nightDiffEnabled: Boolean = true,
+    val nightDiffRate: Double = 0.20
 ) {
     fun toJsonObject(): JSONObject {
         return JSONObject().apply {
@@ -169,6 +172,8 @@ data class AppSettings(
             put("cutoffMonthlyEndDay", cutoffMonthlyEndDay)
             put("cutoffWeeklyStartDay", cutoffWeeklyStartDay)
             put("targetOtHours", targetOtHours)
+            put("nightDiffEnabled", nightDiffEnabled)
+            put("nightDiffRate", nightDiffRate)
         }
     }
 
@@ -187,7 +192,9 @@ data class AppSettings(
                 cutoffSecondEndDay = json.optInt("cutoffSecondEndDay", 0),
                 cutoffMonthlyEndDay = json.optInt("cutoffMonthlyEndDay", 0),
                 cutoffWeeklyStartDay = json.optInt("cutoffWeeklyStartDay", java.util.Calendar.MONDAY),
-                targetOtHours = json.optDouble("targetOtHours", 30.0)
+                targetOtHours = json.optDouble("targetOtHours", 30.0),
+                nightDiffEnabled = json.optBoolean("nightDiffEnabled", true),
+                nightDiffRate = json.optDouble("nightDiffRate", 0.20)
             )
         }
     }

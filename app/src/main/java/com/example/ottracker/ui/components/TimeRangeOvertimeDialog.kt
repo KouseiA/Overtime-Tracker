@@ -125,14 +125,15 @@ fun TimeRangeOvertimeDialog(
         }
     }
 
-    val tempRecord = remember(startCal.timeInMillis, endCal.timeInMillis, isHoliday, settings.baseHourlyRate) {
+    val activeNightRate = if (settings.nightDiffEnabled) settings.nightDiffRate else 0.0
+    val tempRecord = remember(startCal.timeInMillis, endCal.timeInMillis, isHoliday, settings.baseHourlyRate, activeNightRate) {
         OvertimeRecord(
             dateMillis = dateMillis,
             startTimeMillis = startCal.timeInMillis,
             endTimeMillis = endCal.timeInMillis,
             hourlyRate = settings.baseHourlyRate,
             isHoliday = isHoliday,
-            nightDiffRate = 0.20
+            nightDiffRate = activeNightRate
         )
     }
     val durationMinutes = tempRecord.durationMinutes
@@ -750,7 +751,7 @@ fun TimeRangeOvertimeDialog(
                                     hourlyRate = settings.baseHourlyRate,
                                     isHoliday = isHoliday,
                                     notes = existingRecord?.notes ?: "",
-                                    nightDiffRate = 0.20
+                                    nightDiffRate = activeNightRate
                                 )
                                 onSave(record)
                                 onDismiss()

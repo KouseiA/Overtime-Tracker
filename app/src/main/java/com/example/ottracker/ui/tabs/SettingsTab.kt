@@ -43,6 +43,8 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -55,9 +57,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.ottracker.data.AppSettings
 import com.example.ottracker.theme.DangerRed
 import com.example.ottracker.theme.GoldAccent
@@ -481,6 +485,112 @@ fun SettingsTab(
                                         style = MaterialTheme.typography.labelSmall,
                                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                                         color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else onSurface
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    // Night Shift Differential Setting (10:00 PM - 6:00 AM)
+                    HorizontalDivider(color = outline)
+
+                    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text("🌙", fontSize = 16.sp)
+                                    Spacer(modifier = Modifier.width(6.dp))
+                                    Text(
+                                        text = "Night Shift Differential",
+                                        style = MaterialTheme.typography.titleSmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = onSurface
+                                    )
+                                }
+                                Text(
+                                    text = "Auto-calculate premium for work between 10:00 PM and 6:00 AM",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = settings.nightDiffEnabled,
+                                onCheckedChange = { isChecked ->
+                                    onSaveSettings(settings.copy(nightDiffEnabled = isChecked))
+                                },
+                                colors = SwitchDefaults.colors(
+                                    checkedThumbColor = GoldAccent,
+                                    checkedTrackColor = onSurface
+                                )
+                            )
+                        }
+
+                        if (settings.nightDiffEnabled) {
+                            Text(
+                                text = "PREMIUM RATE",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.ExtraBold,
+                                letterSpacing = 1.sp,
+                                color = onSurfaceVariant
+                            )
+
+                            // Preset Rate Chips
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                listOf(0.10 to "10%", 0.15 to "15%", 0.20 to "20% (DOLE)", 0.25 to "25%").forEach { (rateValue, rateLabel) ->
+                                    val isSelected = kotlin.math.abs(settings.nightDiffRate - rateValue) < 0.001
+                                    Surface(
+                                        shape = RoundedCornerShape(8.dp),
+                                        color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+                                        border = BorderStroke(1.dp, if (isSelected) MaterialTheme.colorScheme.primary else outline),
+                                        modifier = Modifier.clickable {
+                                            onSaveSettings(settings.copy(nightDiffRate = rateValue))
+                                        }
+                                    ) {
+                                        Text(
+                                            text = rateLabel,
+                                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                                            color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else onSurface
+                                        )
+                                    }
+                                }
+                            }
+
+                            // Active Night Rate formula preview
+                            val baseRate = settings.baseHourlyRate
+                            val nightRate = baseRate * (1.0 + settings.nightDiffRate)
+                            Surface(
+                                color = Color(0xFF171926),
+                                shape = RoundedCornerShape(8.dp),
+                                border = BorderStroke(1.dp, Color(0xFF312E81)),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 12.dp, vertical = 8.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "Active Night OT Rate:",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = Color(0xFFA5B4FC)
+                                    )
+                                    Text(
+                                        text = "${settings.currencySymbol}${String.format(Locale.US, "%.2f", baseRate)} × ${(1.0 + settings.nightDiffRate)} = ${settings.currencySymbol}${String.format(Locale.US, "%.2f", nightRate)}/hr",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = FontWeight.Bold,
+                                        fontFamily = FontFamily.Monospace,
+                                        color = GoldAccent
                                     )
                                 }
                             }
