@@ -13,7 +13,7 @@
 
 ### 📥 Instant Download
 
-[<img src="https://img.shields.io/badge/⬇️_DOWNLOAD_RELEASE_APK-OvertimeTracker--v1.0.0.apk-FFD700?style=for-the-badge&labelColor=1A1A1A&color=FFD700" height="48" alt="Download APK">](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.0.0/OvertimeTracker-v1.0.0.apk)
+[<img src="https://img.shields.io/badge/⬇️_DOWNLOAD_RELEASE_APK-OvertimeTracker--v1.1.0.apk-FFD700?style=for-the-badge&labelColor=1A1A1A&color=FFD700" height="48" alt="Download APK">](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.1.0/OvertimeTracker-v1.1.0.apk)
 
 *Compatible with Android 8.0 (Oreo) and above. 100% Free & Open Source.*
 
@@ -71,7 +71,7 @@ It gives workers a private, offline tool to track their overtime hours, preview 
 ## 📲 Installation Guide
 
 1. Download the latest APK directly from the [Releases Page](https://github.com/KouseiA/Overtime-Tracker/releases/latest) or click:  
-   👉 **[Download OvertimeTracker-v1.0.0.apk](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.0.0/OvertimeTracker-v1.0.0.apk)**
+   👉 **[Download OvertimeTracker-v1.1.0.apk](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.1.0/OvertimeTracker-v1.1.0.apk)**
 2. On your Android device, tap the downloaded `.apk` file.
 3. If prompted, allow **"Install from unknown sources"** for your browser or file manager.
 4. Tap **Install** and launch the app!
