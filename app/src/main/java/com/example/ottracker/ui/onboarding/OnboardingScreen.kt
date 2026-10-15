@@ -103,7 +103,7 @@ private val pages = listOf(
         accentColor = Color(0xFF4FC3F7),
         featureHighlights = listOf(
             "⏰  Auto-calculates hours & pay",
-            "🏷️  Holiday OT rate (+30% bonus)"
+            "🏷️  DOLE rates (Special +30%, Regular +100%)"
         )
     ),
     OnboardingPage(

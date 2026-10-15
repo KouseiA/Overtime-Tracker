@@ -58,6 +58,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.ottracker.data.AppSettings
 import com.example.ottracker.data.OvertimeRecord
+import com.example.ottracker.data.OvertimeType
 import com.example.ottracker.theme.DangerRed
 import com.example.ottracker.theme.GoldAccent
 import java.text.SimpleDateFormat
@@ -71,6 +72,10 @@ private data class QuickPresetItem(
     val label: String,
     val header: String
 )
+
+// Colors for category cards
+private val SpecialHolidayColor = Color(0xFF6366F1)  // Indigo
+private val RegularHolidayColor = Color(0xFFF59E0B)  // Amber/Gold
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -104,7 +109,7 @@ fun TimeRangeOvertimeDialog(
     var startMinute by remember { mutableIntStateOf(initStartMin) }
     var endHour by remember { mutableIntStateOf(initEndHour) }
     var endMinute by remember { mutableIntStateOf(initEndMin) }
-    var isHoliday by remember { mutableStateOf(existingRecord?.isHoliday ?: false) }
+    var selectedOtType by remember { mutableStateOf(existingRecord?.overtimeType ?: OvertimeType.REGULAR) }
 
     val startCal = Calendar.getInstance().apply {
         timeInMillis = dateMillis
@@ -126,13 +131,13 @@ fun TimeRangeOvertimeDialog(
     }
 
     val activeNightRate = if (settings.nightDiffEnabled) settings.nightDiffRate else 0.0
-    val tempRecord = remember(startCal.timeInMillis, endCal.timeInMillis, isHoliday, settings.baseHourlyRate, activeNightRate) {
+    val tempRecord = remember(startCal.timeInMillis, endCal.timeInMillis, selectedOtType, settings.baseHourlyRate, activeNightRate) {
         OvertimeRecord(
             dateMillis = dateMillis,
             startTimeMillis = startCal.timeInMillis,
             endTimeMillis = endCal.timeInMillis,
             hourlyRate = settings.baseHourlyRate,
-            isHoliday = isHoliday,
+            overtimeType = selectedOtType,
             nightDiffRate = activeNightRate
         )
     }
@@ -423,7 +428,7 @@ fun TimeRangeOvertimeDialog(
                     modifier = Modifier.padding(vertical = 14.dp)
                 )
 
-                // ── OVERTIME CATEGORY / RATE TYPE ─────────────────────────────
+                // ── OVERTIME CATEGORY / RATE TYPE (3-CARD SELECTOR) ───────────
                 Text(
                     text = "RATE CATEGORY",
                     style = MaterialTheme.typography.labelSmall,
@@ -432,84 +437,125 @@ fun TimeRangeOvertimeDialog(
                     color = onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.height(8.dp))
+
+                // 3-card DOLE rate category selector
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    // Regular OT (100%)
-                    NeoCard(
-                        modifier = Modifier.weight(1f),
-                        onClick = {
-                            if (isHoliday) {
-                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                isHoliday = false
-                            }
-                        },
-                        containerColor = if (!isHoliday) onSurface else surfaceVariant,
-                        borderColor = if (!isHoliday) onSurface else outline,
-                        shadowColor = if (!isHoliday) GoldAccent else outline,
-                        shadowOffset = if (!isHoliday) 3.dp else 1.dp
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 10.dp, horizontal = 6.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                    // Card data: type, emoji, short label, multiplier label, accent color
+                    data class CategoryCard(
+                        val type: String,
+                        val emoji: String,
+                        val title: String,
+                        val multiplierLabel: String,
+                        val accentColor: Color
+                    )
+
+                    val categories = listOf(
+                        CategoryCard(OvertimeType.REGULAR, "⚡", "REGULAR\nOT", "×1.00", onSurface),
+                        CategoryCard(OvertimeType.SPECIAL_HOLIDAY, "🏖️", "SPECIAL\nHOLIDAY", "×1.30 (+30%)", SpecialHolidayColor),
+                        CategoryCard(OvertimeType.REGULAR_HOLIDAY, "🎉", "REGULAR\nHOLIDAY", "×2.00 (+100%)", RegularHolidayColor)
+                    )
+
+                    categories.forEach { cat ->
+                        val isSelected = selectedOtType == cat.type
+                        val computedRate = settings.baseHourlyRate * OvertimeType.multiplierFor(cat.type)
+
+                        NeoCard(
+                            modifier = Modifier.weight(1f),
+                            onClick = {
+                                if (selectedOtType != cat.type) {
+                                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                    selectedOtType = cat.type
+                                }
+                            },
+                            containerColor = if (isSelected) {
+                                if (cat.type == OvertimeType.REGULAR) onSurface
+                                else cat.accentColor
+                            } else surfaceVariant,
+                            borderColor = if (isSelected) {
+                                if (cat.type == OvertimeType.REGULAR) onSurface else Color.Black
+                            } else outline,
+                            shadowColor = if (isSelected) {
+                                if (cat.type == OvertimeType.REGULAR) GoldAccent else Color.Black
+                            } else outline,
+                            shadowOffset = if (isSelected) 3.dp else 1.dp
                         ) {
-                            Text(
-                                text = "⚡ REGULAR OT",
-                                fontWeight = FontWeight.Black,
-                                fontSize = 11.sp,
-                                maxLines = 1,
-                                color = if (!isHoliday) MaterialTheme.colorScheme.background else onSurface
-                            )
-                            Spacer(modifier = Modifier.height(2.dp))
-                            Text(
-                                text = "${settings.currencySymbol}${String.format(Locale.US, "%.2f", settings.baseHourlyRate)}/h",
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 10.sp,
-                                maxLines = 1,
-                                color = if (!isHoliday) MaterialTheme.colorScheme.background.copy(alpha = 0.85f) else onSurfaceVariant
-                            )
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 8.dp, horizontal = 4.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = "${cat.emoji} ${cat.title}",
+                                    fontWeight = FontWeight.Black,
+                                    fontSize = 9.sp,
+                                    lineHeight = 12.sp,
+                                    maxLines = 2,
+                                    textAlign = TextAlign.Center,
+                                    color = when {
+                                        isSelected && cat.type == OvertimeType.REGULAR -> MaterialTheme.colorScheme.background
+                                        isSelected && cat.type == OvertimeType.REGULAR_HOLIDAY -> Color.Black
+                                        isSelected -> Color.White
+                                        else -> onSurface
+                                    }
+                                )
+                                Spacer(modifier = Modifier.height(3.dp))
+                                Text(
+                                    text = cat.multiplierLabel,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    fontSize = 8.5.sp,
+                                    maxLines = 1,
+                                    color = when {
+                                        isSelected && cat.type == OvertimeType.REGULAR -> MaterialTheme.colorScheme.background.copy(alpha = 0.8f)
+                                        isSelected && cat.type == OvertimeType.REGULAR_HOLIDAY -> Color.Black.copy(alpha = 0.8f)
+                                        isSelected -> Color.White.copy(alpha = 0.8f)
+                                        else -> onSurfaceVariant
+                                    }
+                                )
+                                Spacer(modifier = Modifier.height(2.dp))
+                                Text(
+                                    text = "${settings.currencySymbol}${String.format(Locale.US, "%.2f", computedRate)}/h",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 9.sp,
+                                    maxLines = 1,
+                                    color = when {
+                                        isSelected && cat.type == OvertimeType.REGULAR -> GoldAccent
+                                        isSelected && cat.type == OvertimeType.REGULAR_HOLIDAY -> Color.Black.copy(alpha = 0.9f)
+                                        isSelected -> GoldAccent
+                                        else -> cat.accentColor
+                                    }
+                                )
+                            }
                         }
                     }
+                }
 
-                    // Holiday OT (+30%)
-                    NeoCard(
-                        modifier = Modifier.weight(1f),
-                        onClick = {
-                            if (!isHoliday) {
-                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                isHoliday = true
-                            }
-                        },
-                        containerColor = if (isHoliday) GoldAccent else surfaceVariant,
-                        borderColor = if (isHoliday) Color.Black else outline,
-                        shadowColor = if (isHoliday) Color.Black else outline,
-                        shadowOffset = if (isHoliday) 3.dp else 1.dp
+                // Rate formula preview below category cards
+                val multiplier = OvertimeType.multiplierFor(selectedOtType)
+                if (selectedOtType != OvertimeType.REGULAR) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Surface(
+                        color = if (selectedOtType == OvertimeType.SPECIAL_HOLIDAY) Color(0xFF1E1B4B) else Color(0xFF1C1917),
+                        shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(
+                                1.dp,
+                                if (selectedOtType == OvertimeType.SPECIAL_HOLIDAY) SpecialHolidayColor.copy(alpha = 0.3f) else RegularHolidayColor.copy(alpha = 0.3f),
+                                RoundedCornerShape(8.dp)
+                            )
                     ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 10.dp, horizontal = 6.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = "🎉 HOLIDAY OT",
-                                fontWeight = FontWeight.Black,
-                                fontSize = 11.sp,
-                                maxLines = 1,
-                                color = if (isHoliday) Color.Black else onSurface
-                            )
-                            Spacer(modifier = Modifier.height(2.dp))
-                            Text(
-                                text = "+30% (${settings.currencySymbol}${String.format(Locale.US, "%.2f", settings.baseHourlyRate * 1.30)}/h)",
-                                fontWeight = FontWeight.ExtraBold,
-                                fontSize = 9.5.sp,
-                                maxLines = 1,
-                                color = if (isHoliday) Color.Black.copy(alpha = 0.85f) else GoldAccent
-                            )
-                        }
+                        Text(
+                            text = "Rate: ${settings.currencySymbol}${String.format(Locale.US, "%.2f", settings.baseHourlyRate)} × ${String.format(Locale.US, "%.2f", multiplier)} = ${settings.currencySymbol}${String.format(Locale.US, "%.2f", effectiveRate)}/hr",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontFamily = FontFamily.Monospace,
+                            fontWeight = FontWeight.Bold,
+                            color = GoldAccent,
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+                        )
                     }
                 }
 
@@ -578,17 +624,26 @@ fun TimeRangeOvertimeDialog(
                                     maxLines = 1,
                                     color = GoldAccent
                                 )
-                                Text(
-                                    text = if (tempRecord.hasNightDifferential)
+                                val rateSubtext = when {
+                                    tempRecord.hasNightDifferential ->
                                         "${String.format(Locale.US, "%.1f", tempRecord.dayOtHours)}h Day + ${String.format(Locale.US, "%.1f", tempRecord.nightOtHours)}h Night"
-                                    else if (isHoliday)
-                                        "@ ${settings.currencySymbol}${String.format(Locale.US, "%.2f", effectiveRate)}/h (+30%)"
-                                    else
-                                        "@ ${settings.currencySymbol}${String.format(Locale.US, "%.2f", effectiveRate)}/hr",
+                                    selectedOtType != OvertimeType.REGULAR ->
+                                        "@ ${settings.currencySymbol}${String.format(Locale.US, "%.2f", effectiveRate)}/h (${OvertimeType.shortLabelFor(selectedOtType)})"
+                                    else ->
+                                        "@ ${settings.currencySymbol}${String.format(Locale.US, "%.2f", effectiveRate)}/hr"
+                                }
+                                val subtextColor = when {
+                                    tempRecord.hasNightDifferential -> Color(0xFFA5B4FC)
+                                    selectedOtType == OvertimeType.SPECIAL_HOLIDAY -> SpecialHolidayColor
+                                    selectedOtType == OvertimeType.REGULAR_HOLIDAY -> RegularHolidayColor
+                                    else -> onSurfaceVariant
+                                }
+                                Text(
+                                    text = rateSubtext,
                                     style = MaterialTheme.typography.bodySmall,
-                                    fontWeight = if (tempRecord.hasNightDifferential || isHoliday) FontWeight.Bold else FontWeight.Normal,
+                                    fontWeight = if (tempRecord.hasNightDifferential || selectedOtType != OvertimeType.REGULAR) FontWeight.Bold else FontWeight.Normal,
                                     maxLines = 1,
-                                    color = if (tempRecord.hasNightDifferential) Color(0xFFA5B4FC) else if (isHoliday) GoldAccent else onSurfaceVariant
+                                    color = subtextColor
                                 )
                             }
                         }
@@ -613,7 +668,7 @@ fun TimeRangeOvertimeDialog(
                                             Text("🌙", fontSize = 13.sp)
                                             Spacer(modifier = Modifier.width(6.dp))
                                             Text(
-                                                text = "NIGHT SHIFT DIFFERENTIAL (+20%)",
+                                                text = "NIGHT SHIFT DIFFERENTIAL (+${(settings.nightDiffRate * 100).toInt()}%)",
                                                 style = MaterialTheme.typography.labelSmall,
                                                 fontWeight = FontWeight.Black,
                                                 color = Color(0xFFA5B4FC),
@@ -638,7 +693,7 @@ fun TimeRangeOvertimeDialog(
 
                                     // Explicit Math Formula
                                     Text(
-                                        text = "Rate Formula: ${settings.currencySymbol}${String.format(Locale.US, "%.2f", tempRecord.effectiveDayRate)} × 1.20 = ${settings.currencySymbol}${String.format(Locale.US, "%.2f", tempRecord.effectiveNightRate)}/hr",
+                                        text = "Rate: ${settings.currencySymbol}${String.format(Locale.US, "%.2f", tempRecord.effectiveDayRate)} × ${String.format(Locale.US, "%.2f", 1.0 + settings.nightDiffRate)} = ${settings.currencySymbol}${String.format(Locale.US, "%.2f", tempRecord.effectiveNightRate)}/hr",
                                         style = MaterialTheme.typography.bodySmall,
                                         fontFamily = FontFamily.Monospace,
                                         fontWeight = FontWeight.Bold,
@@ -749,7 +804,7 @@ fun TimeRangeOvertimeDialog(
                                     startTimeMillis = startCal.timeInMillis,
                                     endTimeMillis = endCal.timeInMillis,
                                     hourlyRate = settings.baseHourlyRate,
-                                    isHoliday = isHoliday,
+                                    overtimeType = selectedOtType,
                                     notes = existingRecord?.notes ?: "",
                                     nightDiffRate = activeNightRate
                                 )

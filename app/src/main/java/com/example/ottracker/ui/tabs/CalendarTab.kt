@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ottracker.data.AppSettings
 import com.example.ottracker.data.OvertimeRecord
+import com.example.ottracker.data.OvertimeType
 import com.example.ottracker.theme.DangerRed
 import com.example.ottracker.theme.GoldAccent
 import com.example.ottracker.ui.components.NeoButton
@@ -503,18 +504,22 @@ fun CalendarTab(
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = onSurface
                                 )
-                                if (record.isHoliday) {
+                                if (record.overtimeType != OvertimeType.REGULAR) {
                                     Spacer(modifier = Modifier.width(6.dp))
+                                    val isRegHoliday = record.overtimeType == OvertimeType.REGULAR_HOLIDAY
+                                    val badgeColor = if (isRegHoliday) Color(0xFFF59E0B) else Color(0xFF818CF8)
+                                    val badgeBg = if (isRegHoliday) Color(0xFFF59E0B).copy(alpha = 0.15f) else Color(0xFF6366F1).copy(alpha = 0.15f)
+                                    val bonusPercent = ((OvertimeType.multiplierFor(record.overtimeType) - 1.0) * 100).toInt()
                                     Surface(
-                                        color = GoldAccent.copy(alpha = 0.15f),
+                                        color = badgeBg,
                                         shape = RoundedCornerShape(4.dp),
-                                        border = BorderStroke(1.dp, GoldAccent)
+                                        border = BorderStroke(1.dp, badgeColor)
                                     ) {
                                         Text(
-                                            text = "🎉 HOLIDAY (+30%)",
+                                            text = "${OvertimeType.emojiFor(record.overtimeType)} ${OvertimeType.shortLabelFor(record.overtimeType)} (+$bonusPercent%)",
                                             fontSize = 9.sp,
                                             fontWeight = FontWeight.Black,
-                                            color = GoldAccent,
+                                            color = badgeColor,
                                             modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
                                         )
                                     }
@@ -539,7 +544,7 @@ fun CalendarTab(
                             Spacer(modifier = Modifier.height(2.dp))
                             val nightBreakdownText = if (record.hasNightDifferential) " (${String.format(Locale.US, "%.1f", record.dayOtHours)}h Day + ${String.format(Locale.US, "%.1f", record.nightOtHours)}h Night)" else ""
                             Text(
-                                text = "${record.formattedTimeRange}  ·  ${record.formattedHoursDecimal}$nightBreakdownText${if (record.isHoliday) "  ·  @ ${settings.currencySymbol}${String.format(Locale.US, "%.2f", record.effectiveHourlyRate)}/hr" else ""}",
+                                text = "${record.formattedTimeRange}  ·  ${record.formattedHoursDecimal}$nightBreakdownText${if (record.overtimeType != OvertimeType.REGULAR) "  ·  @ ${settings.currencySymbol}${String.format(Locale.US, "%.2f", record.effectiveHourlyRate)}/hr" else ""}",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = onSurfaceVariant
                             )

@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ottracker.data.AppSettings
 import com.example.ottracker.data.OvertimeRecord
+import com.example.ottracker.data.OvertimeType
 import com.example.ottracker.theme.GoldAccent
 import com.example.ottracker.ui.components.NeoCard
 import com.example.ottracker.ui.components.TimeRangeOvertimeDialog
@@ -439,13 +440,14 @@ fun OtFormTab(
                                     maxLines = 1,
                                     color = onSurfaceVariant
                                 )
-                                if (record.isHoliday) {
+                                if (record.overtimeType != OvertimeType.REGULAR) {
+                                    val isRegHoliday = record.overtimeType == OvertimeType.REGULAR_HOLIDAY
                                     Text(
-                                        text = "HOLIDAY",
+                                        text = OvertimeType.shortLabelFor(record.overtimeType),
                                         fontWeight = FontWeight.Black,
                                         fontSize = 8.5.sp,
                                         maxLines = 1,
-                                        color = GoldAccent
+                                        color = if (isRegHoliday) Color(0xFFF59E0B) else Color(0xFF818CF8)
                                     )
                                 }
                             }
@@ -525,13 +527,17 @@ fun OtFormTab(
                                     maxLines = 1,
                                     color = GoldAccent
                                 )
-                                if (record.isHoliday) {
+                                if (record.overtimeType != OvertimeType.REGULAR) {
+                                    val mult = OvertimeType.multiplierFor(record.overtimeType)
+                                    val isRegHoliday = record.overtimeType == OvertimeType.REGULAR_HOLIDAY
+                                    val bonusPercent = ((mult - 1.0) * 100).toInt()
+                                    val nsdSuffix = if (record.hasNightDifferential) "+NSD" else " OT"
                                     Text(
-                                        text = "+30% OT",
+                                        text = "+$bonusPercent%$nsdSuffix",
                                         fontWeight = FontWeight.Black,
                                         fontSize = 8.5.sp,
                                         maxLines = 1,
-                                        color = GoldAccent
+                                        color = if (isRegHoliday) Color(0xFFF59E0B) else Color(0xFF818CF8)
                                     )
                                 } else if (record.hasNightDifferential) {
                                     Text(

@@ -6,16 +6,57 @@ import java.util.Date
 import java.util.Locale
 import java.util.UUID
 
+/**
+ * DOLE-compliant OT rate category constants and multipliers.
+ *
+ * Regular OT:           ×1.00  (base OT rate as-is)
+ * Special Non-Working Holiday OT: ×1.30  (+30%)
+ * Regular Holiday OT:   ×2.00  (+100%, double pay)
+ */
+object OvertimeType {
+    const val REGULAR = "REGULAR"
+    const val SPECIAL_HOLIDAY = "SPECIAL_HOLIDAY"
+    const val REGULAR_HOLIDAY = "REGULAR_HOLIDAY"
+
+    fun multiplierFor(type: String): Double = when (type) {
+        SPECIAL_HOLIDAY -> 1.30
+        REGULAR_HOLIDAY -> 2.00
+        else -> 1.00
+    }
+
+    fun labelFor(type: String): String = when (type) {
+        SPECIAL_HOLIDAY -> "Special Holiday OT"
+        REGULAR_HOLIDAY -> "Regular Holiday OT"
+        else -> "Regular OT"
+    }
+
+    fun shortLabelFor(type: String): String = when (type) {
+        SPECIAL_HOLIDAY -> "SNWH"
+        REGULAR_HOLIDAY -> "RH"
+        else -> "REG"
+    }
+
+    fun emojiFor(type: String): String = when (type) {
+        SPECIAL_HOLIDAY -> "🏖️"
+        REGULAR_HOLIDAY -> "🎉"
+        else -> "⚡"
+    }
+}
+
 data class OvertimeRecord(
     val id: String = UUID.randomUUID().toString(),
     val dateMillis: Long, // timestamp for the day
     val startTimeMillis: Long,
     val endTimeMillis: Long,
     val hourlyRate: Double = 93.75, // Default warehouse OT rate
-    val isHoliday: Boolean = false, // Holiday OT category (+30%)
+    val overtimeType: String = OvertimeType.REGULAR, // DOLE OT category
     val notes: String = "",
     val nightDiffRate: Double = 0.20 // Night Shift Differential rate (default +20%)
 ) {
+    // Legacy compatibility alias
+    val isHoliday: Boolean
+        get() = overtimeType != OvertimeType.REGULAR
+
     val durationMinutes: Long
         get() = maxOf(0L, (endTimeMillis - startTimeMillis) / (1000 * 60))
 
@@ -54,12 +95,15 @@ data class OvertimeRecord(
     val hasNightDifferential: Boolean
         get() = nightOtHours > 0.0
 
+    /** Day rate = base OT rate × category multiplier */
     val effectiveDayRate: Double
-        get() = if (isHoliday) hourlyRate * 1.30 else hourlyRate
+        get() = hourlyRate * OvertimeType.multiplierFor(overtimeType)
 
+    /** Backward-compat alias used by widgets and dashboard */
     val effectiveHourlyRate: Double
         get() = effectiveDayRate
 
+    /** Night rate = day rate × (1 + NSD%) */
     val effectiveNightRate: Double
         get() = effectiveDayRate * (1.0 + nightDiffRate)
 
@@ -71,6 +115,14 @@ data class OvertimeRecord(
 
     val totalPay: Double
         get() = dayPay + nightPay
+
+    /** Category multiplier for display (e.g., "×1.30") */
+    val categoryMultiplier: Double
+        get() = OvertimeType.multiplierFor(overtimeType)
+
+    /** Formatted category label */
+    val categoryLabel: String
+        get() = OvertimeType.labelFor(overtimeType)
 
     val formattedFormula: String
         get() = String.format(Locale.US, "₱%.2f × %.2f = ₱%.2f/hr", effectiveDayRate, 1.0 + nightDiffRate, effectiveNightRate)
@@ -105,6 +157,8 @@ data class OvertimeRecord(
             put("startTimeMillis", startTimeMillis)
             put("endTimeMillis", endTimeMillis)
             put("hourlyRate", hourlyRate)
+            put("overtimeType", overtimeType)
+            // Legacy field kept for older app versions reading the backup
             put("isHoliday", isHoliday)
             put("notes", notes)
             put("nightDiffRate", nightDiffRate)
@@ -118,13 +172,22 @@ data class OvertimeRecord(
         private val TIME_FORMAT = SimpleDateFormat("h:mm a", Locale.getDefault())
 
         fun fromJsonObject(json: JSONObject): OvertimeRecord {
+            // Migration: if overtimeType exists, use it; else fall back to isHoliday boolean
+            val overtimeType = if (json.has("overtimeType")) {
+                json.optString("overtimeType", OvertimeType.REGULAR)
+            } else {
+                // Legacy migration: isHoliday=true → SPECIAL_HOLIDAY
+                if (json.optBoolean("isHoliday", false)) OvertimeType.SPECIAL_HOLIDAY
+                else OvertimeType.REGULAR
+            }
+
             return OvertimeRecord(
                 id = json.optString("id", UUID.randomUUID().toString()),
                 dateMillis = json.optLong("dateMillis", System.currentTimeMillis()),
                 startTimeMillis = json.optLong("startTimeMillis", System.currentTimeMillis()),
                 endTimeMillis = json.optLong("endTimeMillis", System.currentTimeMillis()),
                 hourlyRate = json.optDouble("hourlyRate", 93.75),
-                isHoliday = json.optBoolean("isHoliday", false),
+                overtimeType = overtimeType,
                 notes = json.optString("notes", ""),
                 nightDiffRate = json.optDouble("nightDiffRate", 0.20)
             )

@@ -13,7 +13,7 @@
 
 ### 📥 Instant Download
 
-[<img src="https://img.shields.io/badge/⬇️_DOWNLOAD_RELEASE_APK-OvertimeTracker--v1.2.0.apk-FFD700?style=for-the-badge&labelColor=1A1A1A&color=FFD700" height="48" alt="Download APK">](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.2.0/OvertimeTracker-v1.2.0.apk)
+[<img src="https://img.shields.io/badge/⬇️_DOWNLOAD_RELEASE_APK-OvertimeTracker--v1.3.0.apk-FFD700?style=for-the-badge&labelColor=1A1A1A&color=FFD700" height="48" alt="Download APK">](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.3.0/OvertimeTracker-v1.3.0.apk)
 
 *Compatible with Android 8.0 (Oreo) and above. 100% Free & Open Source.*
 
@@ -72,12 +72,19 @@ It gives workers a private, offline tool to track their overtime hours, preview 
 - **Formal DTR Integration**: The formal DTR table clearly displays Day vs. Night OT breakdown per shift and cumulative cutoff night hours for simple transcription onto paper payroll sheets.
 - **Configurable in Settings**: Dedicated toggle to enable/disable NSD, with selectable rate presets (10%, 15%, 20% DOLE standard, 25%).
 
+### 🇵🇭 8. DOLE 3-Tier Overtime Rate Categories
+- **Regular OT (×1.00)**: Direct base rate overtime (e.g. ₱93.75/hr) without unintended secondary multipliers.
+- **Special Non-Working Holiday OT (×1.30)**: Statutory +30% holiday bonus (e.g. ₱93.75 × 1.30 = ₱121.88/hr).
+- **Regular Holiday OT (×2.00)**: Statutory double-pay (+100%) bonus (e.g. ₱93.75 × 2.00 = ₱187.50/hr).
+- **Stackable Night Differential**: Night differential (+20%) stacks directly onto whichever DOLE category is selected.
+- **Visual Selector & DTR Indicators**: 3-card selector with live formula previews and custom DTR ledger badges (`🏖️ SNWH +30%`, `🎉 RH +100%`).
+
 ---
 
 ## 📲 Installation Guide
 
 1. Download the latest APK directly from the [Releases Page](https://github.com/KouseiA/Overtime-Tracker/releases/latest) or click:  
-   👉 **[Download OvertimeTracker-v1.2.0.apk](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.2.0/OvertimeTracker-v1.2.0.apk)**
+   👉 **[Download OvertimeTracker-v1.3.0.apk](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.3.0/OvertimeTracker-v1.3.0.apk)**
 2. On your Android device, tap the downloaded `.apk` file.
 3. If prompted, allow **"Install from unknown sources"** for your browser or file manager.
 4. Tap **Install** and launch the app!
