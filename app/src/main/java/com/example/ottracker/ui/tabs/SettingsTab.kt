@@ -5,6 +5,7 @@ import android.content.Intent
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -41,6 +42,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -78,6 +80,11 @@ fun SettingsTab(
 ) {
     val context = LocalContext.current
     var baseRateText by remember(settings.baseHourlyRate) { mutableStateOf(settings.baseHourlyRate.toString()) }
+    var targetHoursText by remember(settings.targetOtHours) {
+        mutableStateOf(
+            if (settings.targetOtHours % 1.0 == 0.0) settings.targetOtHours.toInt().toString() else settings.targetOtHours.toString()
+        )
+    }
     var startHour by remember(settings.defaultStartHour) { mutableIntStateOf(settings.defaultStartHour) }
     var startMinute by remember(settings.defaultStartMinute) { mutableIntStateOf(settings.defaultStartMinute) }
     var showClearDialog by remember { mutableStateOf(false) }
@@ -416,6 +423,68 @@ fun SettingsTab(
                             color = onSurface,
                             fontWeight = FontWeight.ExtraBold
                         )
+                    }
+
+                    // Target OT Hours / Cutoff Goal Setting
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedTextField(
+                            value = targetHoursText,
+                            onValueChange = {
+                                targetHoursText = it
+                                val hours = it.toDoubleOrNull()
+                                if (hours != null && hours > 0) {
+                                    onSaveSettings(settings.copy(targetOtHours = hours))
+                                }
+                            },
+                            label = { Text("Target OT Hours / Cutoff Goal", color = onSurfaceVariant) },
+                            supportingText = {
+                                Text(
+                                    "Powers the 2x2 widget circular gauge & cutoff goal tracking",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = onSurfaceVariant
+                                )
+                            },
+                            leadingIcon = { Icon(Icons.Default.AccessTime, contentDescription = null, tint = onSurface) },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                            modifier = Modifier.fillMaxWidth(),
+                            singleLine = true,
+                            shape = RoundedCornerShape(12.dp),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = onSurface,
+                                unfocusedBorderColor = outline,
+                                focusedTextColor = onSurface,
+                                unfocusedTextColor = onSurface,
+                                focusedLabelColor = onSurface,
+                                cursorColor = onSurface
+                            )
+                        )
+
+                        // Quick preset chips
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            listOf(15.0, 20.0, 30.0, 40.0, 50.0).forEach { preset ->
+                                val isSelected = settings.targetOtHours == preset
+                                Surface(
+                                    shape = RoundedCornerShape(8.dp),
+                                    color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+                                    border = BorderStroke(1.dp, if (isSelected) MaterialTheme.colorScheme.primary else outline),
+                                    modifier = Modifier.clickable {
+                                        targetHoursText = preset.toInt().toString()
+                                        onSaveSettings(settings.copy(targetOtHours = preset))
+                                    }
+                                ) {
+                                    Text(
+                                        text = "${preset.toInt()}h",
+                                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                                        color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else onSurface
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }

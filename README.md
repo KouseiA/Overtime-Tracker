@@ -62,7 +62,7 @@ It gives workers a private, offline tool to track their overtime hours, preview 
 - **100% Offline & Private**: Zero cloud requirements, zero tracking, and no account signup. Your data stays strictly on your device.
 
 ### 📲 6. Dual Home Screen Widgets (Compact & Detailed)
-- **Compact Gauge (2x2)**: A space-saving square widget featuring a **dynamic glowing gold circular progress ring** that tracks hours rendered against your cutoff target, with bold earnings and a quick `+` log button.
+- **Compact Gauge (2x2)**: A space-saving square widget featuring a **dynamic glowing gold circular progress ring** tracking hours against your **user-configurable Target OT Goal** (set in Settings with quick presets: 15h, 20h, 30h, 40h, 50h). Displays bold earnings, progress percentage badge (`42% OF GOAL` → `GOAL MET! 100%`), and a quick `+` log button.
 - **Detailed Summary (4x2)**: A full-width dark OLED card displaying active cutoff dates, days remaining, hero gold earnings payout, hours rendered, and a direct `LOG OT +` launch button.
 - **Parallel Real-Time Sync**: Both widgets automatically refresh whenever overtime is logged or edited.
 

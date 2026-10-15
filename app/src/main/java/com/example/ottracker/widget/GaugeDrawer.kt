@@ -46,7 +46,14 @@ object GaugeDrawer {
 
         // 2. Draw active progress arc (starting at -90 degrees, which is 12 o'clock)
         val clampedProgress = progress.coerceIn(0.0f, 1.0f)
-        if (clampedProgress > 0.005f) {
+        if (clampedProgress >= 0.999f) {
+            val progressPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                style = Paint.Style.STROKE
+                strokeWidth = strokeWidthPx
+                color = progressColor
+            }
+            canvas.drawOval(rect, progressPaint)
+        } else if (clampedProgress > 0.005f) {
             val progressPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 style = Paint.Style.STROKE
                 strokeWidth = strokeWidthPx

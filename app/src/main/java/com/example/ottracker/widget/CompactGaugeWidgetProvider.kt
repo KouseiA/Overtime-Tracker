@@ -99,11 +99,7 @@ class CompactGaugeWidgetProvider : AppWidgetProvider() {
                 }
 
                 // 4. Determine Target Hours & Progress
-                val targetHours = when (settings.cutoffFrequency.uppercase(Locale.US)) {
-                    "MONTHLY" -> 70.0f
-                    "WEEKLY" -> 18.0f
-                    else -> 35.0f // Semi-Monthly
-                }
+                val targetHours = if (settings.targetOtHours > 0.0) settings.targetOtHours else 30.0
                 val progress = (cutoffHours / targetHours).toFloat()
 
                 // 5. Draw Dynamic Circular Progress Ring Bitmap
@@ -115,14 +111,26 @@ class CompactGaugeWidgetProvider : AppWidgetProvider() {
 
                 // 6. Format Compact Metrics
                 val payString = formatCompactPay(settings.currencySymbol, cutoffPay)
-                val hoursString = "${String.format(Locale.US, "%.1f", cutoffHours)} hrs"
+                val targetDisplay = if (targetHours % 1.0 == 0.0) {
+                    String.format(Locale.US, "%.0f", targetHours)
+                } else {
+                    String.format(Locale.US, "%.1f", targetHours)
+                }
+                val hoursString = "${String.format(Locale.US, "%.1f", cutoffHours)} / ${targetDisplay} hrs"
+
+                val percentInt = (progress * 100).toInt()
+                val badgeText = if (percentInt >= 100) {
+                    "GOAL MET! $percentInt%"
+                } else {
+                    "$percentInt% OF GOAL"
+                }
 
                 // 7. Populate RemoteViews
                 val views = RemoteViews(context.packageName, R.layout.widget_compact_gauge).apply {
                     setImageViewBitmap(R.id.widget_compact_gauge_img, gaugeBitmap)
                     setTextViewText(R.id.widget_compact_pay, payString)
                     setTextViewText(R.id.widget_compact_hours, hoursString)
-                    setTextViewText(R.id.widget_compact_badge, "CURRENT CUTOFF")
+                    setTextViewText(R.id.widget_compact_badge, badgeText)
 
                     // Click Intent to open MainActivity
                     val launchIntent = Intent(context, MainActivity::class.java).apply {

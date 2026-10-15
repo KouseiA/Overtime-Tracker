@@ -101,7 +101,9 @@ data class AppSettings(
     // Monthly: cutoff day (0 = end of month, or e.g. 25 for 26th-25th)
     val cutoffMonthlyEndDay: Int = 0,
     // Weekly: start day of week (Calendar.MONDAY = 2, Calendar.SUNDAY = 1, etc.)
-    val cutoffWeeklyStartDay: Int = java.util.Calendar.MONDAY
+    val cutoffWeeklyStartDay: Int = java.util.Calendar.MONDAY,
+    // Target OT Hours per Cutoff (for progress tracking & 2x2 widget circular gauge)
+    val targetOtHours: Double = 30.0
 ) {
     fun toJsonObject(): JSONObject {
         return JSONObject().apply {
@@ -117,6 +119,7 @@ data class AppSettings(
             put("cutoffSecondEndDay", cutoffSecondEndDay)
             put("cutoffMonthlyEndDay", cutoffMonthlyEndDay)
             put("cutoffWeeklyStartDay", cutoffWeeklyStartDay)
+            put("targetOtHours", targetOtHours)
         }
     }
 
@@ -134,7 +137,8 @@ data class AppSettings(
                 cutoffFirstEndDay = json.optInt("cutoffFirstEndDay", 15),
                 cutoffSecondEndDay = json.optInt("cutoffSecondEndDay", 0),
                 cutoffMonthlyEndDay = json.optInt("cutoffMonthlyEndDay", 0),
-                cutoffWeeklyStartDay = json.optInt("cutoffWeeklyStartDay", java.util.Calendar.MONDAY)
+                cutoffWeeklyStartDay = json.optInt("cutoffWeeklyStartDay", java.util.Calendar.MONDAY),
+                targetOtHours = json.optDouble("targetOtHours", 30.0)
             )
         }
     }
