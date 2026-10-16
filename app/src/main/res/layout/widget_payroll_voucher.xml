@@ -9,7 +9,7 @@
     android:paddingBottom="10dp">
 
     <!-- 1. SOLID GOLD OFFSET SHADOW -->
-    <View
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="5dp"
@@ -67,13 +67,14 @@
         </RelativeLayout>
 
         <!-- Divider Line (Perforation Feel) -->
-        <View
+        <ImageView
             android:id="@+id/widget_voucher_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@id/widget_voucher_header"
             android:layout_marginTop="6dp"
-            android:background="#2E2E2E" />
+            android:background="#2E2E2E"
+            android:contentDescription="@null" />
 
         <!-- Cutoff Period Subtitle -->
         <TextView

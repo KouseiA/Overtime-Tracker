@@ -29,4 +29,6 @@
     <color name="widget_neo_text_primary">#FFFFFF</color>
     <color name="widget_neo_text_secondary">#B0B0B0</color>
     <color name="widget_neo_text_muted">#707070</color>
+    <color name="widget_stamp_badge_fill">#20FFD700</color>
+    <color name="widget_divider_color">#2E2E2E</color>
 </resources>
