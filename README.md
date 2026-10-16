@@ -13,7 +13,7 @@
 
 ### 📥 Instant Download
 
-[<img src="https://img.shields.io/badge/⬇️_DOWNLOAD_RELEASE_APK-OvertimeTracker--v1.4.0.apk-FFD700?style=for-the-badge&labelColor=1A1A1A&color=FFD700" height="48" alt="Download APK">](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.4.0/OvertimeTracker-v1.4.0.apk)
+[<img src="https://img.shields.io/badge/⬇️_DOWNLOAD_RELEASE_APK-OvertimeTracker--v1.4.1.apk-FFD700?style=for-the-badge&labelColor=1A1A1A&color=FFD700" height="48" alt="Download APK">](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.4.1/OvertimeTracker-v1.4.1.apk)
 
 *Compatible with Android 8.0 (Oreo) and above. 100% Free & Open Source.*
 
@@ -62,10 +62,12 @@ It gives workers a private, offline tool to track their overtime hours, preview 
 - **Import with Confidence**: Restore your data on a new phone with choice of **Merge with Existing** or **Replace All**.
 - **100% Offline & Private**: Zero cloud requirements, zero tracking, and no account signup. Your data stays strictly on your device.
 
-### 📲 6. Dual Home Screen Widgets (Compact & Detailed)
-- **Compact Gauge (2x2)**: A space-saving square widget featuring a **dynamic glowing gold circular progress ring** tracking hours against your **user-configurable Target OT Goal** (set in Settings with quick presets: 15h, 20h, 30h, 40h, 50h). Displays bold earnings, progress percentage badge (`42% OF GOAL` → `GOAL MET! 100%`), and a quick `+` log button.
-- **Detailed Summary (4x2)**: A full-width dark OLED card displaying active cutoff dates, days remaining, hero gold earnings payout, hours rendered, and a direct `LOG OT +` launch button.
-- **Parallel Real-Time Sync**: Both widgets automatically refresh whenever overtime is logged or edited.
+### 📲 6. Tactile Neo-Brutalist Home Screen Widgets Suite (4 Widgets)
+- **🎟️ Concept 1: Payroll Voucher (4×2) [NEW]**: Modeled after a physical punch-card payroll receipt. Features a deep OLED dark background, crisp 2dp white border, solid tactile Gold offset shadow, live header status badge (`[ 4 DAYS LEFT ]`), monospace cutoff range subtitle, hero gold earnings payout (`₱0.00`), hours rendered pill, and a direct `+ LOG OT` action button.
+- **🏷️ Concept 4: Rubber Stamp (2×2) [NEW]**: Ultra-compact, high-contrast lock screen and home screen companion styled as an official stamped timecard. Features a signature `[ APPROVED OT ]` stamp badge, days-left counter, large gold earnings summary, hours rendered, and a circular `+` button.
+- **⏱️ Compact Gauge (2×2)**: A space-saving square widget featuring a **dynamic glowing gold circular progress ring** tracking hours against your **user-configurable Target OT Goal** (15h, 20h, 30h, 40h, 50h). Displays bold earnings, progress percentage badge (`42% OF GOAL` → `GOAL MET! 100%`), and a quick `+` log button.
+- **📊 Detailed Summary (4×2)**: A full-width dark OLED card displaying active cutoff dates, days remaining, hero gold earnings payout, hours rendered, and a direct `LOG OT +` launch button.
+- **⚡ Parallel Real-Time Sync**: All 4 widgets automatically refresh in parallel whenever overtime is logged or edited.
 
 ### 🌙 7. Automatic Night Shift Differential (+20%)
 - **DOLE-Compliant Smart Detection**: Automatically detects when shifts cross into the **10:00 PM – 6:00 AM** night window and splits your hours into Day OT and Night OT. Zero manual toggles required when logging shifts.
@@ -85,7 +87,7 @@ It gives workers a private, offline tool to track their overtime hours, preview 
 ## 📲 Installation Guide
 
 1. Download the latest APK directly from the [Releases Page](https://github.com/KouseiA/Overtime-Tracker/releases/latest) or click:  
-   👉 **[Download OvertimeTracker-v1.3.0.apk](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.3.0/OvertimeTracker-v1.3.0.apk)**
+   👉 **[Download OvertimeTracker-v1.4.1.apk](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.4.1/OvertimeTracker-v1.4.1.apk)**
 2. On your Android device, tap the downloaded `.apk` file.
 3. If prompted, allow **"Install from unknown sources"** for your browser or file manager.
 4. Tap **Install** and launch the app!

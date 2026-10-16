@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_stamp_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="4dp"
+    android:paddingTop="4dp"
+    android:paddingEnd="8dp"
+    android:paddingBottom="8dp">
+
+    <!-- 1. SOLID GOLD OFFSET SHADOW -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/widget_stamp_shadow" />
+
+    <!-- 2. FRONT STAMP CARD -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/widget_stamp_bg"
+        android:padding="10dp">
+
+        <!-- Top Rubber Stamp Badge -->
+        <TextView
+            android:id="@+id/widget_stamp_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/widget_stamp_badge"
+            android:fontFamily="monospace"
+            android:letterSpacing="0.08"
+            android:paddingStart="6dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="6dp"
+            android:paddingBottom="2dp"
+            android:text="[ APPROVED OT ]"
+            android:textColor="#FFD700"
+            android:textSize="9sp"
+            android:textStyle="bold" />
+
+        <!-- Days Left Badge (Top Right) -->
+        <TextView
+            android:id="@+id/widget_stamp_days_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:fontFamily="monospace"
+            android:text="4D LEFT"
+            android:textColor="#888888"
+            android:textSize="9sp"
+            android:textStyle="bold" />
+
+        <!-- Center Metrics Container -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+
+            <!-- Hero Pay Amount -->
+            <TextView
+                android:id="@+id/widget_stamp_pay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:text="₱0"
+                android:textColor="#FFD700"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <!-- Hours Rendered -->
+            <TextView
+                android:id="@+id/widget_stamp_hours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:fontFamily="monospace"
+                android:maxLines="1"
+                android:text="0.0 HRS TOTAL"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <!-- Period Range -->
+            <TextView
+                android:id="@+id/widget_stamp_period"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:fontFamily="monospace"
+                android:maxLines="1"
+                android:text="CURRENT CUTOFF"
+                android:textColor="#666666"
+                android:textSize="8.5sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Bottom Action Quick Add Button -->
+        <TextView
+            android:id="@+id/widget_stamp_btn"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/widget_stamp_btn"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="+"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+</FrameLayout>

@@ -2,4 +2,8 @@
     <string name="app_name">OT Tracker</string>
     <string name="widget_description">Detailed overtime cutoff summary and earnings</string>
     <string name="widget_compact_description">Compact circular gauge of your cutoff progress and earnings</string>
+    <string name="widget_voucher_name">Payroll Voucher (4×2)</string>
+    <string name="widget_voucher_description">Neo-brutalist payroll ticket with live cutoff earnings &amp; hours</string>
+    <string name="widget_stamp_name">Rubber Stamp (2×2)</string>
+    <string name="widget_stamp_description">Tactile verified punch-card badge with overtime totals</string>
 </resources>

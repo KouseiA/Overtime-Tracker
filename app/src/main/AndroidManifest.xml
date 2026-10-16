@@ -41,6 +41,30 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/compact_gauge_widget_info" />
         </receiver>
+
+        <!-- Concept 1: Neo-Brutalist Payroll Voucher (4x2) -->
+        <receiver
+            android:name=".widget.PayrollVoucherWidgetProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/payroll_voucher_widget_info" />
+        </receiver>
+
+        <!-- Concept 4: Neo-Brutalist Rubber Stamp (2x2) -->
+        <receiver
+            android:name=".widget.RubberStampWidgetProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/rubber_stamp_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

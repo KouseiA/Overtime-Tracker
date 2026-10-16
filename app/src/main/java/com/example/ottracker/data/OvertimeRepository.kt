@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.example.ottracker.widget.CompactGaugeWidgetProvider
 import com.example.ottracker.widget.OvertimeWidgetProvider
+import com.example.ottracker.widget.PayrollVoucherWidgetProvider
+import com.example.ottracker.widget.RubberStampWidgetProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,8 +39,7 @@ class OvertimeRepository(context: Context) {
     fun updateSettings(newSettings: AppSettings) {
         _settings.value = newSettings
         prefs.edit().putString(KEY_SETTINGS, newSettings.toJsonObject().toString()).apply()
-        OvertimeWidgetProvider.updateAllWidgets(appContext)
-        CompactGaugeWidgetProvider.updateAllWidgets(appContext)
+        updateAllWidgets()
     }
 
     private fun loadRecords() {
@@ -83,8 +84,14 @@ class OvertimeRepository(context: Context) {
         val array = JSONArray()
         list.forEach { array.put(it.toJsonObject()) }
         prefs.edit().putString(KEY_RECORDS, array.toString()).apply()
+        updateAllWidgets()
+    }
+
+    private fun updateAllWidgets() {
         OvertimeWidgetProvider.updateAllWidgets(appContext)
         CompactGaugeWidgetProvider.updateAllWidgets(appContext)
+        PayrollVoucherWidgetProvider.updateAllWidgets(appContext)
+        RubberStampWidgetProvider.updateAllWidgets(appContext)
     }
 
     fun exportBackupJson(): String {
