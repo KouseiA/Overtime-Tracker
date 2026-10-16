@@ -13,7 +13,7 @@
 
 ### 📥 Instant Download
 
-[<img src="https://img.shields.io/badge/⬇️_DOWNLOAD_RELEASE_APK-OvertimeTracker--v1.3.0.apk-FFD700?style=for-the-badge&labelColor=1A1A1A&color=FFD700" height="48" alt="Download APK">](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.3.0/OvertimeTracker-v1.3.0.apk)
+[<img src="https://img.shields.io/badge/⬇️_DOWNLOAD_RELEASE_APK-OvertimeTracker--v1.4.0.apk-FFD700?style=for-the-badge&labelColor=1A1A1A&color=FFD700" height="48" alt="Download APK">](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.4.0/OvertimeTracker-v1.4.0.apk)
 
 *Compatible with Android 8.0 (Oreo) and above. 100% Free & Open Source.*
 

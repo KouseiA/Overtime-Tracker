@@ -56,9 +56,11 @@ import com.example.ottracker.data.OvertimeRecord
 import com.example.ottracker.data.OvertimeType
 import com.example.ottracker.theme.DangerRed
 import com.example.ottracker.theme.GoldAccent
+import androidx.compose.ui.text.font.FontFamily
 import com.example.ottracker.ui.components.NeoButton
-import com.example.ottracker.ui.components.NeoIconButton
 import com.example.ottracker.ui.components.NeoCard
+import com.example.ottracker.ui.components.NeoIconButton
+import com.example.ottracker.ui.components.OvertimeCategoryStamp
 import com.example.ottracker.ui.components.TimeRangeOvertimeDialog
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -504,42 +506,12 @@ fun CalendarTab(
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = onSurface
                                 )
-                                if (record.overtimeType != OvertimeType.REGULAR) {
-                                    Spacer(modifier = Modifier.width(6.dp))
-                                    val isRegHoliday = record.overtimeType == OvertimeType.REGULAR_HOLIDAY
-                                    val badgeColor = if (isRegHoliday) Color(0xFFF59E0B) else Color(0xFF818CF8)
-                                    val badgeBg = if (isRegHoliday) Color(0xFFF59E0B).copy(alpha = 0.15f) else Color(0xFF6366F1).copy(alpha = 0.15f)
-                                    val bonusPercent = ((OvertimeType.multiplierFor(record.overtimeType) - 1.0) * 100).toInt()
-                                    Surface(
-                                        color = badgeBg,
-                                        shape = RoundedCornerShape(4.dp),
-                                        border = BorderStroke(1.dp, badgeColor)
-                                    ) {
-                                        Text(
-                                            text = "${OvertimeType.emojiFor(record.overtimeType)} ${OvertimeType.shortLabelFor(record.overtimeType)} (+$bonusPercent%)",
-                                            fontSize = 9.sp,
-                                            fontWeight = FontWeight.Black,
-                                            color = badgeColor,
-                                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
-                                        )
-                                    }
-                                }
-                                if (record.hasNightDifferential) {
-                                    Spacer(modifier = Modifier.width(6.dp))
-                                    Surface(
-                                        color = Color(0xFF312E81).copy(alpha = 0.35f),
-                                        shape = RoundedCornerShape(4.dp),
-                                        border = BorderStroke(1.dp, Color(0xFF6366F1))
-                                    ) {
-                                        Text(
-                                            text = "🌙 ${String.format(Locale.US, "%.1f", record.nightOtHours)}h NIGHT (+20%)",
-                                            fontSize = 9.sp,
-                                            fontWeight = FontWeight.Black,
-                                            color = Color(0xFFA5B4FC),
-                                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
-                                        )
-                                    }
-                                }
+                                Spacer(modifier = Modifier.width(6.dp))
+                                OvertimeCategoryStamp(
+                                    overtimeType = record.overtimeType,
+                                    hasNightDiff = record.hasNightDifferential,
+                                    rotation = -1.5f
+                                )
                             }
                             Spacer(modifier = Modifier.height(2.dp))
                             val nightBreakdownText = if (record.hasNightDifferential) " (${String.format(Locale.US, "%.1f", record.dayOtHours)}h Day + ${String.format(Locale.US, "%.1f", record.nightOtHours)}h Night)" else ""
@@ -553,7 +525,8 @@ fun CalendarTab(
                         Column(horizontalAlignment = Alignment.End) {
                             Text(
                                 text = "${settings.currencySymbol}${String.format(Locale.US, "%.2f", record.totalPay)}",
-                                fontWeight = FontWeight.ExtraBold,
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.Black,
                                 style = MaterialTheme.typography.titleMedium,
                                 color = GoldAccent
                             )

@@ -109,6 +109,7 @@ fun AnimatedMoneyCounter(
     Text(
         text = "$currencySymbol${String.format(Locale.US, "%,.2f", displayedValue)}",
         style = textStyle,
+        fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
         fontWeight = fontWeight,
         color = color,
         modifier = modifier.scale(scaleAnim.value)

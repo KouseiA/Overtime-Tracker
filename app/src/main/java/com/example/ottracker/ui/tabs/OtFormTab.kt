@@ -41,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -50,6 +51,7 @@ import com.example.ottracker.data.OvertimeRecord
 import com.example.ottracker.data.OvertimeType
 import com.example.ottracker.theme.GoldAccent
 import com.example.ottracker.ui.components.NeoCard
+import com.example.ottracker.ui.components.NeoReceiptCard
 import com.example.ottracker.ui.components.TimeRangeOvertimeDialog
 import com.example.ottracker.ui.main.DashboardStats
 import java.text.SimpleDateFormat
@@ -523,6 +525,7 @@ fun OtFormTab(
                                     text = "${settings.currencySymbol}${String.format(Locale.US, "%.2f", record.totalPay)}",
                                     textAlign = TextAlign.End,
                                     fontWeight = FontWeight.Black,
+                                    fontFamily = FontFamily.Monospace,
                                     fontSize = 12.5.sp,
                                     maxLines = 1,
                                     color = GoldAccent
@@ -586,6 +589,7 @@ fun OtFormTab(
                                 .padding(horizontal = 2.dp),
                             textAlign = TextAlign.Center,
                             fontWeight = FontWeight.Black,
+                            fontFamily = FontFamily.Monospace,
                             fontSize = 12.5.sp,
                             color = onSurface
                         )
@@ -599,6 +603,7 @@ fun OtFormTab(
                                 .padding(end = 4.dp),
                             textAlign = TextAlign.End,
                             fontWeight = FontWeight.Black,
+                            fontFamily = FontFamily.Monospace,
                             fontSize = 12.5.sp,
                             color = GoldAccent
                         )
@@ -618,74 +623,104 @@ fun OtFormTab(
             }
         }
 
-        // ── FORMAL TOTAL SUMMARY FOOTER CARD ─────────────────────────────────
+        // ── FORMAL TOTAL SUMMARY FOOTER CARD (RECEIPT STYLE) ─────────────────
         if (filteredRecords.isNotEmpty()) {
             item {
-                NeoCard(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(18.dp)) {
-                        Text(
-                            text = "TOTAL CUTOFF SUMMARY",
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.ExtraBold,
-                            letterSpacing = 1.5.sp,
-                            color = onSurfaceVariant
-                        )
-                        Spacer(modifier = Modifier.height(12.dp))
-
+                NeoReceiptCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    shadowOffset = 4.dp,
+                    stubContent = {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.Bottom
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Column {
-                                Text(
-                                    text = "TOTAL OVERTIME HOURS",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    fontWeight = FontWeight.Bold,
-                                    color = onSurfaceVariant
-                                )
-                                Spacer(modifier = Modifier.height(2.dp))
-                                Text(
-                                    text = "${String.format(Locale.US, "%.2f", totalHours)} hrs",
-                                    style = MaterialTheme.typography.headlineMedium,
-                                    fontWeight = FontWeight.Black,
-                                    color = onSurface
-                                )
-                                if (totalNightHours > 0.0) {
-                                    Text(
-                                        text = "${String.format(Locale.US, "%.1f", totalDayHours)}h Day · ${String.format(Locale.US, "%.1f", totalNightHours)}h Night (+20%)",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        fontWeight = FontWeight.Bold,
-                                        color = Color(0xFFA5B4FC)
-                                    )
-                                }
-                                Text(
-                                    text = "${filteredRecords.size} Total Shifts Logged",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = onSurfaceVariant
-                                )
-                            }
+                            Text(
+                                text = "@ ${settings.currencySymbol}${String.format(Locale.US, "%.2f", settings.baseHourlyRate)}/HR BASE RATE",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.Bold,
+                                color = onSurfaceVariant
+                            )
+                            Text(
+                                text = "DOLE COMPLIANT",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.ExtraBold,
+                                fontSize = 9.sp,
+                                color = GoldAccent
+                            )
+                        }
+                    }
+                ) {
+                    Text(
+                        text = "TOTAL CUTOFF SUMMARY",
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.ExtraBold,
+                        letterSpacing = 1.5.sp,
+                        color = onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
 
-                            Column(horizontalAlignment = Alignment.End) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.Bottom
+                    ) {
+                        Column {
+                            Text(
+                                text = "TOTAL OVERTIME HOURS",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = onSurfaceVariant
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = "${String.format(Locale.US, "%.2f", totalHours)} hrs",
+                                style = MaterialTheme.typography.headlineMedium,
+                                fontWeight = FontWeight.Black,
+                                fontFamily = FontFamily.Monospace,
+                                color = onSurface
+                            )
+                            if (totalNightHours > 0.0) {
                                 Text(
-                                    text = "TOTAL OVERTIME PAY",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    fontWeight = FontWeight.Bold,
-                                    color = onSurfaceVariant
-                                )
-                                Spacer(modifier = Modifier.height(2.dp))
-                                Text(
-                                    text = "${settings.currencySymbol}${String.format(Locale.US, "%,.2f", totalPay)}",
-                                    style = MaterialTheme.typography.headlineMedium,
-                                    fontWeight = FontWeight.Black,
-                                    color = GoldAccent
-                                )
-                                Text(
-                                    text = "@ ${settings.currencySymbol}${String.format(Locale.US, "%.2f", settings.baseHourlyRate)}/hr",
+                                    text = "${String.format(Locale.US, "%.1f", totalDayHours)}h Day · ${String.format(Locale.US, "%.1f", totalNightHours)}h Night (+20%)",
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = onSurfaceVariant
+                                    fontFamily = FontFamily.Monospace,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFFA5B4FC)
                                 )
                             }
+                            Text(
+                                text = "${filteredRecords.size} Total Shifts Logged",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = onSurfaceVariant
+                            )
+                        }
+
+                        Column(horizontalAlignment = Alignment.End) {
+                            Text(
+                                text = "TOTAL OVERTIME PAY",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = onSurfaceVariant
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = "${settings.currencySymbol}${String.format(Locale.US, "%,.2f", totalPay)}",
+                                style = MaterialTheme.typography.headlineMedium,
+                                fontWeight = FontWeight.Black,
+                                fontFamily = FontFamily.Monospace,
+                                color = GoldAccent
+                            )
+                            Text(
+                                text = "VERIFIED DISBURSEMENT",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 9.sp,
+                                color = onSurfaceVariant
+                            )
                         }
                     }
                 }

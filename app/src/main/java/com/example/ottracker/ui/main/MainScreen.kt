@@ -47,6 +47,9 @@ import com.example.ottracker.data.OvertimeRecord
 import com.example.ottracker.data.OvertimeRepository
 import com.example.ottracker.theme.GoldAccent
 import com.example.ottracker.ui.components.CashConfettiEffect
+import com.example.ottracker.ui.components.NeoNavigationBar
+import com.example.ottracker.ui.components.NeoTabItem
+import com.example.ottracker.ui.components.NeoTopAppBar
 import com.example.ottracker.ui.tabs.CalendarTab
 import com.example.ottracker.ui.tabs.DashboardTab
 import com.example.ottracker.ui.tabs.OtFormTab
@@ -141,62 +144,34 @@ fun MainScreen(
             }
         },
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = when (AppTab.entries[selectedTabIndex]) {
-                            AppTab.DASHBOARD -> "OT Statistics"
-                            AppTab.CALENDAR -> "Overtime Calendar"
-                            AppTab.OT_FORM -> "OT Form Records Sheet"
-                            AppTab.SETTINGS -> "Settings"
-                        },
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 0.5.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                )
+            val currentTab = AppTab.entries[selectedTabIndex]
+            val tabSubtitle = when (currentTab) {
+                AppTab.DASHBOARD -> "Statistics"
+                AppTab.CALENDAR -> "Shift Calendar"
+                AppTab.OT_FORM -> "DTR Ledger"
+                AppTab.SETTINGS -> "Preferences"
+            }
+            val statusText = when (currentTab) {
+                AppTab.SETTINGS -> "${state.settings.currencySymbol}${String.format(Locale.US, "%.2f", state.settings.baseHourlyRate)}/h"
+                else -> "${state.stats.currentCutoff.daysRemaining}d left"
+            }
+            NeoTopAppBar(
+                title = "OT TRACKER",
+                tabSubtitle = tabSubtitle,
+                statusText = statusText
             )
         },
         bottomBar = {
-            NavigationBar(
-                containerColor = MaterialTheme.colorScheme.surface,
-                tonalElevation = 8.dp
-            ) {
-                AppTab.entries.forEachIndexed { index, tab ->
-                    NavigationBarItem(
-                        selected = selectedTabIndex == index,
-                        onClick = {
-                            if (selectedTabIndex != index) {
-                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                                selectedTabIndex = index
-                            }
-                        },
-                        icon = {
-                            Icon(tab.icon, contentDescription = tab.title)
-                        },
-                        label = {
-                            Text(
-                                tab.title,
-                                fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.Normal,
-                                fontSize = 11.sp,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MaterialTheme.colorScheme.onSurface,
-                            selectedTextColor = MaterialTheme.colorScheme.onSurface,
-                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            indicatorColor = MaterialTheme.colorScheme.surfaceVariant
-                        )
-                    )
-                }
+            val tabs = remember {
+                AppTab.entries.map { NeoTabItem(it.title, it.icon) }
             }
+            NeoNavigationBar(
+                tabs = tabs,
+                selectedIndex = selectedTabIndex,
+                onTabSelected = { index ->
+                    selectedTabIndex = index
+                }
+            )
         }
     ) { innerPadding ->
         Box(

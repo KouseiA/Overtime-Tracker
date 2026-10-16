@@ -1,6 +1,9 @@
 package com.example.ottracker.ui.tabs
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,18 +13,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ottracker.data.AppSettings
@@ -31,6 +37,8 @@ import com.example.ottracker.ui.components.AnimatedMoneyCounter
 import com.example.ottracker.ui.components.EarningsBarChart
 import com.example.ottracker.ui.components.GrindLevelBadge
 import com.example.ottracker.ui.components.NeoCard
+import com.example.ottracker.ui.components.NeoReceiptCard
+import com.example.ottracker.ui.components.NeoStampBadge
 import com.example.ottracker.ui.main.DashboardStats
 import java.util.Locale
 
@@ -78,6 +86,7 @@ fun DashboardTab(
                             text = "NO OVERTIME LOGGED YET",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Black,
+                            fontFamily = FontFamily.Monospace,
                             letterSpacing = 1.sp,
                             color = onSurface
                         )
@@ -93,136 +102,313 @@ fun DashboardTab(
             }
         }
 
-        // ── 1. CURRENT CUTOFF HERO CARD ──────────────────────────────────────
+        // ── 1. CURRENT CUTOFF HERO RECEIPT VOUCHER (P3 & P4) ───────────────────
         item {
-            NeoCard(
+            NeoReceiptCard(
                 modifier = Modifier.fillMaxWidth(),
                 shadowOffset = 4.dp,
-                shape = RoundedCornerShape(16.dp),
-                borderColor = onSurface,
-                containerColor = surface
-            ) {
-                Column(modifier = Modifier.padding(20.dp)) {
-
-                    // Header row with Grind Level Badge
+                stubContent = {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row(
-                            modifier = Modifier.weight(1f, fill = false),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
+                        Column {
                             Text(
-                                text = "CURRENT CUTOFF",
+                                text = "RENDERED HOURS",
                                 style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.ExtraBold,
-                                letterSpacing = 1.2.sp,
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 9.sp,
                                 color = onSurfaceVariant
                             )
-                            Spacer(modifier = Modifier.width(6.dp))
-                            GrindLevelBadge(hours = stats.currentCutoff.hours)
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = "${String.format(Locale.US, "%.2f", stats.currentCutoff.hours)} HRS",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.Black,
+                                color = onSurface
+                            )
                         }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = stats.currentCutoff.payday,
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.Bold,
-                            color = onSurfaceVariant
-                        )
+
+                        Column(horizontalAlignment = Alignment.End) {
+                            Text(
+                                text = "CYCLE STATUS",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 9.sp,
+                                color = onSurfaceVariant
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Box(
+                                modifier = Modifier
+                                    .border(1.dp, GoldAccent, RoundedCornerShape(4.dp))
+                                    .background(GoldAccent.copy(alpha = 0.12f), RoundedCornerShape(4.dp))
+                                    .padding(horizontal = 7.dp, vertical = 2.dp)
+                            ) {
+                                Text(
+                                    text = "${stats.currentCutoff.daysRemaining}D REMAINING",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontFamily = FontFamily.Monospace,
+                                    fontWeight = FontWeight.Black,
+                                    fontSize = 10.sp,
+                                    color = GoldAccent
+                                )
+                            }
+                        }
                     }
 
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
-                        text = stats.currentCutoff.title,
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = onSurface
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Text(
-                        text = "Estimated Overtime Payout",
+                        text = "DOLE COMPLIANT • BASE RATE: ${settings.currencySymbol}${String.format(Locale.US, "%.2f", settings.baseHourlyRate)}/HR",
                         style = MaterialTheme.typography.labelSmall,
-                        color = onSurfaceVariant,
-                        letterSpacing = 0.5.sp
+                        fontFamily = FontFamily.Monospace,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 8.5.sp,
+                        color = onSurfaceVariant
                     )
-                    AnimatedMoneyCounter(
-                        targetAmount = stats.currentCutoff.pay,
-                        currencySymbol = settings.currencySymbol,
-                        textStyle = MaterialTheme.typography.displaySmall,
-                        color = GoldAccent
-                    )
-
-                    Spacer(modifier = Modifier.height(14.dp))
-                    HorizontalDivider(color = outline)
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = "${String.format(Locale.US, "%.2f", stats.currentCutoff.hours)} Hours Rendered",
-                            fontWeight = FontWeight.SemiBold,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = onSurface
-                        )
-                        Text(
-                            text = "${stats.currentCutoff.daysRemaining}d left",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = onSurfaceVariant
-                        )
-                    }
                 }
+            ) {
+                // Header row with Stamp Badge, Grind Level & Payday
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        NeoStampBadge(
+                            text = "CYCLE RECEIPT",
+                            rotation = -1.5f,
+                            containerColor = GoldAccent.copy(alpha = 0.12f),
+                            contentColor = GoldAccent,
+                            borderColor = GoldAccent
+                        )
+                        GrindLevelBadge(hours = stats.currentCutoff.hours)
+                    }
+                    Text(
+                        text = "PAYDAY: ${stats.currentCutoff.payday.uppercase(Locale.US)}",
+                        style = MaterialTheme.typography.labelSmall,
+                        fontFamily = FontFamily.Monospace,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 10.sp,
+                        color = onSurfaceVariant
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Text(
+                    text = stats.currentCutoff.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Black,
+                    color = onSurface
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Text(
+                    text = "ESTIMATED OVERTIME PAYOUT",
+                    style = MaterialTheme.typography.labelSmall,
+                    fontFamily = FontFamily.Monospace,
+                    fontWeight = FontWeight.ExtraBold,
+                    letterSpacing = 1.sp,
+                    fontSize = 10.sp,
+                    color = onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                AnimatedMoneyCounter(
+                    targetAmount = stats.currentCutoff.pay,
+                    currencySymbol = settings.currencySymbol,
+                    textStyle = MaterialTheme.typography.displaySmall,
+                    color = GoldAccent
+                )
             }
         }
 
-        // ── 2. PERIOD OVERVIEW LABEL ────────────────────────────────────────
+        // ── 2. PERIOD ACTIVITY ASYMMETRIC BENTO GRID (P4) ─────────────────────
         item {
             Text(
-                text = "PERIOD OVERVIEW",
+                text = "PERIOD BREAKDOWN",
                 style = MaterialTheme.typography.labelSmall,
+                fontFamily = FontFamily.Monospace,
                 fontWeight = FontWeight.ExtraBold,
                 letterSpacing = 1.5.sp,
                 color = onSurfaceVariant
             )
         }
 
-        // ── 3. THREE PERIOD CARDS: TODAY / THIS WEEK / THIS MONTH ───────────
         item {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                MonoPeriodCard(
-                    title = "TODAY",
-                    hours = stats.todayHours,
-                    pay = stats.todayPay,
-                    currencySymbol = settings.currencySymbol,
-                    modifier = Modifier.weight(1f)
-                )
-                MonoPeriodCard(
-                    title = "THIS WEEK",
-                    hours = stats.weekHours,
-                    pay = stats.weekPay,
-                    currencySymbol = settings.currencySymbol,
-                    modifier = Modifier.weight(1f)
-                )
-                MonoPeriodCard(
-                    title = "THIS MONTH",
-                    hours = stats.monthHours,
-                    pay = stats.monthPay,
-                    currencySymbol = settings.currencySymbol,
-                    modifier = Modifier.weight(1f)
-                )
+                // Left Bento Tile: TODAY'S ACTIVITY (Primary Focal Tile)
+                NeoCard(
+                    modifier = Modifier.weight(1.15f),
+                    shadowOffset = 3.dp,
+                    shape = RoundedCornerShape(14.dp),
+                    borderColor = onSurface,
+                    containerColor = surface
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(14.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "TODAY",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.Black,
+                                letterSpacing = 1.sp,
+                                color = onSurfaceVariant
+                            )
+                            // Live status dot
+                            Box(
+                                modifier = Modifier
+                                    .size(8.dp)
+                                    .background(
+                                        color = if (stats.todayHours > 0) Color(0xFF22C55E) else outline,
+                                        shape = CircleShape
+                                    )
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        Text(
+                            text = "${String.format(Locale.US, "%.1f", stats.todayHours)}h",
+                            style = MaterialTheme.typography.headlineMedium,
+                            fontFamily = FontFamily.Monospace,
+                            fontWeight = FontWeight.Black,
+                            color = onSurface
+                        )
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            text = "${settings.currencySymbol}${String.format(Locale.US, "%,.2f", stats.todayPay)}",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontFamily = FontFamily.Monospace,
+                            fontWeight = FontWeight.Black,
+                            color = GoldAccent
+                        )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Text(
+                            text = if (stats.todayHours > 0) "ACTIVE SHIFT" else "OFF-DUTY",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontFamily = FontFamily.Monospace,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 9.sp,
+                            color = if (stats.todayHours > 0) Color(0xFF22C55E) else onSurfaceVariant
+                        )
+                    }
+                }
+
+                // Right Bento Column: THIS WEEK & THIS MONTH (Stacked Metrics)
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    // THIS WEEK Bento Tile
+                    NeoCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        shadowOffset = 3.dp,
+                        shape = RoundedCornerShape(12.dp),
+                        borderColor = onSurface,
+                        containerColor = surface
+                    ) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Text(
+                                text = "THIS WEEK",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.ExtraBold,
+                                letterSpacing = 1.sp,
+                                fontSize = 10.sp,
+                                color = onSurfaceVariant
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.Bottom
+                            ) {
+                                Text(
+                                    text = "${String.format(Locale.US, "%.1f", stats.weekHours)}h",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontFamily = FontFamily.Monospace,
+                                    fontWeight = FontWeight.Black,
+                                    color = onSurface
+                                )
+                                Text(
+                                    text = "${settings.currencySymbol}${String.format(Locale.US, "%.0f", stats.weekPay)}",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontFamily = FontFamily.Monospace,
+                                    fontWeight = FontWeight.Black,
+                                    color = GoldAccent
+                                )
+                            }
+                        }
+                    }
+
+                    // THIS MONTH Bento Tile
+                    NeoCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        shadowOffset = 3.dp,
+                        shape = RoundedCornerShape(12.dp),
+                        borderColor = onSurface,
+                        containerColor = surface
+                    ) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Text(
+                                text = "THIS MONTH",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.ExtraBold,
+                                letterSpacing = 1.sp,
+                                fontSize = 10.sp,
+                                color = onSurfaceVariant
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.Bottom
+                            ) {
+                                Text(
+                                    text = "${String.format(Locale.US, "%.1f", stats.monthHours)}h",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontFamily = FontFamily.Monospace,
+                                    fontWeight = FontWeight.Black,
+                                    color = onSurface
+                                )
+                                Text(
+                                    text = "${settings.currencySymbol}${String.format(Locale.US, "%.0f", stats.monthPay)}",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontFamily = FontFamily.Monospace,
+                                    fontWeight = FontWeight.Black,
+                                    color = GoldAccent
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        // ── 3.5. EARNINGS TRENDS BAR CHART ──────────────────────────────────
+        // ── 3. EARNINGS TRENDS BAR CHART BENTO ────────────────────────────────
         item {
             EarningsBarChart(
                 cutoffTrends = stats.cutoffTrends,
@@ -231,112 +417,122 @@ fun DashboardTab(
             )
         }
 
-        // ── 4. PREVIOUS CUTOFF CARD ─────────────────────────────────────────
+        // ── 4. HISTORICAL BENCHMARKS BENTO GRID ───────────────────────────────
         item {
-            NeoCard(
-                modifier = Modifier.fillMaxWidth(),
-                shadowOffset = 4.dp,
-                shape = RoundedCornerShape(16.dp),
-                borderColor = onSurface,
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
-            ) {
-                Column(modifier = Modifier.padding(18.dp)) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "PREVIOUS CUTOFF",
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.ExtraBold,
-                            letterSpacing = 1.5.sp,
-                            color = onSurfaceVariant
-                        )
-                        Text(
-                            text = stats.previousCutoff.payday,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = onSurfaceVariant
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column {
-                            Text(
-                                text = stats.previousCutoff.title,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = onSurfaceVariant
-                            )
-                            Spacer(modifier = Modifier.height(2.dp))
-                            Text(
-                                text = "${String.format(Locale.US, "%.2f", stats.previousCutoff.hours)} hrs rendered",
-                                style = MaterialTheme.typography.bodySmall,
-                                fontWeight = FontWeight.SemiBold,
-                                color = onSurface
-                            )
-                        }
-
-                        Text(
-                            text = "${settings.currencySymbol}${String.format(Locale.US, "%,.2f", stats.previousCutoff.pay)}",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = GoldAccent
-                        )
-                    }
-                }
-            }
+            Text(
+                text = "HISTORICAL BENCHMARKS",
+                style = MaterialTheme.typography.labelSmall,
+                fontFamily = FontFamily.Monospace,
+                fontWeight = FontWeight.ExtraBold,
+                letterSpacing = 1.5.sp,
+                color = onSurfaceVariant
+            )
         }
 
-        // ── 5. ALL-TIME TOTAL CARD ───────────────────────────────────────────
         item {
-            NeoCard(
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                shadowOffset = 4.dp,
-                shape = RoundedCornerShape(16.dp),
-                borderColor = onSurface,
-                containerColor = surface
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(18.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                // Previous Cutoff Bento Tile
+                NeoCard(
+                    modifier = Modifier.weight(1f),
+                    shadowOffset = 3.dp,
+                    shape = RoundedCornerShape(14.dp),
+                    borderColor = onSurface,
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
                 ) {
-                    Column {
+                    Column(modifier = Modifier.padding(14.dp)) {
                         Text(
-                            text = "ALL-TIME TOTAL",
+                            text = "PREVIOUS CYCLE",
                             style = MaterialTheme.typography.labelSmall,
+                            fontFamily = FontFamily.Monospace,
                             fontWeight = FontWeight.ExtraBold,
-                            letterSpacing = 1.5.sp,
+                            fontSize = 10.sp,
+                            letterSpacing = 1.sp,
                             color = onSurfaceVariant
                         )
-                        Spacer(modifier = Modifier.height(6.dp))
-                        AnimatedMoneyCounter(
-                            targetAmount = stats.totalPay,
-                            currencySymbol = settings.currencySymbol,
-                            textStyle = MaterialTheme.typography.titleLarge,
-                            color = GoldAccent,
-                            enableSound = false
-                        )
-                    }
-                    Column(horizontalAlignment = Alignment.End) {
+                        Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "${String.format(Locale.US, "%.2f", stats.totalHours)} hrs",
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.bodyMedium,
+                            text = "${settings.currencySymbol}${String.format(Locale.US, "%,.2f", stats.previousCutoff.pay)}",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontFamily = FontFamily.Monospace,
+                            fontWeight = FontWeight.Black,
+                            color = GoldAccent
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "${String.format(Locale.US, "%.1f", stats.previousCutoff.hours)}h rendered",
+                            style = MaterialTheme.typography.bodySmall,
+                            fontFamily = FontFamily.Monospace,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 11.sp,
                             color = onSurface
                         )
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
-                            text = "${records.size} OT Shifts Logged",
+                            text = stats.previousCutoff.title,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = onSurfaceVariant,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }
+
+                // All-Time Career Bento Tile
+                NeoCard(
+                    modifier = Modifier.weight(1f),
+                    shadowOffset = 3.dp,
+                    shape = RoundedCornerShape(14.dp),
+                    borderColor = onSurface,
+                    containerColor = surface
+                ) {
+                    Column(modifier = Modifier.padding(14.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "ALL-TIME",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.ExtraBold,
+                                fontSize = 10.sp,
+                                letterSpacing = 1.sp,
+                                color = onSurfaceVariant
+                            )
+                            Text(
+                                text = "${records.size} SHIFTS",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 9.sp,
+                                color = onSurfaceVariant
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        AnimatedMoneyCounter(
+                            targetAmount = stats.totalPay,
+                            currencySymbol = settings.currencySymbol,
+                            textStyle = MaterialTheme.typography.titleMedium,
+                            color = GoldAccent,
+                            enableSound = false
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "${String.format(Locale.US, "%.1f", stats.totalHours)}h logged",
                             style = MaterialTheme.typography.bodySmall,
+                            fontFamily = FontFamily.Monospace,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 11.sp,
+                            color = onSurface
+                        )
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            text = "Career Total Pay",
+                            style = MaterialTheme.typography.labelSmall,
                             color = onSurfaceVariant
                         )
                     }
@@ -345,60 +541,5 @@ fun DashboardTab(
         }
 
         item { Spacer(modifier = Modifier.height(16.dp)) }
-    }
-}
-
-@Composable
-fun MonoPeriodCard(
-    title: String,
-    hours: Double,
-    pay: Double,
-    currencySymbol: String,
-    modifier: Modifier = Modifier
-) {
-    val onSurface = MaterialTheme.colorScheme.onSurface
-    val onSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
-    val surface = MaterialTheme.colorScheme.surface
-
-    NeoCard(
-        modifier = modifier,
-        shadowOffset = 3.dp,
-        shape = RoundedCornerShape(14.dp),
-        borderColor = onSurface,
-        containerColor = surface
-    ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 6.dp, vertical = 10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.labelSmall,
-                fontWeight = FontWeight.ExtraBold,
-                letterSpacing = 0.5.sp,
-                fontSize = 10.sp,
-                color = onSurfaceVariant,
-                textAlign = TextAlign.Center,
-                maxLines = 1
-            )
-            Spacer(modifier = Modifier.height(6.dp))
-            Text(
-                text = "${String.format(Locale.US, "%.1f", hours)}h",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Black,
-                color = onSurface,
-                textAlign = TextAlign.Center,
-                maxLines = 1
-            )
-            Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                text = "$currencySymbol${String.format(Locale.US, "%.0f", pay)}",
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight = FontWeight.Bold,
-                color = GoldAccent,
-                textAlign = TextAlign.Center,
-                maxLines = 1
-            )
-        }
     }
 }
