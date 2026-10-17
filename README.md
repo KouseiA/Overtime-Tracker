@@ -2,133 +2,100 @@
 
 # Overtime Tracker
 
-**An offline-first Android overtime ledger and cutoff earnings calculator engineered for Philippine statutory labor standards (PD 442).**
+**A simple, offline Android app to track your overtime hours and compute your cutoff pay based on Philippine labor rules.**
 
 [![Latest Release](https://img.shields.io/github/v/release/KouseiA/Overtime-Tracker?style=flat-square&color=FFD700&label=Release)](https://github.com/KouseiA/Overtime-Tracker/releases/latest)
-[![Platform](https://img.shields.io/badge/Platform-Android%208.0%2B%20(API%2026%2B)-3DDC84?style=flat-square&logo=android&logoColor=white)](https://android.com)
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.0.21-7F52FF?style=flat-square&logo=kotlin&logoColor=white)](https://kotlinlang.org)
-[![UI](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?style=flat-square&logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
-[![Binary Size](https://img.shields.io/badge/APK_Size-7.89_MB-success?style=flat-square)](https://github.com/KouseiA/Overtime-Tracker/releases/latest)
+[![Platform](https://img.shields.io/badge/Platform-Android_8.0+-3DDC84?style=flat-square&logo=android&logoColor=white)](https://android.com)
+[![Size](https://img.shields.io/badge/Size-Under_8_MB-success?style=flat-square)](https://github.com/KouseiA/Overtime-Tracker/releases/latest)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
 
 <br/>
 
-[**Download Latest Release (v1.4.2 APK)**](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.4.2/OvertimeTracker-v1.4.2.apk) • [**Report an Issue**](https://github.com/KouseiA/Overtime-Tracker/issues) • [**Changelog**](CHANGELOG.md)
+[**Download Overtime Tracker (v1.4.2 APK)**](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.4.2/OvertimeTracker-v1.4.2.apk) • [**View Changes**](CHANGELOG.md)
 
 </div>
 
 ---
 
-## Interface Preview
+## Screenshots
 
-| Bento Dashboard | Shift Calendar | Formal DTR Ledger | Rates & Settings |
+| Dashboard | Shift Calendar | DTR Sheet | Settings |
 |:---:|:---:|:---:|:---:|
-| <img src="docs/screenshots/01_dashboard.jpg" width="220" alt="Bento Dashboard" /> | <img src="docs/screenshots/02_calendar.jpg" width="220" alt="Shift Calendar" /> | <img src="docs/screenshots/03_dtr_sheet.jpg" width="220" alt="Formal DTR Ledger" /> | <img src="docs/screenshots/04_settings.jpg" width="220" alt="Warehouse OT Settings" /> |
-| *Hero voucher & live stats* | *Visual monthly hour tags* | *Transcribe-ready table* | *DOLE NSD & rate formulas* |
+| <img src="docs/screenshots/01_dashboard.jpg" width="220" alt="Dashboard" /> | <img src="docs/screenshots/02_calendar.jpg" width="220" alt="Calendar" /> | <img src="docs/screenshots/03_dtr_sheet.jpg" width="220" alt="DTR Sheet" /> | <img src="docs/screenshots/04_settings.jpg" width="220" alt="Settings" /> |
+| *Total pay & hours* | *Tap days to log OT* | *Ready for paper forms* | *Set your hourly rate* |
 
 ---
 
-## Overview
+## What Does This App Do?
 
-Overtime Tracker simplifies payroll tracking for industrial, warehouse, BPO, and shift workers across the Philippines. It automates statutory overtime rates, detects night shifts, synchronizes semi-monthly cutoff cycles, and generates clean, transcribable logs to dispute or verify physical payslips.
+Writing down overtime on scratch paper or trying to do the math in your head often leads to mistakes. **Overtime Tracker** makes it simple:
 
-- **100% Offline & Private**: Zero external network calls, accounts, or telemetry. All shift records and configuration parameters remain entirely on the local device.
-- **DOLE Statutory Compliance**: Implements the legal premium formulas defined in Presidential Decree No. 442 (The Labor Code of the Philippines).
-- **Tactile Neo-Brutalist Design**: High-contrast OLED dark theme with zero-jitter monospace financial figures, mechanical squish buttons, and native tactile vibration cues.
-
----
-
-## Statutory Pay Calculation Matrix
-
-Calculations strictly mirror Department of Labor and Employment (DOLE) rules:
-
-| Shift Classification | Statutory Reference | Standard Multiplier | With Night Shift Differential (+20%) |
-|---|---|:---:|:---:|
-| **Regular Workday OT** | Labor Code Art. 87 | **125%** (`× 1.25`) | **150%** (`× 1.50`) |
-| **Rest Day OT** | Labor Code Art. 93 | **169%** (`× 1.69`) | **202.8%** (`× 2.028`) |
-| **Special Non-Working Holiday (SNWH)** | Labor Code Art. 93 | **130%** (`× 1.30`) | **156%** (`× 1.56`) |
-| **Regular Holiday (RH)** | Labor Code Art. 94 | **200%** (`× 2.00`) | **240%** (`× 2.40`) |
-| **Night Shift Differential (NSD)** | Labor Code Art. 86 | **+10% to +25%** *(Default: 20%)* | Applied to all hours worked between 10:00 PM – 6:00 AM |
+- **100% Offline & Private**: No sign-up, no login, and no internet needed. All your hours stay saved only on your phone.
+- **Accurate DOLE Rates**: Automatically computes regular overtime, holiday pay, and night differential.
+- **Double-Check Your Payslip**: Know exactly how much you earned before payday so you can spot any missing hours or pay discrepancies.
 
 ---
 
-## Core Capabilities
+## Overtime Rates (DOLE Rules)
 
-### 1. Semi-Monthly Cutoff Engine
-- Pre-configured presets for common Philippine corporate schedules:
-  - **Standard 15th/End**: 1st–15th (Payday: 20th) & 16th–End (Payday: 5th).
-  - **Mid-Month Cutoff**: 11th–25th (Payday: 30th) & 26th–10th (Payday: 15th).
-  - **Custom Bounds**: User-defined cycle start and end days via visual date-picker dialogs.
-- Active countdown ticker indicating remaining cycle days.
-- Live earnings counter with low-latency synthesized cash sounds (`SoundPool`).
+The app automatically computes your pay using standard Philippine labor rules:
 
-### 2. Transcribe-Ready DTR Ledger
-- Structured shift ledger formatted to match physical company OT authorization forms (`Date`, `In`, `Out`, `Hours`, `Amount`).
-- Filters for **This Cutoff**, **Previous Cutoff**, or **Complete History**.
-- Displays combined cumulative cutoff totals and shift-by-shift Day vs. Night breakdowns.
+| Day Type | Rate | With Night Differential (10 PM – 6 AM) |
+|---|:---:|:---:|
+| **Regular Workday** | **125%** (`× 1.25`) | **150%** (`× 1.50`) |
+| **Rest Day** | **169%** (`× 1.69`) | **202.8%** (`× 2.028`) |
+| **Special Non-Working Holiday** | **130%** (`× 1.30`) | **156%** (`× 1.56`) |
+| **Regular Holiday** | **200%** (Double Pay) | **240%** (`× 2.40`) |
+| **Night Shift Differential** | **+20%** standard | Automatically applied between 10:00 PM and 6:00 AM |
 
-### 3. Automatic Night Shift Differential Detection
-- Automatically identifies hours falling within the statutory **10:00 PM – 6:00 AM** window.
-- Splits shift duration into Day OT and Night OT sub-totals without requiring manual calculation.
-- Stacks onto Special Holiday and Regular Holiday overtime rates.
+---
+
+## Main Features
+
+### 1. Payday & Cutoff Tracker
+- Works with common Philippine cutoff schedules:
+  - **1st to 15th** (Payday on the 20th) & **16th to end of month** (Payday on the 5th)
+  - **11th to 25th** & **26th to 10th**
+  - Or choose your own custom cutoff dates.
+- Shows a countdown of how many days are left in your cutoff.
+
+### 2. Paper-Ready DTR Table
+- Formatted just like a company overtime slip (`Date`, `Time In`, `Time Out`, `Hours`, `Amount`).
+- Easy to copy onto your paper form before passing it to HR or your supervisor.
+- Filter by **Current Cutoff**, **Previous Cutoff**, or **All Records**.
+
+### 3. Automatic Night Differential
+- If your overtime extends past 10:00 PM, the app automatically splits your hours into Day OT and Night OT.
+- No need to do the math yourself.
 
 ### 4. Home Screen Widgets
-Four real-time synchronized AppWidgets:
-- **Payroll Voucher (4×2)**: Perforated ticket layout with cycle bounds, live cutoff pay, and quick-add trigger.
-- **Rubber Stamp (2×2)**: High-contrast compact badge displaying hours and days remaining.
-- **Circular Goal Gauge (2×2)**: Dynamic progress ring tracking cutoff hours against user-defined goals (15h–50h).
-- **Cutoff Summary (4×2)**: Complete summary card with hero earnings readout.
+Check your hours and earnings right on your home screen without opening the app:
+- **Payroll Voucher (4×2)**: Shows your cutoff dates, pay, hours, and a quick "+ LOG OT" button.
+- **Rubber Stamp (2×2)**: Compact square widget showing total pay and days left.
+- **Goal Ring (2×2)**: Circular progress ring showing your progress toward your monthly overtime goal.
+- **Cutoff Card (4×2)**: Clean summary card for your home screen.
 
-### 5. Local Data Sovereignty
-- Single-tap export to standardized JSON format.
-- Safe import supporting **Merge with Existing** or **Clean Overwrite**.
-
----
-
-## Technical Stack & Architecture
-
-- **Language**: Kotlin 2.0.21
-- **UI Toolkit**: Jetpack Compose + Material 3 (Custom Neo-Brutalist theme tokens)
-- **Architecture**: Single-Activity, Clean MVVM
-- **State Management**: Reactive `StateFlow` backed by atomic shared preferences
-- **Audio Engine**: Native Android `SoundPool` waveform synthesis (zero external audio asset dependencies)
-- **Widgets**: Multi-receiver Android `AppWidgetProvider` with `RemoteViews`
-- **Compiler Optimizations**: ProGuard / R8 code and resource shrinking (< 8 MB release binary)
+### 5. Backup & Transfer
+- Save your shift records to a backup file anytime.
+- Easily restore your data if you buy a new phone.
 
 ---
 
-## Building from Source
+## How to Install
 
-### Prerequisites
-- Android Studio Ladybug (2024.2+) or newer
-- JDK 17
-- Android SDK 36 (compileSdk 36, minSdk 24)
-
-### Build Commands
-```bash
-# Clone the repository
-git clone https://github.com/KouseiA/Overtime-Tracker.git
-cd Overtime-Tracker
-
-# Build unsigned debug APK
-./gradlew assembleDebug
-
-# Build optimized production release APK
-./gradlew assembleRelease
-```
-The output APK is generated at:
-```
-app/build/outputs/apk/release/app-release.apk
-```
+1. Download the APK file: [**Download OvertimeTracker-v1.4.2.apk**](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.4.2/OvertimeTracker-v1.4.2.apk)
+2. Tap the downloaded file on your Android phone.
+3. If asked, tap **Allow install from unknown sources**.
+4. Open the app and set your hourly rate!
 
 ---
 
-## Disclaimer
+## Note
 
-> **Paalala:** The amounts and totals calculated by this application are estimates intended for personal monitoring and cross-referencing. Final compensation may vary according to company policy, tax withholding, and internal payroll adjustments.
+> **Paalala:** The numbers in this app are estimates to help you track your own hours. Your official company payslip may differ slightly due to tax deductions, SSS/PhilHealth/Pag-IBIG, or company-specific policies.
 
 ---
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE) — free to inspect, modify, and distribute.
+Free and open-source under the [MIT License](LICENSE).
