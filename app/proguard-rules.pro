@@ -1,16 +1,22 @@
 # ── OT Tracker ProGuard / R8 Rules ────────────────────────────────────────────
 
-# Keep data classes used with JSONObject serialization (accessed via reflection-like patterns)
--keep class com.example.ottracker.data.OvertimeRecord { *; }
--keep class com.example.ottracker.data.AppSettings { *; }
+-keepattributes *Annotation*,Signature,InnerClasses,EnclosingMethod
 
-# Keep the widget provider (referenced in AndroidManifest.xml)
--keep class com.example.ottracker.widget.OvertimeWidgetProvider { *; }
+# Keep data classes used with JSON serialization
+-keep class com.example.ottracker.data.** { *; }
+
+# Keep all widget providers and helpers
+-keep class com.example.ottracker.widget.** { *; }
+
+# Jetpack Glance & WorkManager
+-dontwarn androidx.glance.**
+-keep class androidx.glance.** { *; }
+-dontwarn androidx.work.**
+-keep class androidx.work.** { *; }
 
 # Keep Compose — required for R8 full mode
 -dontwarn androidx.compose.**
 -keep class androidx.compose.** { *; }
 
-# Keep Material3 icons (extended icons are tree-shaken by R8 automatically,
-# but we need to keep the ones actually referenced)
+# Keep Material3 icons
 -dontwarn androidx.compose.material.icons.**
