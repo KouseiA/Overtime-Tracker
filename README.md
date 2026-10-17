@@ -32,7 +32,7 @@ Writing down overtime on scratch paper or trying to do the math in your head oft
 
 - **100% Offline & Private**: No sign-up, no login, and no internet needed. All your hours stay saved only on your phone.
 - **Accurate DOLE Rates**: Automatically computes regular overtime, holiday pay, and night differential.
-- **Double-Check Your Payslip**: Know exactly how much you earned before payday so you can spot any missing hours or pay discrepancies.
+- **Keep Your Own Records**: Keep a personal log of your overtime hours and estimated pay so you have a copy to reference when your payslip arrives.
 
 ---
 
