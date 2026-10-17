@@ -121,11 +121,12 @@ fun OtFormTab(
         else -> "All Logged Shifts"
     }
 
-    val paydayText = when (selectedFilterIndex) {
+    val rawPayday = when (selectedFilterIndex) {
         0 -> stats.currentCutoff.payday
         1 -> stats.previousCutoff.payday
         else -> "N/A"
     }
+    val paydayText = rawPayday.replace(Regex("(?i)^(payday:\\s*)+"), "").trim().ifEmpty { rawPayday }
 
     val timeFormat = remember { SimpleDateFormat("h:mm a", Locale.getDefault()) }
     val monthDayFormat = remember { SimpleDateFormat("MMM dd", Locale.getDefault()) }

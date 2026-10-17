@@ -67,10 +67,12 @@ fun EarningsBarChart(
         mutableIntStateOf(if (currIdx >= 0) currIdx else currentList.lastIndex)
     }
 
-    val maxPay = (currentList.maxOfOrNull { it.pay } ?: 0.0).coerceAtLeast(1.0)
-    val totalEarnings = currentList.sumOf { it.pay }
-    val averageEarnings = if (currentList.isNotEmpty()) totalEarnings / currentList.size else 0.0
-    val peakEarnings = currentList.maxOfOrNull { it.pay } ?: 0.0
+    val totalEarnings = remember(currentList) { currentList.sumOf { it.pay } }
+    val peakEarnings = remember(currentList) { currentList.maxOfOrNull { it.pay } ?: 0.0 }
+    val maxPay = remember(peakEarnings) { peakEarnings.coerceAtLeast(1.0) }
+    val averageEarnings = remember(currentList, totalEarnings) {
+        if (currentList.isNotEmpty()) totalEarnings / currentList.size else 0.0
+    }
 
     val selectedBar = currentList.getOrNull(selectedIndex)
 

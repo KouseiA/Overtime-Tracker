@@ -104,7 +104,7 @@ fun SettingsTab(
         set(Calendar.HOUR_OF_DAY, startHour)
         set(Calendar.MINUTE, startMinute)
     }
-    val timeFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
+    val timeFormat = remember { SimpleDateFormat("h:mm a", Locale.getDefault()) }
 
     if (showClearDialog) {
         val isConfirmed = confirmInputText.trim().equals("DELETE", ignoreCase = true)

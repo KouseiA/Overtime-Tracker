@@ -168,47 +168,63 @@ fun DashboardTab(
                         fontFamily = FontFamily.Monospace,
                         fontWeight = FontWeight.Bold,
                         fontSize = 8.5.sp,
-                        color = onSurfaceVariant
+                        color = onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             ) {
-                // Header row with Stamp Badge, Grind Level & Payday
+                val rawPayday = stats.currentCutoff.payday
+                val cleanPaydayDate = rawPayday.replace(Regex("(?i)^(payday:\\s*)+"), "").trim()
+
+                // Header Row 1: Badges (Cycle Receipt + Grind Level)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    NeoStampBadge(
+                        text = "CYCLE RECEIPT",
+                        rotation = -1.5f,
+                        containerColor = GoldAccent.copy(alpha = 0.12f),
+                        contentColor = GoldAccent,
+                        borderColor = GoldAccent
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    GrindLevelBadge(hours = stats.currentCutoff.hours)
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // Header Row 2: Cutoff Dates & Clean Payday (Zero overlap, perfectly spaced)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        NeoStampBadge(
-                            text = "CYCLE RECEIPT",
-                            rotation = -1.5f,
-                            containerColor = GoldAccent.copy(alpha = 0.12f),
-                            contentColor = GoldAccent,
-                            borderColor = GoldAccent
-                        )
-                        GrindLevelBadge(hours = stats.currentCutoff.hours)
-                    }
                     Text(
-                        text = "PAYDAY: ${stats.currentCutoff.payday.uppercase(Locale.US)}",
-                        style = MaterialTheme.typography.labelSmall,
-                        fontFamily = FontFamily.Monospace,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 10.sp,
-                        color = onSurfaceVariant
+                        text = stats.currentCutoff.title,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Black,
+                        color = onSurface,
+                        modifier = Modifier.weight(1f, fill = false),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
+                    if (cleanPaydayDate.isNotEmpty()) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "PAYDAY: ${cleanPaydayDate.uppercase(Locale.US)}",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontFamily = FontFamily.Monospace,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 10.sp,
+                            color = onSurfaceVariant,
+                            maxLines = 1,
+                            softWrap = false
+                        )
+                    }
                 }
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                Text(
-                    text = stats.currentCutoff.title,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Black,
-                    color = onSurface
-                )
 
                 Spacer(modifier = Modifier.height(10.dp))
 

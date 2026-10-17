@@ -115,7 +115,8 @@ fun CalendarTab(
     val firstDayOfWeek = currentMonthCal.get(Calendar.DAY_OF_WEEK)
 
     // ALL CAPS month title for monochrome look
-    val monthFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
+    val monthFormat = remember { SimpleDateFormat("MMMM yyyy", Locale.getDefault()) }
+    val selectedDayFormat = remember { SimpleDateFormat("MMMM d, yyyy", Locale.getDefault()) }
     val monthTitle = monthFormat.format(currentMonthCal.time).uppercase()
     val monthTitleReadable = monthFormat.format(currentMonthCal.time)
 
@@ -363,7 +364,7 @@ fun CalendarTab(
                                 set(Calendar.MONTH, calendarMonth)
                                 set(Calendar.DAY_OF_MONTH, selectedDayOfMonth!!)
                             }
-                            SimpleDateFormat("MMMM d, yyyy", Locale.getDefault()).format(selCal.time)
+                            selectedDayFormat.format(selCal.time)
                         } else {
                             "All of $monthTitleReadable"
                         }
@@ -477,7 +478,11 @@ fun CalendarTab(
                 }
             }
         } else {
-            items(displayedRecords, key = { it.id }) { record ->
+            items(
+                items = displayedRecords,
+                key = { it.id },
+                contentType = { "overtime_record" }
+            ) { record ->
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -521,6 +526,8 @@ fun CalendarTab(
                                 color = onSurfaceVariant
                             )
                         }
+
+                        Spacer(modifier = Modifier.width(8.dp))
 
                         Column(horizontalAlignment = Alignment.End) {
                             Text(

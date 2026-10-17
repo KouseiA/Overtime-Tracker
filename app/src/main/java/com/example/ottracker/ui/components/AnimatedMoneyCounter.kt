@@ -14,7 +14,7 @@ import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -112,6 +112,9 @@ fun AnimatedMoneyCounter(
         fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
         fontWeight = fontWeight,
         color = color,
-        modifier = modifier.scale(scaleAnim.value)
+        modifier = modifier.graphicsLayer {
+            scaleX = scaleAnim.value
+            scaleY = scaleAnim.value
+        }
     )
 }
