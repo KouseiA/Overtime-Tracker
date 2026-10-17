@@ -14,8 +14,8 @@ android {
         applicationId = "com.example.ottracker"
         minSdk = 24
         targetSdk = 36
-        versionCode = 9
-        versionName = "1.4.3"
+        versionCode = 10
+        versionName = "1.5.0"
     }
 
     // ── Release signing ─────────────────────────────────────────────────────

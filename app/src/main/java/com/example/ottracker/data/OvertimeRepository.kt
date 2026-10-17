@@ -3,18 +3,22 @@ package com.example.ottracker.data
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.ottracker.widget.CompactGaugeWidgetProvider
-import com.example.ottracker.widget.OvertimeWidgetProvider
-import com.example.ottracker.widget.PayrollVoucherWidgetProvider
-import com.example.ottracker.widget.RubberStampWidgetProvider
+import com.example.ottracker.widget.OvertimeGlanceWidget
+import androidx.glance.appwidget.updateAll
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 
 class OvertimeRepository(context: Context) {
     private val appContext = context.applicationContext
     private val prefs: SharedPreferences = context.getSharedPreferences("ot_tracker_prefs", Context.MODE_PRIVATE)
+    private val widgetScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private val _records = MutableStateFlow<List<OvertimeRecord>>(emptyList())
     val records: StateFlow<List<OvertimeRecord>> = _records.asStateFlow()
@@ -88,10 +92,13 @@ class OvertimeRepository(context: Context) {
     }
 
     private fun updateAllWidgets() {
-        OvertimeWidgetProvider.updateAllWidgets(appContext)
         CompactGaugeWidgetProvider.updateAllWidgets(appContext)
-        PayrollVoucherWidgetProvider.updateAllWidgets(appContext)
-        RubberStampWidgetProvider.updateAllWidgets(appContext)
+        // Update Glance widget via coroutines (required by Glance API)
+        widgetScope.launch {
+            try {
+                OvertimeGlanceWidget().updateAll(appContext)
+            } catch (_: Exception) {}
+        }
     }
 
     fun exportBackupJson(): String {

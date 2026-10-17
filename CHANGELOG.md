@@ -4,6 +4,20 @@ All notable changes to **Overtime Tracker** are documented here. Releases are pu
 
 ---
 
+## [v1.5.0] - 2026-10-18
+### Added
+- **Jetpack Glance Modern Widget Framework**: Rebuilt the primary home screen widget using **Jetpack Glance (`glance-appwidget`)**, Google's official Compose-for-AppWidgets framework.
+- **Tactile Neo-Brutalist Glance Card (4×2)**:
+  - Declarative Compose UI with `#141414` deep charcoal card and rounded borders.
+  - Live cutoff badge, days remaining counter, hero gold payout readout (`#FFD700`), and hours rendered.
+  - Interactive tactile `+ LOG OT` quick-action button launching the app directly.
+- **Coroutine-Based State Synchronization**: Direct reactive updates triggered via `OvertimeGlanceWidget().updateAll(context)` whenever shifts or settings are updated in `OvertimeRepository`.
+
+### Removed
+- **Legacy XML Widget Layouts**: Removed legacy `PayrollVoucherWidgetProvider` and `RubberStampWidgetProvider` alongside deprecated RemoteViews XML templates, simplifying widget maintenance and reducing APK footprint.
+
+---
+
 ## [v1.4.3] - 2026-10-17
 ### Fixed
 - **Hero Voucher Header**: Fixed duplicate `"PAYDAY: "` prefix and text collision in `NeoReceiptCard`. Separated card badges and cutoff date/payday into two well-spaced rows to prevent wrapping on narrow screens.
