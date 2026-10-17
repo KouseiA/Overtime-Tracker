@@ -13,7 +13,7 @@
 
 <br/>
 
-[**Download Latest Release (v1.4.2 APK)**](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.4.2/OvertimeTracker-v1.4.2.apk) • [**Report an Issue**](https://github.com/KouseiA/Overtime-Tracker/issues) • [**Changelog**](RELEASE_NOTES_v1.4.2.md)
+[**Download Latest Release (v1.4.2 APK)**](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.4.2/OvertimeTracker-v1.4.2.apk) • [**Report an Issue**](https://github.com/KouseiA/Overtime-Tracker/issues) • [**Changelog**](CHANGELOG.md)
 
 </div>
 
