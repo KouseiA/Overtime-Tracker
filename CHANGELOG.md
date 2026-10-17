@@ -4,6 +4,19 @@ All notable changes to **Overtime Tracker** are documented here. Releases are pu
 
 ---
 
+## [v1.4.3] - 2026-10-17
+### Fixed
+- **Hero Voucher Header**: Fixed duplicate `"PAYDAY: "` prefix and text collision in `NeoReceiptCard`. Separated card badges and cutoff date/payday into two well-spaced rows to prevent wrapping on narrow screens.
+- **DTR Payday Label**: Cleaned redundant `"Payday: "` prefix in the Official Record Sheet header under the `"PAYROLL DATE"` label.
+
+### Optimized
+- **Compose Recomposition & Animation**: Replaced `modifier.scale` with `modifier.graphicsLayer` in `AnimatedMoneyCounter` to evaluate scale bounces purely in the Draw phase.
+- **Memory & Allocation**: Wrapped date formatters in `remember` across `CalendarTab`, `SettingsTab`, and `TimeRangeOvertimeDialog` to prevent high-frequency object allocations during interactions.
+- **Lazy Layout Performance**: Added `contentType` to shift items in `CalendarTab` for efficient Compose slot table recycling.
+- **Chart Aggregations**: Cached total, peak, and average calculations in `EarningsBarChart` with `remember(currentList)`.
+
+---
+
 ## [v1.4.2] - 2026-10-17
 ### Fixed
 - **Widget RemoteViews Inflation**: Replaced raw `<View>` tags with standard `RemoteViews`-compliant `<FrameLayout>` and `<ImageView>` containers in `widget_payroll_voucher.xml` and `widget_rubber_stamp.xml`, resolving launcher crash (`Class not allowed to be inflated android.view.View`) on Xiaomi HyperOS/MIUI and other OEM launchers.
