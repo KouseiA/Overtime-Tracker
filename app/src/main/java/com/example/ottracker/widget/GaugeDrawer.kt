@@ -21,7 +21,7 @@ object GaugeDrawer {
         sizePx: Int = 260,
         strokeWidthPx: Float = 22f,
         progress: Float,
-        trackColor: Int = Color.parseColor("#1E293B"),
+        trackColor: Int = Color.parseColor("#262626"),
         progressColor: Int = Color.parseColor("#FFD700")
     ): Bitmap {
         val bitmap = Bitmap.createBitmap(sizePx, sizePx, Bitmap.Config.ARGB_8888)

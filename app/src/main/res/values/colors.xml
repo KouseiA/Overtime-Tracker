@@ -12,9 +12,9 @@
     <color name="widget_card_fill">#1E293B</color>
 
     <!-- Modern Dark OLED & Gold Tokens -->
-    <color name="widget_dark_bg">#0F172A</color>
-    <color name="widget_dark_card">#1E293B</color>
-    <color name="widget_dark_border">#334155</color>
+    <color name="widget_dark_bg">#141414</color>
+    <color name="widget_dark_card">#252525</color>
+    <color name="widget_dark_border">#333333</color>
     <color name="widget_gold_accent">#FFD700</color>
     <color name="widget_text_light">#F8FAFC</color>
     <color name="widget_text_muted">#94A3B8</color>

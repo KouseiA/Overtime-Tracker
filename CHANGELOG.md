@@ -4,6 +4,17 @@ All notable changes to **Overtime Tracker** are documented here. Releases are pu
 
 ---
 
+## [v1.5.1] - 2026-10-18
+### Redesigned
+- **4×2 Cutoff Terminal (Jetpack Glance)**:
+  - Eliminated dead space with a balanced 2-column layout (hero gold earnings and rendered hours on left, tactile `+ LOG OT` button on right).
+  - Integrated active horizontal cutoff goal progress bar with real-time target hours (`CUTOFF GOAL · 4.5 / 30 hrs (15%)`).
+- **2×2 Circular Gauge Widget**:
+  - Harmonized background color tokens from slate navy to deep `#141414` matte charcoal, eliminating launcher color mismatches.
+  - Enhanced center payout readout with high-contrast gold (`#FFD700`) and dark graphite track ring.
+
+---
+
 ## [v1.5.0] - 2026-10-18
 ### Added
 - **Jetpack Glance Modern Widget Framework**: Rebuilt the primary home screen widget using **Jetpack Glance (`glance-appwidget`)**, Google's official Compose-for-AppWidgets framework.

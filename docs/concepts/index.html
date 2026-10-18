@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Overtime Tracker - Widget Redesign Concepts</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #0A0A0A;
+      color: #F5F5F5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 32px 20px;
+    }
+    .header {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 36px;
+    }
+    h1 {
+      color: #FFD700;
+      font-size: 28px;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+    p.subtitle {
+      color: #AAAAAA;
+      font-size: 15px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 28px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .card {
+      background: #141414;
+      border: 2px solid #282828;
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    }
+    .card:hover {
+      border-color: #FFD700;
+    }
+    .image-container {
+      width: 100%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+    }
+    .image-container img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      display: block;
+    }
+    .content {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .badge {
+      display: inline-block;
+      align-self: flex-start;
+      background: #252525;
+      color: #FFD700;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-size: 18px;
+      color: #FFF;
+      margin-bottom: 8px;
+    }
+    p.desc {
+      color: #BBBBBB;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    ul {
+      color: #999;
+      font-size: 13px;
+      line-height: 1.6;
+      padding-left: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Widget Redesign Concepts</h1>
+    <p class="subtitle">Tactile Neo-Brutalist & Arcade Widgets for Overtime Tracker</p>
+  </div>
+
+  <div class="grid">
+    <!-- Concept 1 -->
+    <div class="card">
+      <div class="image-container">
+        <img src="concept1_cutoff_terminal.jpg" alt="Concept 1: Cutoff Terminal with Progress Bar">
+      </div>
+      <div class="content">
+        <span class="badge">CONCEPT 1 · 4×2 WIDE</span>
+        <h2>Dark Gold Cutoff Terminal</h2>
+        <p class="desc">Fills the dead space with an active horizontal goal progress bar and clear typographic hierarchy.</p>
+        <ul>
+          <li>Gold cutoff pill badge + days remaining indicator</li>
+          <li>Massive gold payout readout without horizontal jitter</li>
+          <li>Real-time goal progress bar (4.5 / 30 hrs)</li>
+          <li>Tactile yellow "+ LOG OT" action button</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Concept 2 -->
+    <div class="card">
+      <div class="image-container">
+        <img src="concept2_quick_action.jpg" alt="Concept 2: Quick-Action Commander">
+      </div>
+      <div class="content">
+        <span class="badge">CONCEPT 2 · 4×2 WIDE</span>
+        <h2>Quick-Action Commander</h2>
+        <p class="desc">Eliminates empty space by dedicating the right half to instant 1-tap overtime hour logging buttons.</p>
+        <ul>
+          <li>Cutoff total earnings & payday countdown date</li>
+          <li>Instant "+1.5h" and "+2h" one-tap preset chips</li>
+          <li>Large prominent "⚡ QUICK LOG" primary button</li>
+          <li>Fastest interaction for daily shift logging</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Concept 3 -->
+    <div class="card">
+      <div class="image-container">
+        <img src="concept3_bento_dashboard.jpg" alt="Concept 3: Neo-Bento Dashboard">
+      </div>
+      <div class="content">
+        <span class="badge">CONCEPT 3 · 4×2 WIDE</span>
+        <h2>Neo-Bento Dashboard</h2>
+        <p class="desc">Multi-tile information hub displaying today's shift stats, total earnings, and an overtime beast streak.</p>
+        <ul>
+          <li>Left tile: Total Cutoff earnings and progress bar</li>
+          <li>Top-Right tile: Today's tracked overtime (hours + pay)</li>
+          <li>Bottom-Right tile: Overtime streak & week totals</li>
+          <li>Tactile floating gold "+" action button</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Concept 4 -->
+    <div class="card">
+      <div class="image-container">
+        <img src="concept4_harmonized_gauge.jpg" alt="Concept 4: Harmonized Circular Gauge">
+      </div>
+      <div class="content">
+        <span class="badge">CONCEPT 4 · 2×2 SQUARE</span>
+        <h2>Harmonized Circular Gauge</h2>
+        <p class="desc">Redesigns the bottom 2×2 widget with deep #141414 charcoal to perfectly match the 4×2 widget above it.</p>
+        <ul>
+          <li>Deep matte charcoal base (fixes the navy blue mismatch)</li>
+          <li>Glowing neon gold circular progress gauge</li>
+          <li>Bold center currency & hours readout</li>
+          <li>Tactile "+" button recessed into the corner</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
