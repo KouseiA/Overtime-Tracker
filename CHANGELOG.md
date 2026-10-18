@@ -4,6 +4,15 @@ All notable changes to **Overtime Tracker** are documented here. Releases are pu
 
 ---
 
+## [v1.5.4] - 2026-10-18
+### Fixed
+- **Dynamic Tip Alignment for Progress Bar (Option 1)**:
+  - Replaced static-centered milestone text with `GaugeDrawer.drawHorizontalProgressBar`, dynamically anchoring the current hours label (`4.5 hrs`) directly to the end-tip of the gold progress bar.
+  - The milestone number now levels and glides smoothly with actual progress (e.g. at 15%, the label sits exactly at 15% under the bar tip, eliminating the detached look).
+  - Cleanly bounds the label between `0` and `30+` milestones to prevent horizontal edge clipping.
+
+---
+
 ## [v1.5.3] - 2026-10-18
 ### Fixed
 - **Pixel-Perfect Alignment with Concept 1 Mockup**:

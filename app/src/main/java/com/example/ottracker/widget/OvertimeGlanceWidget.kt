@@ -1,17 +1,18 @@
 package com.example.ottracker.widget
 
 import android.content.Context
+import android.graphics.Bitmap
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
+import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
-import androidx.glance.appwidget.LinearProgressIndicator
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
@@ -19,6 +20,7 @@ import androidx.glance.color.ColorProvider
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
+import androidx.glance.layout.ContentScale
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxSize
@@ -86,7 +88,7 @@ class OvertimeGlanceWidget : GlanceAppWidget() {
         val payString = "${settings.currencySymbol}${String.format(Locale.US, "%,.2f", cutoffPay)}"
         val hoursRenderedText = "${String.format(Locale.US, "%.1f", cutoffHours)} hrs rendered"
 
-        // 4. Goal Progress Calculation
+        // 4. Goal Progress & Dynamic Tip-Aligned Progress Bitmap
         val targetHours = if (settings.targetOtHours > 0.0) settings.targetOtHours else 30.0
         val progress = (cutoffHours / targetHours).toFloat().coerceIn(0.0f, 1.0f)
         val targetDisplay = if (targetHours % 1.0 == 0.0) {
@@ -97,15 +99,21 @@ class OvertimeGlanceWidget : GlanceAppWidget() {
         val currentHoursDisplay = "${String.format(Locale.US, "%.1f", cutoffHours)} hrs"
         val targetHoursDisplay = "${targetDisplay}+"
 
+        val progressBitmap = GaugeDrawer.drawHorizontalProgressBar(
+            widthPx = 700,
+            heightPx = 68,
+            progress = progress,
+            currentHoursText = currentHoursDisplay,
+            targetHoursText = targetHoursDisplay
+        )
+
         provideContent {
             OvertimeWidgetContent(
                 cutoffTag = cutoffTitle,
                 cutoffSubtitle = cutoffSubtitle,
                 payString = payString,
                 hoursRenderedText = hoursRenderedText,
-                currentHoursDisplay = currentHoursDisplay,
-                targetHoursDisplay = targetHoursDisplay,
-                progress = progress
+                progressBitmap = progressBitmap
             )
         }
     }
@@ -118,15 +126,13 @@ class OvertimeGlanceWidget : GlanceAppWidget() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// COMPOSABLE WIDGET UI — Exact Concept 1 Golden Border Cutoff Terminal
+// COMPOSABLE WIDGET UI — 100% Concept 1: Dynamic Tip-Aligned Progress Bar
 // ─────────────────────────────────────────────────────────────────────────────
 
 private val GoldAccent = ColorProvider(Color(0xFFFFD700), Color(0xFFFFD700))
 private val SubtitleGray = ColorProvider(Color(0xFFCBD5E1), Color(0xFFCBD5E1))
-private val MilestoneGray = ColorProvider(Color(0xFF94A3B8), Color(0xFF94A3B8))
 private val ButtonTextDark = ColorProvider(Color(0xFF0F141C), Color(0xFF0F141C))
 private val GoldButton = ColorProvider(Color(0xFFFFD700), Color(0xFFFFD700))
-private val ProgressTrack = ColorProvider(Color(0xFF1E2633), Color(0xFF1E2633))
 
 @Composable
 private fun OvertimeWidgetContent(
@@ -134,9 +140,7 @@ private fun OvertimeWidgetContent(
     cutoffSubtitle: String,
     payString: String,
     hoursRenderedText: String,
-    currentHoursDisplay: String,
-    targetHoursDisplay: String,
-    progress: Float
+    progressBitmap: Bitmap
 ) {
     Box(
         modifier = GlanceModifier
@@ -195,55 +199,19 @@ private fun OvertimeWidgetContent(
 
             Spacer(modifier = GlanceModifier.defaultWeight())
 
-            // ── Row 3: Thick Rounded Goal Progress Bar ──
-            LinearProgressIndicator(
-                progress = progress,
+            // ── Row 3: Dynamic Tip-Aligned Progress Bar & Milestones ──
+            Image(
+                provider = ImageProvider(progressBitmap),
+                contentDescription = "Cutoff Progress",
                 modifier = GlanceModifier
                     .fillMaxWidth()
-                    .height(11.dp)
-                    .cornerRadius(5.5.dp),
-                color = GoldAccent,
-                backgroundColor = ProgressTrack
+                    .height(28.dp),
+                contentScale = ContentScale.FillBounds
             )
-
-            Spacer(modifier = GlanceModifier.height(4.dp))
-
-            // ── Row 4: Milestone Labels (0 · Current · Target+) ──
-            Row(
-                modifier = GlanceModifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "0",
-                    style = TextStyle(
-                        color = MilestoneGray,
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Medium
-                    )
-                )
-                Spacer(modifier = GlanceModifier.defaultWeight())
-                Text(
-                    text = currentHoursDisplay,
-                    style = TextStyle(
-                        color = GoldAccent,
-                        fontSize = 10.5.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                )
-                Spacer(modifier = GlanceModifier.defaultWeight())
-                Text(
-                    text = targetHoursDisplay,
-                    style = TextStyle(
-                        color = MilestoneGray,
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Medium
-                    )
-                )
-            }
 
             Spacer(modifier = GlanceModifier.defaultWeight())
 
-            // ── Row 5: Bottom Row: "24.5 hrs rendered" (Left) + "+ LOG OT" Pill (Right) ──
+            // ── Row 4: Bottom Row: "24.5 hrs rendered" (Left) + "+ LOG OT" Pill (Right) ──
             Row(
                 modifier = GlanceModifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically

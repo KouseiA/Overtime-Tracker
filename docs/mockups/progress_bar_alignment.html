@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Progress Bar Milestone Alignment - Mockup Options</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #0A0A0A;
+      color: #F5F5F5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 32px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .header {
+      text-align: center;
+      max-width: 650px;
+      margin-bottom: 32px;
+    }
+    h1 {
+      color: #FFD700;
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+    p.subtitle {
+      color: #94A3B8;
+      font-size: 14px;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+      width: 100%;
+      max-width: 520px;
+    }
+    .option-card {
+      background: #000;
+      border: 1px solid #222;
+      border-radius: 20px;
+      padding: 20px;
+    }
+    .option-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #FFD700;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .option-desc {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 16px;
+    }
+
+    /* THE WIDGET CONTAINER */
+    .widget {
+      width: 100%;
+      height: 200px;
+      background-color: #0D1118;
+      border: 1.8px solid #FFD700;
+      border-radius: 24px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    }
+    .row-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .badge {
+      background-color: #FFD700;
+      color: #0F141C;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .subtitle-text {
+      color: #CBD5E1;
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .hero-payout {
+      color: #FFD700;
+      font-size: 44px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1;
+      margin-top: 2px;
+    }
+
+    /* PROGRESS BAR */
+    .bar-track {
+      width: 100%;
+      height: 11px;
+      background-color: #1E2633;
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+    }
+    .bar-fill {
+      height: 100%;
+      background: #FFD700;
+      border-radius: 6px;
+      transition: width 0.3s;
+    }
+
+    /* BOTTOM ROW */
+    .row-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .hrs-rendered {
+      color: #FFD700;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .btn-log {
+      background-color: #FFD700;
+      color: #0F141C;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 8px 18px;
+      border-radius: 16px;
+      cursor: pointer;
+    }
+
+    /* OPTION A: Dynamic Tip Tracker */
+    .tip-container {
+      width: 100%;
+      position: relative;
+      height: 16px;
+      margin-top: 3px;
+    }
+    .tip-start {
+      position: absolute;
+      left: 0;
+      font-size: 10px;
+      color: #94A3B8;
+      font-weight: 500;
+    }
+    .tip-current {
+      position: absolute;
+      transform: translateX(-50%);
+      font-size: 10px;
+      color: #FFD700;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .tip-end {
+      position: absolute;
+      right: 0;
+      font-size: 10px;
+      color: #94A3B8;
+      font-weight: 500;
+    }
+
+    /* OPTION B: Clean Clean Start/End */
+    .milestones-clean {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #94A3B8;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+    .milestones-clean .highlight {
+      color: #FFD700;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Progress Milestone Alignment</h1>
+    <p class="subtitle">Reviewing layout solutions for the 4.5 hrs milestone alignment issue</p>
+  </div>
+
+  <div class="container">
+    <!-- OPTION 1: DYNAMIC TIP ALIGNMENT (Exactly aligned to the bar tip) -->
+    <div class="option-card">
+      <div class="option-title">
+        <span>OPTION 1: DYNAMIC TIP ALIGNMENT (Recommended)</span>
+        <span>EXACT MATCH</span>
+      </div>
+      <p class="option-desc">The "4.5 hrs" label moves dynamically with the tip of the gold bar so it's always perfectly leveled and never detached.</p>
+      
+      <div class="widget">
+        <div class="row-top">
+          <div class="badge">CURRENT CUTOFF</div>
+          <div class="subtitle-text">OCT 16 – 31 · 13 DAYS LEFT</div>
+        </div>
+
+        <div class="hero-payout">₱421.88</div>
+
+        <div>
+          <!-- Bar -->
+          <div class="bar-track">
+            <div class="bar-fill" style="width: 15%;"></div>
+          </div>
+          <!-- Milestone labels: 4.5 hrs is at 15% directly under the bar tip -->
+          <div class="tip-container">
+            <span class="tip-start">0</span>
+            <span class="tip-current" style="left: 15%;">4.5 hrs</span>
+            <span class="tip-end">30+</span>
+          </div>
+        </div>
+
+        <div class="row-bottom">
+          <div class="hrs-rendered">4.5 hrs rendered</div>
+          <div class="btn-log">+ LOG OT</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTION 2: CLEAN START & TARGET MILESTONES -->
+    <div class="option-card">
+      <div class="option-title">
+        <span>OPTION 2: CLEAN START & TARGET (No Duplicate Text)</span>
+        <span>CLEANEST</span>
+      </div>
+      <p class="option-desc">Shows "0 hrs" at the start and "30 hrs goal" at the end, eliminating redundant text while "4.5 hrs rendered (15%)" shines on the bottom row.</p>
+      
+      <div class="widget">
+        <div class="row-top">
+          <div class="badge">CURRENT CUTOFF</div>
+          <div class="subtitle-text">OCT 16 – 31 · 13 DAYS LEFT</div>
+        </div>
+
+        <div class="hero-payout">₱421.88</div>
+
+        <div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: 15%;"></div>
+          </div>
+          <div class="milestones-clean">
+            <span>0 hrs</span>
+            <span>Progress: <span class="highlight">15%</span></span>
+            <span>Goal: 30 hrs</span>
+          </div>
+        </div>
+
+        <div class="row-bottom">
+          <div class="hrs-rendered">4.5 hrs rendered</div>
+          <div class="btn-log">+ LOG OT</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

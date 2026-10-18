@@ -66,4 +66,73 @@ object GaugeDrawer {
 
         return bitmap
     }
+
+    /**
+     * Draws a horizontal progress bar with dynamically aligned milestone labels.
+     * The current hours text is positioned directly under the tip of the progress fill.
+     */
+    fun drawHorizontalProgressBar(
+        widthPx: Int = 700,
+        heightPx: Int = 68,
+        progress: Float,
+        currentHoursText: String,
+        targetHoursText: String,
+        trackColor: Int = Color.parseColor("#1E2633"),
+        progressColor: Int = Color.parseColor("#FFD700"),
+        textColorMuted: Int = Color.parseColor("#94A3B8")
+    ): Bitmap {
+        val bitmap = Bitmap.createBitmap(widthPx, heightPx, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+
+        val barHeight = 24f
+        val barRadius = 12f
+        val clampedProgress = progress.coerceIn(0.0f, 1.0f)
+
+        // 1. Draw track
+        val trackPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            style = Paint.Style.FILL
+            color = trackColor
+        }
+        val trackRect = RectF(0f, 0f, widthPx.toFloat(), barHeight)
+        canvas.drawRoundRect(trackRect, barRadius, barRadius, trackPaint)
+
+        // 2. Draw active progress fill
+        if (clampedProgress > 0.005f) {
+            val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                style = Paint.Style.FILL
+                color = progressColor
+            }
+            val fillWidth = (widthPx * clampedProgress).coerceAtLeast(barRadius * 2f)
+            val fillRect = RectF(0f, 0f, fillWidth, barHeight)
+            canvas.drawRoundRect(fillRect, barRadius, barRadius, fillPaint)
+        }
+
+        // 3. Draw Milestones
+        val textY = 56f
+        val milestonePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            textSize = 21f
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
+        }
+
+        // 3a. Start label "0"
+        milestonePaint.color = textColorMuted
+        milestonePaint.textAlign = Paint.Align.LEFT
+        canvas.drawText("0", 0f, textY, milestonePaint)
+
+        // 3b. Target label (e.g. "30+")
+        milestonePaint.textAlign = Paint.Align.RIGHT
+        canvas.drawText(targetHoursText, widthPx.toFloat(), textY, milestonePaint)
+
+        // 3c. Current hours label (e.g. "4.5 hrs") - perfectly anchored to the tip
+        milestonePaint.color = progressColor
+        milestonePaint.textAlign = Paint.Align.CENTER
+        val currentTextWidth = milestonePaint.measureText(currentHoursText)
+        val tipX = widthPx * clampedProgress
+        val minX = currentTextWidth / 2f + 32f
+        val maxX = widthPx.toFloat() - currentTextWidth / 2f - 48f
+        val clampedTipX = tipX.coerceIn(minX, maxX)
+        canvas.drawText(currentHoursText, clampedTipX, textY, milestonePaint)
+
+        return bitmap
+    }
 }
