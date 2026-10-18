@@ -4,6 +4,17 @@ All notable changes to **Overtime Tracker** are documented here. Releases are pu
 
 ---
 
+## [v1.5.3] - 2026-10-18
+### Fixed
+- **Pixel-Perfect Alignment with Concept 1 Mockup**:
+  - **Golden Outline Border**: Added 1.8dp gold perimeter stroke with 24dp rounded corners (`widget_terminal_gold_border.xml`).
+  - **Massive 44sp Hero Payout**: Boosted hero currency readout to 44sp bold gold for immediate glanceability matching the mockup.
+  - **Thick Capsule Progress Bar**: Increased progress bar height to 11dp with 5.5dp rounded ends and distinct milestone markers (`0`, `current hrs`, `target+`).
+  - **Dynamic Vertical Spacing**: Replaced top-heavy clumping with balanced vertical weights, eliminating all blank voids across any launcher cell height.
+  - **Bottom Row Pairing**: Symmetrically balanced gold `hrs rendered` text on the bottom-left with the pill `+ LOG OT` button on the bottom-right.
+
+---
+
 ## [v1.5.2] - 2026-10-18
 ### Fixed
 - **4×2 Cutoff Terminal Visual Layout**: Fully restructured `OvertimeGlanceWidget` to match Concept 1 mockups:

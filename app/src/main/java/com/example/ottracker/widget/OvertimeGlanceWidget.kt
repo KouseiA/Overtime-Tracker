@@ -7,6 +7,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
+import androidx.glance.ImageProvider
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
@@ -30,6 +31,7 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import com.example.ottracker.MainActivity
+import com.example.ottracker.R
 import com.example.ottracker.data.AppSettings
 import com.example.ottracker.data.CutoffHelper
 import com.example.ottracker.data.OvertimeRecord
@@ -116,15 +118,15 @@ class OvertimeGlanceWidget : GlanceAppWidget() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// COMPOSABLE WIDGET UI — 100% Concept 1: Dark Gold Cutoff Terminal
+// COMPOSABLE WIDGET UI — Exact Concept 1 Golden Border Cutoff Terminal
 // ─────────────────────────────────────────────────────────────────────────────
 
-private val DeepCharcoal = ColorProvider(Color(0xFF141414), Color(0xFF141414))
 private val GoldAccent = ColorProvider(Color(0xFFFFD700), Color(0xFFFFD700))
-private val SubtitleGray = ColorProvider(Color(0xFFAAAAAA), Color(0xFFAAAAAA))
-private val ButtonTextDark = ColorProvider(Color(0xFF0A0A0A), Color(0xFF0A0A0A))
+private val SubtitleGray = ColorProvider(Color(0xFFCBD5E1), Color(0xFFCBD5E1))
+private val MilestoneGray = ColorProvider(Color(0xFF94A3B8), Color(0xFF94A3B8))
+private val ButtonTextDark = ColorProvider(Color(0xFF0F141C), Color(0xFF0F141C))
 private val GoldButton = ColorProvider(Color(0xFFFFD700), Color(0xFFFFD700))
-private val ProgressTrack = ColorProvider(Color(0xFF282828), Color(0xFF282828))
+private val ProgressTrack = ColorProvider(Color(0xFF1E2633), Color(0xFF1E2633))
 
 @Composable
 private fun OvertimeWidgetContent(
@@ -139,26 +141,25 @@ private fun OvertimeWidgetContent(
     Box(
         modifier = GlanceModifier
             .fillMaxSize()
-            .cornerRadius(18.dp)
-            .background(DeepCharcoal)
+            .background(ImageProvider(R.drawable.widget_terminal_gold_border))
             .clickable(actionStartActivity<MainActivity>())
-            .padding(horizontal = 14.dp, vertical = 12.dp)
+            .padding(horizontal = 16.dp, vertical = 14.dp)
     ) {
         Column(
             modifier = GlanceModifier.fillMaxSize(),
             verticalAlignment = Alignment.Top,
             horizontalAlignment = Alignment.Start
         ) {
-            // ── Row 1: Gold "CURRENT CUTOFF" Badge + Subtitle ──
+            // ── Row 1: Gold "CURRENT CUTOFF" Pill Badge + Date/Days Subtitle ──
             Row(
                 modifier = GlanceModifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
                     modifier = GlanceModifier
-                        .cornerRadius(6.dp)
+                        .cornerRadius(8.dp)
                         .background(GoldAccent)
-                        .padding(horizontal = 7.dp, vertical = 2.5.dp)
+                        .padding(horizontal = 8.dp, vertical = 3.dp)
                 ) {
                     Text(
                         text = cutoffTag,
@@ -174,40 +175,40 @@ private fun OvertimeWidgetContent(
                     text = cutoffSubtitle,
                     style = TextStyle(
                         color = SubtitleGray,
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Normal
+                        fontSize = 10.5.sp,
+                        fontWeight = FontWeight.Medium
                     )
                 )
             }
 
-            Spacer(modifier = GlanceModifier.height(4.dp))
+            Spacer(modifier = GlanceModifier.defaultWeight())
 
-            // ── Row 2: Massive Hero Payout Readout ──
+            // ── Row 2: Enormous Hero Payout Readout (Matching Mockup) ──
             Text(
                 text = payString,
                 style = TextStyle(
                     color = GoldAccent,
-                    fontSize = 35.sp,
+                    fontSize = 44.sp,
                     fontWeight = FontWeight.Bold
                 )
             )
 
-            Spacer(modifier = GlanceModifier.height(4.dp))
+            Spacer(modifier = GlanceModifier.defaultWeight())
 
-            // ── Row 3: Horizontal Progress Bar ──
+            // ── Row 3: Thick Rounded Goal Progress Bar ──
             LinearProgressIndicator(
                 progress = progress,
                 modifier = GlanceModifier
                     .fillMaxWidth()
-                    .height(7.dp)
-                    .cornerRadius(3.5.dp),
+                    .height(11.dp)
+                    .cornerRadius(5.5.dp),
                 color = GoldAccent,
                 backgroundColor = ProgressTrack
             )
 
-            Spacer(modifier = GlanceModifier.height(3.dp))
+            Spacer(modifier = GlanceModifier.height(4.dp))
 
-            // ── Row 4: Milestone Labels (0 · Current Hrs · Target+) ──
+            // ── Row 4: Milestone Labels (0 · Current · Target+) ──
             Row(
                 modifier = GlanceModifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -215,8 +216,8 @@ private fun OvertimeWidgetContent(
                 Text(
                     text = "0",
                     style = TextStyle(
-                        color = SubtitleGray,
-                        fontSize = 9.sp,
+                        color = MilestoneGray,
+                        fontSize = 10.sp,
                         fontWeight = FontWeight.Medium
                     )
                 )
@@ -225,7 +226,7 @@ private fun OvertimeWidgetContent(
                     text = currentHoursDisplay,
                     style = TextStyle(
                         color = GoldAccent,
-                        fontSize = 9.sp,
+                        fontSize = 10.5.sp,
                         fontWeight = FontWeight.Bold
                     )
                 )
@@ -233,8 +234,8 @@ private fun OvertimeWidgetContent(
                 Text(
                     text = targetHoursDisplay,
                     style = TextStyle(
-                        color = SubtitleGray,
-                        fontSize = 9.sp,
+                        color = MilestoneGray,
+                        fontSize = 10.sp,
                         fontWeight = FontWeight.Medium
                     )
                 )
@@ -242,7 +243,7 @@ private fun OvertimeWidgetContent(
 
             Spacer(modifier = GlanceModifier.defaultWeight())
 
-            // ── Row 5: Bottom Action Row (Hours Rendered on Left, + LOG OT on Right) ──
+            // ── Row 5: Bottom Row: "24.5 hrs rendered" (Left) + "+ LOG OT" Pill (Right) ──
             Row(
                 modifier = GlanceModifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -251,24 +252,24 @@ private fun OvertimeWidgetContent(
                     text = hoursRenderedText,
                     style = TextStyle(
                         color = GoldAccent,
-                        fontSize = 13.sp,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
                     )
                 )
                 Spacer(modifier = GlanceModifier.defaultWeight())
                 Box(
                     modifier = GlanceModifier
-                        .cornerRadius(12.dp)
+                        .cornerRadius(16.dp)
                         .background(GoldButton)
                         .clickable(actionStartActivity<MainActivity>())
-                        .padding(horizontal = 16.dp, vertical = 7.dp),
+                        .padding(horizontal = 18.dp, vertical = 9.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "+ LOG OT",
                         style = TextStyle(
                             color = ButtonTextDark,
-                            fontSize = 11.5.sp,
+                            fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center
                         )

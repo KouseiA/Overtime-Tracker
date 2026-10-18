@@ -11,7 +11,7 @@
 
 <br/>
 
-[**Download Overtime Tracker (v1.5.2 APK)**](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.5.2/OvertimeTracker-v1.5.2.apk) • [**View Changes**](CHANGELOG.md)
+[**Download Overtime Tracker (v1.5.3 APK)**](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.5.3/OvertimeTracker-v1.5.3.apk) • [**View Changes**](CHANGELOG.md)
 
 </div>
 
@@ -81,7 +81,7 @@ Check your hours and earnings right on your home screen without opening the app:
 
 ## How to Install
 
-1. Download the APK file: [**Download OvertimeTracker-v1.5.2.apk**](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.5.2/OvertimeTracker-v1.5.2.apk)
+1. Download the APK file: [**Download OvertimeTracker-v1.5.3.apk**](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.5.3/OvertimeTracker-v1.5.3.apk)
 2. Tap the downloaded file on your Android phone.
 3. If asked, tap **Allow install from unknown sources**.
 4. Open the app and set your hourly rate!
