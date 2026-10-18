@@ -4,6 +4,16 @@ All notable changes to **Overtime Tracker** are documented here. Releases are pu
 
 ---
 
+## [v1.5.2] - 2026-10-18
+### Fixed
+- **4×2 Cutoff Terminal Visual Layout**: Fully restructured `OvertimeGlanceWidget` to match Concept 1 mockups:
+  - Giant hero gold payout readout (`35sp`) centered across the top section.
+  - Full-width goal progress bar placed directly below the payout with `0`, `current hrs`, and `target+` milestone markers.
+  - Re-anchored `+ LOG OT` action button to the bottom-right row, paired with gold `hrs rendered` readout on the left, completely eliminating the empty void in the center.
+  - Upgraded cutoff pill badge to gold background with high-contrast dark text.
+
+---
+
 ## [v1.5.1] - 2026-10-18
 ### Redesigned
 - **4×2 Cutoff Terminal (Jetpack Glance)**:

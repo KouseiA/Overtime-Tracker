@@ -82,28 +82,27 @@ class OvertimeGlanceWidget : GlanceAppWidget() {
         }
 
         val payString = "${settings.currencySymbol}${String.format(Locale.US, "%,.2f", cutoffPay)}"
-        val hoursString = "${String.format(Locale.US, "%.1f", cutoffHours)} Hours Rendered"
+        val hoursRenderedText = "${String.format(Locale.US, "%.1f", cutoffHours)} hrs rendered"
 
         // 4. Goal Progress Calculation
         val targetHours = if (settings.targetOtHours > 0.0) settings.targetOtHours else 30.0
         val progress = (cutoffHours / targetHours).toFloat().coerceIn(0.0f, 1.0f)
-        val percent = (progress * 100).toInt()
         val targetDisplay = if (targetHours % 1.0 == 0.0) {
             String.format(Locale.US, "%.0f", targetHours)
         } else {
             String.format(Locale.US, "%.1f", targetHours)
         }
-        val goalLabel = "${String.format(Locale.US, "%.1f", cutoffHours)} / ${targetDisplay} hrs"
-        val goalPercentText = "$percent%"
+        val currentHoursDisplay = "${String.format(Locale.US, "%.1f", cutoffHours)} hrs"
+        val targetHoursDisplay = "${targetDisplay}+"
 
         provideContent {
             OvertimeWidgetContent(
                 cutoffTag = cutoffTitle,
                 cutoffSubtitle = cutoffSubtitle,
                 payString = payString,
-                hoursString = hoursString,
-                goalLabel = goalLabel,
-                goalPercentText = goalPercentText,
+                hoursRenderedText = hoursRenderedText,
+                currentHoursDisplay = currentHoursDisplay,
+                targetHoursDisplay = targetHoursDisplay,
                 progress = progress
             )
         }
@@ -117,14 +116,12 @@ class OvertimeGlanceWidget : GlanceAppWidget() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// COMPOSABLE WIDGET UI — Option 1: Dark Gold Cutoff Terminal
+// COMPOSABLE WIDGET UI — 100% Concept 1: Dark Gold Cutoff Terminal
 // ─────────────────────────────────────────────────────────────────────────────
 
 private val DeepCharcoal = ColorProvider(Color(0xFF141414), Color(0xFF141414))
-private val BadgeBg = ColorProvider(Color(0xFF252525), Color(0xFF252525))
 private val GoldAccent = ColorProvider(Color(0xFFFFD700), Color(0xFFFFD700))
 private val SubtitleGray = ColorProvider(Color(0xFFAAAAAA), Color(0xFFAAAAAA))
-private val NearWhite = ColorProvider(Color(0xFFF5F5F5), Color(0xFFF5F5F5))
 private val ButtonTextDark = ColorProvider(Color(0xFF0A0A0A), Color(0xFF0A0A0A))
 private val GoldButton = ColorProvider(Color(0xFFFFD700), Color(0xFFFFD700))
 private val ProgressTrack = ColorProvider(Color(0xFF282828), Color(0xFF282828))
@@ -134,9 +131,9 @@ private fun OvertimeWidgetContent(
     cutoffTag: String,
     cutoffSubtitle: String,
     payString: String,
-    hoursString: String,
-    goalLabel: String,
-    goalPercentText: String,
+    hoursRenderedText: String,
+    currentHoursDisplay: String,
+    targetHoursDisplay: String,
     progress: Float
 ) {
     Box(
@@ -145,14 +142,14 @@ private fun OvertimeWidgetContent(
             .cornerRadius(18.dp)
             .background(DeepCharcoal)
             .clickable(actionStartActivity<MainActivity>())
-            .padding(14.dp)
+            .padding(horizontal = 14.dp, vertical = 12.dp)
     ) {
         Column(
             modifier = GlanceModifier.fillMaxSize(),
             verticalAlignment = Alignment.Top,
             horizontalAlignment = Alignment.Start
         ) {
-            // ── Row 1: Badge Tag + Subtitle ──
+            // ── Row 1: Gold "CURRENT CUTOFF" Badge + Subtitle ──
             Row(
                 modifier = GlanceModifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -160,13 +157,13 @@ private fun OvertimeWidgetContent(
                 Box(
                     modifier = GlanceModifier
                         .cornerRadius(6.dp)
-                        .background(BadgeBg)
-                        .padding(horizontal = 8.dp, vertical = 3.dp)
+                        .background(GoldAccent)
+                        .padding(horizontal = 7.dp, vertical = 2.5.dp)
                 ) {
                     Text(
                         text = cutoffTag,
                         style = TextStyle(
-                            color = GoldAccent,
+                            color = ButtonTextDark,
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -183,95 +180,101 @@ private fun OvertimeWidgetContent(
                 )
             }
 
-            Spacer(modifier = GlanceModifier.height(8.dp))
+            Spacer(modifier = GlanceModifier.height(4.dp))
 
-            // ── Row 2: Hero Pay & Hours (Left) + Quick Action (Right) ──
-            Row(
-                modifier = GlanceModifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Left Column: Currency & Hours
-                Column(
-                    modifier = GlanceModifier.defaultWeight()
-                ) {
-                    Text(
-                        text = payString,
-                        style = TextStyle(
-                            color = GoldAccent,
-                            fontSize = 28.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    )
-                    Spacer(modifier = GlanceModifier.height(1.dp))
-                    Text(
-                        text = hoursString,
-                        style = TextStyle(
-                            color = NearWhite,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Medium
-                        )
-                    )
-                }
+            // ── Row 2: Massive Hero Payout Readout ──
+            Text(
+                text = payString,
+                style = TextStyle(
+                    color = GoldAccent,
+                    fontSize = 35.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            )
 
-                // Right Column: Tactile "+ LOG OT" Button
-                Box(
-                    modifier = GlanceModifier
-                        .cornerRadius(10.dp)
-                        .background(GoldButton)
-                        .clickable(actionStartActivity<MainActivity>())
-                        .padding(horizontal = 14.dp, vertical = 8.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "+ LOG OT",
-                        style = TextStyle(
-                            color = ButtonTextDark,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center
-                        )
-                    )
-                }
-            }
+            Spacer(modifier = GlanceModifier.height(4.dp))
 
-            Spacer(modifier = GlanceModifier.defaultWeight())
+            // ── Row 3: Horizontal Progress Bar ──
+            LinearProgressIndicator(
+                progress = progress,
+                modifier = GlanceModifier
+                    .fillMaxWidth()
+                    .height(7.dp)
+                    .cornerRadius(3.5.dp),
+                color = GoldAccent,
+                backgroundColor = ProgressTrack
+            )
 
-            // ── Row 3: Goal Header Row ──
+            Spacer(modifier = GlanceModifier.height(3.dp))
+
+            // ── Row 4: Milestone Labels (0 · Current Hrs · Target+) ──
             Row(
                 modifier = GlanceModifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "CUTOFF GOAL",
+                    text = "0",
                     style = TextStyle(
                         color = SubtitleGray,
                         fontSize = 9.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Medium
                     )
                 )
                 Spacer(modifier = GlanceModifier.defaultWeight())
                 Text(
-                    text = "$goalLabel ($goalPercentText)",
+                    text = currentHoursDisplay,
                     style = TextStyle(
                         color = GoldAccent,
                         fontSize = 9.sp,
                         fontWeight = FontWeight.Bold
                     )
                 )
+                Spacer(modifier = GlanceModifier.defaultWeight())
+                Text(
+                    text = targetHoursDisplay,
+                    style = TextStyle(
+                        color = SubtitleGray,
+                        fontSize = 9.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                )
             }
 
-            Spacer(modifier = GlanceModifier.height(4.dp))
+            Spacer(modifier = GlanceModifier.defaultWeight())
 
-            // ── Row 4: Horizontal Progress Bar ──
-            LinearProgressIndicator(
-                progress = progress,
-                modifier = GlanceModifier
-                    .fillMaxWidth()
-                    .height(6.dp)
-                    .cornerRadius(3.dp),
-                color = GoldAccent,
-                backgroundColor = ProgressTrack
-            )
+            // ── Row 5: Bottom Action Row (Hours Rendered on Left, + LOG OT on Right) ──
+            Row(
+                modifier = GlanceModifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = hoursRenderedText,
+                    style = TextStyle(
+                        color = GoldAccent,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+                Spacer(modifier = GlanceModifier.defaultWeight())
+                Box(
+                    modifier = GlanceModifier
+                        .cornerRadius(12.dp)
+                        .background(GoldButton)
+                        .clickable(actionStartActivity<MainActivity>())
+                        .padding(horizontal = 16.dp, vertical = 7.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "+ LOG OT",
+                        style = TextStyle(
+                            color = ButtonTextDark,
+                            fontSize = 11.5.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+                        )
+                    )
+                }
+            }
         }
     }
 }
