@@ -78,8 +78,8 @@ fun NeoStampBadge(
 @Composable
 fun OvertimeCategoryStamp(
     overtimeType: String,
-    hasNightDiff: Boolean = false,
     modifier: Modifier = Modifier,
+    hasNightDiff: Boolean = false,
     rotation: Float = 0f
 ) {
     val onSurface = MaterialTheme.colorScheme.onSurface

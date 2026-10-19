@@ -98,6 +98,7 @@ fun NeoReceiptCard(
 fun PerforatedTearDivider(
     cardBackground: Color,
     borderColor: Color,
+    modifier: Modifier = Modifier,
     borderWidth: Dp = 1.5.dp,
     notchRadius: Dp = 9.dp
 ) {
@@ -105,7 +106,7 @@ fun PerforatedTearDivider(
     val onSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(notchRadius * 2),
         contentAlignment = Alignment.Center

@@ -53,8 +53,8 @@ import com.example.ottracker.theme.GoldAccent
 fun NeoTopAppBar(
     title: String,
     tabSubtitle: String,
-    statusText: String? = null,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    statusText: String? = null
 ) {
     val onSurface = MaterialTheme.colorScheme.onSurface
     val onSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
@@ -221,10 +221,10 @@ fun NeoNavigationBar(
 
 @Composable
 private fun NeoNavTabButton(
-    modifier: Modifier = Modifier,
     tab: NeoTabItem,
     isSelected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val onSurface = MaterialTheme.colorScheme.onSurface
     val onSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant

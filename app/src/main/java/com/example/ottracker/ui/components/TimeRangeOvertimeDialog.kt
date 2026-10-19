@@ -81,10 +81,11 @@ private val RegularHolidayColor = Color(0xFFF59E0B)  // Amber/Gold
 @Composable
 fun TimeRangeOvertimeDialog(
     dateMillis: Long,
-    existingRecord: OvertimeRecord? = null,
     settings: AppSettings,
     onDismiss: () -> Unit,
     onSave: (OvertimeRecord) -> Unit,
+    modifier: Modifier = Modifier,
+    existingRecord: OvertimeRecord? = null,
     onDelete: ((String) -> Unit)? = null
 ) {
     val context = LocalContext.current
@@ -160,7 +161,7 @@ fun TimeRangeOvertimeDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         Surface(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth(0.94f)
                 .padding(vertical = 16.dp)
                 .border(1.dp, outline, RoundedCornerShape(20.dp)),

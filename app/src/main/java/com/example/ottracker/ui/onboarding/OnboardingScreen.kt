@@ -146,14 +146,15 @@ private val pages = listOf(
 
 @Composable
 fun OnboardingScreen(
-    onFinished: () -> Unit
+    onFinished: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val pagerState = rememberPagerState(pageCount = { pages.size })
     val coroutineScope = rememberCoroutineScope()
     val isLastPage = pagerState.currentPage == pages.size - 1
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {

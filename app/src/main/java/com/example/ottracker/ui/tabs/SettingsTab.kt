@@ -76,12 +76,12 @@ import java.util.Locale
 @Composable
 fun SettingsTab(
     settings: AppSettings,
-    recordCount: Int = 0,
     onSaveSettings: (AppSettings) -> Unit,
     onClearAllData: () -> Unit,
     onExportBackup: () -> String,
     onImportBackup: (String, Boolean) -> Result<Int>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    recordCount: Int = 0
 ) {
     val context = LocalContext.current
     var baseRateText by remember(settings.baseHourlyRate) { mutableStateOf(settings.baseHourlyRate.toString()) }

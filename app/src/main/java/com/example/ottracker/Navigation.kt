@@ -13,6 +13,7 @@ import com.example.ottracker.ui.onboarding.OnboardingScreen
 
 @Composable
 fun MainNavigation(
+    modifier: Modifier = Modifier,
     targetTab: String? = null,
     showOnboarding: Boolean = false,
     onOnboardingComplete: () -> Unit = {}
@@ -20,11 +21,13 @@ fun MainNavigation(
     Crossfade(
         targetState = showOnboarding,
         animationSpec = tween(400),
+        modifier = modifier,
         label = "onboarding_transition"
     ) { shouldShowOnboarding ->
         if (shouldShowOnboarding) {
             OnboardingScreen(
-                onFinished = onOnboardingComplete
+                onFinished = onOnboardingComplete,
+                modifier = Modifier.fillMaxSize()
             )
         } else {
             val backStack = rememberNavBackStack(Main)

@@ -67,8 +67,8 @@ enum class AppTab(val title: String, val icon: ImageVector) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    targetTab: String? = null,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    targetTab: String? = null
 ) {
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current

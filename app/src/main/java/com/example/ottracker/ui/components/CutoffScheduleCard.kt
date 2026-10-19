@@ -759,16 +759,17 @@ private fun CutoffCalendarVisualizer(
 @Composable
 private fun CutoffPresetChip(
     label: String,
-    caption: String? = null,
     isSelected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    caption: String? = null
 ) {
     val onSurface = MaterialTheme.colorScheme.onSurface
     val outline = MaterialTheme.colorScheme.outline
     val surfaceVariant = MaterialTheme.colorScheme.surfaceVariant
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .border(
                 width = if (isSelected) 2.dp else 1.dp,
                 color = if (isSelected) onSurface else outline,
@@ -802,11 +803,11 @@ private fun CutoffPresetChip(
 
 @Composable
 private fun DaySelectorCard(
-    modifier: Modifier = Modifier,
     title: String,
     displayValue: String,
     subtitle: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val onSurface = MaterialTheme.colorScheme.onSurface
     val onSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant

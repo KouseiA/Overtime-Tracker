@@ -7,7 +7,9 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -76,13 +78,15 @@ fun CashConfettiEffect(
         }
     }
 
+    val currentOnFinished by rememberUpdatedState(onFinished)
+
     LaunchedEffect(trigger) {
         progress.snapTo(0f)
         progress.animateTo(
             targetValue = 1f,
             animationSpec = tween(durationMillis = 1200, easing = LinearOutSlowInEasing)
         )
-        onFinished()
+        currentOnFinished()
     }
 
     Canvas(modifier = modifier.fillMaxSize()) {

@@ -64,9 +64,9 @@ fun OtFormTab(
     records: List<OvertimeRecord>,
     stats: DashboardStats,
     settings: AppSettings,
+    modifier: Modifier = Modifier,
     onAddOrUpdateRecord: (OvertimeRecord) -> Unit = {},
-    onDeleteRecord: (String) -> Unit = {},
-    modifier: Modifier = Modifier
+    onDeleteRecord: (String) -> Unit = {}
 ) {
     val haptic = LocalHapticFeedback.current
     var recordToEdit by remember { mutableStateOf<OvertimeRecord?>(null) }
