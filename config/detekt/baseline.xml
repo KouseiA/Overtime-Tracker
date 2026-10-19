@@ -1,0 +1,203 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ArgumentListWrapping:CalendarTab.kt$(Locale.US, "%.1f", dayTotalHours)</ID>
+    <ID>ArgumentListWrapping:CalendarTab.kt$(Locale.US, "%.1f", record.dayOtHours)</ID>
+    <ID>ArgumentListWrapping:CalendarTab.kt$(Locale.US, "%.1f", record.nightOtHours)</ID>
+    <ID>ArgumentListWrapping:CalendarTab.kt$(Locale.US, "%.2f", record.effectiveHourlyRate)</ID>
+    <ID>ArgumentListWrapping:CalendarTab.kt$(alpha = 0.85f)</ID>
+    <ID>ArgumentListWrapping:CutoffHelper.kt$CutoffHelper$( nextMonthCal.get(Calendar.YEAR), nextMonthCal.get(Calendar.MONTH), secondEnd, 23, 59, 59 )</ID>
+    <ID>ArgumentListWrapping:CutoffScheduleCard.kt$(alpha = 0.7f)</ID>
+    <ID>ArgumentListWrapping:DashboardTab.kt$(Locale.US, "%,.2f", stats.previousCutoff.pay)</ID>
+    <ID>ArgumentListWrapping:DashboardTab.kt$(Locale.US, "%.0f", stats.monthPay)</ID>
+    <ID>ArgumentListWrapping:DashboardTab.kt$(Locale.US, "%.0f", stats.weekPay)</ID>
+    <ID>ArgumentListWrapping:DashboardTab.kt$(Locale.US, "%.2f", settings.baseHourlyRate)</ID>
+    <ID>ArgumentListWrapping:MainScreen.kt$(Locale.US, "%.2f", state.settings.baseHourlyRate)</ID>
+    <ID>ArgumentListWrapping:MainScreenViewModel.kt$MainScreenViewModel$(6, settings, now.timeInMillis)</ID>
+    <ID>ArgumentListWrapping:OtFormTab.kt$(Locale.US, "%.1f", totalDayHours)</ID>
+    <ID>ArgumentListWrapping:OtFormTab.kt$(Locale.US, "%.1f", totalNightHours)</ID>
+    <ID>ArgumentListWrapping:OtFormTab.kt$(Locale.US, "%.2f", record.totalPay)</ID>
+    <ID>ArgumentListWrapping:OtFormTab.kt$(Locale.US, "%.2f", settings.baseHourlyRate)</ID>
+    <ID>ArgumentListWrapping:OvertimeRecord.kt$OvertimeRecord$(Locale.US, "₱%.2f × %.2f = ₱%.2f/hr", effectiveDayRate, 1.0 + nightDiffRate, effectiveNightRate)</ID>
+    <ID>ArgumentListWrapping:SettingsTab.kt$("Overtime Hourly Rate (${settings.currencySymbol}/hr)", color = onSurfaceVariant)</ID>
+    <ID>ArgumentListWrapping:SettingsTab.kt$("Save File", fontWeight = FontWeight.Bold, color = onSurface, style = MaterialTheme.typography.labelMedium)</ID>
+    <ID>ArgumentListWrapping:SettingsTab.kt$("Share / Drive", fontWeight = FontWeight.Bold, color = onSurface, style = MaterialTheme.typography.labelMedium)</ID>
+    <ID>ArgumentListWrapping:SettingsTab.kt$(0.10 to "10%", 0.15 to "15%", 0.20 to "20% (DOLE)", 0.25 to "25%")</ID>
+    <ID>ArgumentListWrapping:SettingsTab.kt$(1.dp, if (isSelected) MaterialTheme.colorScheme.primary else outline)</ID>
+    <ID>ArgumentListWrapping:SettingsTab.kt$(18.dp)</ID>
+    <ID>ArgumentListWrapping:SettingsTab.kt$(Icons.Default.AccessTime, contentDescription = null, tint = onSurface)</ID>
+    <ID>ArgumentListWrapping:SettingsTab.kt$(Icons.Default.FileDownload, contentDescription = null, tint = onSurface, modifier = Modifier.size(18.dp))</ID>
+    <ID>ArgumentListWrapping:SettingsTab.kt$(Icons.Default.FileUpload, contentDescription = null, tint = Color.Black, modifier = Modifier.size(18.dp))</ID>
+    <ID>ArgumentListWrapping:SettingsTab.kt$(Icons.Default.Share, contentDescription = null, tint = onSurface, modifier = Modifier.size(18.dp))</ID>
+    <ID>ArgumentListWrapping:SettingsTab.kt$(Locale.US, "%.2f", baseRate)</ID>
+    <ID>ArgumentListWrapping:SettingsTab.kt$(Locale.US, "%.2f", nightRate)</ID>
+    <ID>ArgumentListWrapping:SettingsTab.kt$(context, "Error sharing: ${e.localizedMessage}", Toast.LENGTH_SHORT)</ID>
+    <ID>ArgumentListWrapping:SettingsTab.kt$(context, "Restore failed: ${err.localizedMessage}", Toast.LENGTH_LONG)</ID>
+    <ID>ArgumentListWrapping:SettingsTab.kt$(context, "Successfully merged $count records &amp; settings!", Toast.LENGTH_LONG)</ID>
+    <ID>ArgumentListWrapping:SettingsTab.kt$(context, "Successfully replaced with $count records!", Toast.LENGTH_LONG)</ID>
+    <ID>ArgumentListWrapping:SettingsTab.kt$(context, "Successfully restored $count records &amp; settings!", Toast.LENGTH_LONG)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(0xFF1C1917)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(0xFF1E1B4B)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(Locale.US, "%.1f", tempRecord.dayOtHours)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(Locale.US, "%.1f", tempRecord.nightOtHours)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(Locale.US, "%.2f", 1.0 + settings.nightDiffRate)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(Locale.US, "%.2f", computedRate)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(Locale.US, "%.2f", effectiveRate)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(Locale.US, "%.2f", multiplier)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(Locale.US, "%.2f", settings.baseHourlyRate)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(Locale.US, "%.2f", tempRecord.dayPay)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(Locale.US, "%.2f", tempRecord.effectiveDayRate)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(Locale.US, "%.2f", tempRecord.effectiveNightRate)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(Locale.US, "%.2f", tempRecord.nightPay)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(OvertimeType.REGULAR_HOLIDAY, "🎉", "REGULAR\nHOLIDAY", "×2.00 (+100%)", RegularHolidayColor)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(OvertimeType.SPECIAL_HOLIDAY, "🏖️", "SPECIAL\nHOLIDAY", "×1.30 (+30%)", SpecialHolidayColor)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(alpha = 0.3f)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(alpha = 0.8f)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(alpha = 0.9f)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(selectedOtType)</ID>
+    <ID>ArgumentListWrapping:TimeRangeOvertimeDialog.kt$(startCal.timeInMillis, endCal.timeInMillis, selectedOtType, settings.baseHourlyRate, activeNightRate)</ID>
+    <ID>BlockCommentInitialStarAlignment:Type.kt$/* Other default text styles to override titleLarge = TextStyle( fontFamily = FontFamily.Default, fontWeight = FontWeight.Normal, fontSize = 22.sp, lineHeight = 28.sp, letterSpacing = 0.sp ), labelSmall = TextStyle( fontFamily = FontFamily.Default, fontWeight = FontWeight.Medium, fontSize = 11.sp, lineHeight = 16.sp, letterSpacing = 0.5.sp ) */</ID>
+    <ID>ComposableParamOrder:CutoffScheduleCard.kt$CutoffPresetChip</ID>
+    <ID>ComposableParamOrder:CutoffScheduleCard.kt$DaySelectorCard</ID>
+    <ID>ComposableParamOrder:MainScreen.kt$MainScreen</ID>
+    <ID>ComposableParamOrder:NeoNavigationBar.kt$NeoNavTabButton</ID>
+    <ID>ComposableParamOrder:NeoNavigationBar.kt$NeoTopAppBar</ID>
+    <ID>ComposableParamOrder:NeoStampBadge.kt$OvertimeCategoryStamp</ID>
+    <ID>ComposableParamOrder:OtFormTab.kt$OtFormTab</ID>
+    <ID>ComposableParamOrder:SettingsTab.kt$SettingsTab</ID>
+    <ID>ComposableParamOrder:TimeRangeOvertimeDialog.kt$TimeRangeOvertimeDialog</ID>
+    <ID>CyclomaticComplexMethod:CalendarTab.kt$@Composable fun CalendarTab( records: List&lt;OvertimeRecord&gt;, settings: AppSettings, onAddOrUpdateRecord: (OvertimeRecord) -&gt; Unit, onDeleteRecord: (String) -&gt; Unit, modifier: Modifier = Modifier )</ID>
+    <ID>CyclomaticComplexMethod:CutoffHelper.kt$CutoffHelper$private fun getSemiMonthlyCutoff( referenceMillis: Long, firstEndDayRaw: Int, secondEndDayRaw: Int, offset: Int // 0 = current, -1 = prev, etc. ): CutoffPeriod</ID>
+    <ID>CyclomaticComplexMethod:CutoffScheduleCard.kt$@Composable private fun CutoffCalendarVisualizer( settings: AppSettings )</ID>
+    <ID>CyclomaticComplexMethod:CutoffScheduleCard.kt$@Composable private fun DaySelectionDialog( title: String, currentDay: Int, maxDays: Int, allowEndOfMonth: Boolean, onDaySelected: (Int) -&gt; Unit, onDismiss: () -&gt; Unit )</ID>
+    <ID>CyclomaticComplexMethod:CutoffScheduleCard.kt$@OptIn(ExperimentalLayoutApi::class) @Composable fun CutoffScheduleCard( settings: AppSettings, onSaveSettings: (AppSettings) -&gt; Unit, modifier: Modifier = Modifier )</ID>
+    <ID>CyclomaticComplexMethod:EarningsBarChart.kt$@Composable fun EarningsBarChart( cutoffTrends: List&lt;ChartBarData&gt;, monthlyTrends: List&lt;ChartBarData&gt;, currencySymbol: String, modifier: Modifier = Modifier )</ID>
+    <ID>CyclomaticComplexMethod:MainScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun MainScreen( targetTab: String? = null, modifier: Modifier = Modifier )</ID>
+    <ID>CyclomaticComplexMethod:MainScreenViewModel.kt$MainScreenViewModel$private fun calculateWarehouseStats(records: List&lt;OvertimeRecord&gt;, settings: AppSettings): DashboardStats</ID>
+    <ID>CyclomaticComplexMethod:OtFormTab.kt$@Composable fun OtFormTab( records: List&lt;OvertimeRecord&gt;, stats: DashboardStats, settings: AppSettings, onAddOrUpdateRecord: (OvertimeRecord) -&gt; Unit = {}, onDeleteRecord: (String) -&gt; Unit = {}, modifier: Modifier = Modifier )</ID>
+    <ID>CyclomaticComplexMethod:SettingsTab.kt$@Composable fun SettingsTab( settings: AppSettings, recordCount: Int = 0, onSaveSettings: (AppSettings) -&gt; Unit, onClearAllData: () -&gt; Unit, onExportBackup: () -&gt; String, onImportBackup: (String, Boolean) -&gt; Result&lt;Int&gt;, modifier: Modifier = Modifier )</ID>
+    <ID>CyclomaticComplexMethod:TimeRangeOvertimeDialog.kt$@OptIn(ExperimentalLayoutApi::class) @Composable fun TimeRangeOvertimeDialog( dateMillis: Long, existingRecord: OvertimeRecord? = null, settings: AppSettings, onDismiss: () -&gt; Unit, onSave: (OvertimeRecord) -&gt; Unit, onDelete: ((String) -&gt; Unit)? = null )</ID>
+    <ID>Filename:NavigationKeys.kt$com.example.ottracker.NavigationKeys.kt</ID>
+    <ID>ImportOrdering:AnimatedMoneyCounter.kt$import androidx.compose.animation.core.Animatable import androidx.compose.animation.core.FastOutSlowInEasing import androidx.compose.animation.core.Spring import androidx.compose.animation.core.spring import androidx.compose.animation.core.tween import androidx.compose.material3.MaterialTheme import androidx.compose.material3.Text import androidx.compose.runtime.Composable import androidx.compose.runtime.LaunchedEffect import androidx.compose.runtime.getValue import androidx.compose.runtime.mutableDoubleStateOf import androidx.compose.runtime.remember import androidx.compose.runtime.setValue import androidx.compose.ui.Modifier import androidx.compose.ui.graphics.graphicsLayer import androidx.compose.ui.graphics.Color import androidx.compose.ui.hapticfeedback.HapticFeedbackType import androidx.compose.ui.platform.LocalHapticFeedback import androidx.compose.ui.text.TextStyle import androidx.compose.ui.text.font.FontWeight import java.util.Locale</ID>
+    <ID>ImportOrdering:CalendarTab.kt$import androidx.compose.foundation.background import androidx.compose.foundation.border import androidx.compose.foundation.clickable import androidx.compose.foundation.layout.Arrangement import androidx.compose.foundation.layout.Box import androidx.compose.foundation.layout.Column import androidx.compose.foundation.layout.Row import androidx.compose.foundation.layout.Spacer import androidx.compose.foundation.layout.aspectRatio import androidx.compose.foundation.layout.fillMaxWidth import androidx.compose.foundation.layout.height import androidx.compose.foundation.layout.padding import androidx.compose.foundation.layout.size import androidx.compose.foundation.layout.width import androidx.compose.foundation.lazy.LazyColumn import androidx.compose.foundation.lazy.items import androidx.compose.foundation.BorderStroke import androidx.compose.foundation.shape.RoundedCornerShape import androidx.compose.material.icons.Icons import androidx.compose.material.icons.automirrored.filled.ArrowBack import androidx.compose.material.icons.automirrored.filled.ArrowForward import androidx.compose.material.icons.filled.Add import androidx.compose.material.icons.filled.CalendarToday import androidx.compose.material.icons.filled.DeleteOutline import androidx.compose.material.icons.filled.Edit import androidx.compose.material3.Button import androidx.compose.material3.ButtonDefaults import androidx.compose.material3.Card import androidx.compose.material3.CardDefaults import androidx.compose.material3.HorizontalDivider import androidx.compose.material3.Icon import androidx.compose.material3.IconButton import androidx.compose.material3.MaterialTheme import androidx.compose.material3.Surface import androidx.compose.material3.Text import androidx.compose.runtime.Composable import androidx.compose.runtime.getValue import androidx.compose.runtime.mutableIntStateOf import androidx.compose.runtime.mutableStateOf import androidx.compose.runtime.remember import androidx.compose.runtime.setValue import androidx.compose.ui.Alignment import androidx.compose.ui.Modifier import androidx.compose.ui.draw.clip import androidx.compose.ui.graphics.Color import androidx.compose.ui.hapticfeedback.HapticFeedbackType import androidx.compose.ui.platform.LocalHapticFeedback import androidx.compose.ui.text.font.FontWeight import androidx.compose.ui.text.style.TextAlign import androidx.compose.ui.unit.dp import androidx.compose.ui.unit.sp import com.example.ottracker.data.AppSettings import com.example.ottracker.data.OvertimeRecord import com.example.ottracker.data.OvertimeType import com.example.ottracker.theme.DangerRed import com.example.ottracker.theme.GoldAccent import androidx.compose.ui.text.font.FontFamily import com.example.ottracker.ui.components.NeoButton import com.example.ottracker.ui.components.NeoCard import com.example.ottracker.ui.components.NeoIconButton import com.example.ottracker.ui.components.OvertimeCategoryStamp import com.example.ottracker.ui.components.TimeRangeOvertimeDialog import java.text.SimpleDateFormat import java.util.Calendar import java.util.Locale</ID>
+    <ID>ImportOrdering:OnboardingScreen.kt$import androidx.compose.animation.AnimatedVisibility import androidx.compose.animation.core.FastOutSlowInEasing import androidx.compose.animation.core.LinearEasing import androidx.compose.animation.core.RepeatMode import androidx.compose.animation.core.Spring import androidx.compose.animation.core.animateDpAsState import androidx.compose.animation.core.animateFloat import androidx.compose.animation.core.animateFloatAsState import androidx.compose.animation.core.infiniteRepeatable import androidx.compose.animation.core.rememberInfiniteTransition import androidx.compose.animation.core.spring import androidx.compose.animation.core.tween import androidx.compose.animation.fadeIn import androidx.compose.animation.slideInVertically import androidx.compose.foundation.Canvas import androidx.compose.foundation.background import androidx.compose.foundation.layout.Arrangement import androidx.compose.foundation.layout.Box import androidx.compose.foundation.layout.Column import androidx.compose.foundation.layout.Row import androidx.compose.foundation.layout.Spacer import androidx.compose.foundation.layout.fillMaxSize import androidx.compose.foundation.layout.fillMaxWidth import androidx.compose.foundation.layout.height import androidx.compose.foundation.layout.padding import androidx.compose.foundation.layout.size import androidx.compose.foundation.layout.width import androidx.compose.foundation.pager.HorizontalPager import androidx.compose.foundation.pager.rememberPagerState import androidx.compose.foundation.shape.CircleShape import androidx.compose.foundation.shape.RoundedCornerShape import androidx.compose.material.icons.Icons import androidx.compose.material.icons.automirrored.filled.Assignment import androidx.compose.material.icons.filled.AccessTime import androidx.compose.material.icons.automirrored.filled.ArrowForward import androidx.compose.material.icons.filled.CalendarMonth import androidx.compose.material.icons.filled.Rocket import androidx.compose.material.icons.filled.Settings import androidx.compose.material3.Button import androidx.compose.material3.ButtonDefaults import androidx.compose.material3.Icon import androidx.compose.material3.MaterialTheme import androidx.compose.material3.Text import androidx.compose.material3.TextButton import androidx.compose.runtime.Composable import androidx.compose.runtime.LaunchedEffect import androidx.compose.runtime.getValue import androidx.compose.runtime.mutableStateOf import androidx.compose.runtime.remember import androidx.compose.runtime.rememberCoroutineScope import androidx.compose.runtime.setValue import androidx.compose.ui.Alignment import androidx.compose.ui.Modifier import androidx.compose.ui.draw.clip import androidx.compose.ui.draw.scale import androidx.compose.ui.geometry.Offset import androidx.compose.ui.graphics.Brush import androidx.compose.ui.graphics.Color import androidx.compose.ui.graphics.drawscope.Stroke import androidx.compose.ui.graphics.vector.ImageVector import androidx.compose.ui.text.font.FontWeight import androidx.compose.ui.text.style.TextAlign import androidx.compose.ui.unit.dp import androidx.compose.ui.unit.sp import com.example.ottracker.theme.GoldAccent import kotlinx.coroutines.delay import kotlinx.coroutines.launch import kotlin.math.cos import kotlin.math.sin</ID>
+    <ID>ImportOrdering:OvertimeRepository.kt$import android.content.Context import android.content.SharedPreferences import com.example.ottracker.widget.CompactGaugeWidgetProvider import com.example.ottracker.widget.OvertimeGlanceWidget import androidx.glance.appwidget.updateAll import kotlinx.coroutines.CoroutineScope import kotlinx.coroutines.Dispatchers import kotlinx.coroutines.SupervisorJob import kotlinx.coroutines.flow.MutableStateFlow import kotlinx.coroutines.flow.StateFlow import kotlinx.coroutines.flow.asStateFlow import kotlinx.coroutines.launch import org.json.JSONArray import org.json.JSONObject</ID>
+    <ID>ImportOrdering:TimeRangeOvertimeDialog.kt$import android.app.TimePickerDialog import androidx.compose.foundation.background import androidx.compose.foundation.border import androidx.compose.foundation.clickable import androidx.compose.foundation.layout.Arrangement import androidx.compose.foundation.layout.Box import androidx.compose.foundation.layout.Column import androidx.compose.foundation.layout.ExperimentalLayoutApi import androidx.compose.foundation.layout.FlowRow import androidx.compose.foundation.layout.Row import androidx.compose.foundation.layout.Spacer import androidx.compose.foundation.layout.fillMaxWidth import androidx.compose.foundation.layout.height import androidx.compose.foundation.layout.padding import androidx.compose.foundation.layout.size import androidx.compose.foundation.layout.width import androidx.compose.foundation.rememberScrollState import androidx.compose.foundation.shape.RoundedCornerShape import androidx.compose.foundation.verticalScroll import androidx.compose.ui.draw.clip import androidx.compose.material.icons.Icons import androidx.compose.material.icons.filled.AccessTime import androidx.compose.material.icons.filled.Close import androidx.compose.material.icons.filled.DeleteOutline import androidx.compose.material3.Button import androidx.compose.material3.ButtonDefaults import androidx.compose.material3.Card import androidx.compose.material3.CardDefaults import androidx.compose.material3.FilterChip import androidx.compose.material3.FilterChipDefaults import androidx.compose.material3.HorizontalDivider import androidx.compose.material3.Icon import androidx.compose.material3.IconButton import androidx.compose.material3.MaterialTheme import androidx.compose.material3.Surface import androidx.compose.material3.Text import androidx.compose.material3.TextButton import androidx.compose.runtime.Composable import androidx.compose.runtime.getValue import androidx.compose.runtime.mutableIntStateOf import androidx.compose.runtime.mutableStateOf import androidx.compose.runtime.remember import androidx.compose.runtime.setValue import androidx.compose.ui.Alignment import androidx.compose.ui.Modifier import androidx.compose.ui.graphics.Color import androidx.compose.ui.hapticfeedback.HapticFeedbackType import androidx.compose.ui.platform.LocalContext import androidx.compose.ui.platform.LocalHapticFeedback import androidx.compose.ui.text.font.FontFamily import androidx.compose.ui.text.font.FontWeight import androidx.compose.ui.text.style.TextAlign import androidx.compose.ui.unit.dp import androidx.compose.ui.unit.sp import androidx.compose.ui.window.Dialog import androidx.compose.ui.window.DialogProperties import com.example.ottracker.data.AppSettings import com.example.ottracker.data.OvertimeRecord import com.example.ottracker.data.OvertimeType import com.example.ottracker.theme.DangerRed import com.example.ottracker.theme.GoldAccent import java.text.SimpleDateFormat import java.util.Calendar import java.util.Date import java.util.Locale</ID>
+    <ID>Indentation:CalendarTab.kt$ </ID>
+    <ID>Indentation:CutoffScheduleCard.kt$ </ID>
+    <ID>Indentation:MainActivity.kt$MainActivity$ </ID>
+    <ID>Indentation:MoneySound.kt$MoneySound$ </ID>
+    <ID>Indentation:Navigation.kt$ </ID>
+    <ID>Indentation:OnboardingScreen.kt$ </ID>
+    <ID>Indentation:Type.kt$ </ID>
+    <ID>LambdaParameterEventTrailing:CutoffScheduleCard.kt$onClick</ID>
+    <ID>LambdaParameterEventTrailing:NeoNavigationBar.kt$onClick</ID>
+    <ID>LambdaParameterInRestartableEffect:CashConfettiEffect.kt$onFinished</ID>
+    <ID>LongMethod:AnimatedMoneyCounter.kt$@Composable fun AnimatedMoneyCounter( targetAmount: Double, currencySymbol: String, modifier: Modifier = Modifier, textStyle: TextStyle = MaterialTheme.typography.displaySmall, color: Color = Color.Unspecified, fontWeight: FontWeight = FontWeight.Black, durationMillis: Int = 1100, enableHaptics: Boolean = true, enableSound: Boolean = true )</ID>
+    <ID>LongMethod:CalendarTab.kt$@Composable fun CalendarTab( records: List&lt;OvertimeRecord&gt;, settings: AppSettings, onAddOrUpdateRecord: (OvertimeRecord) -&gt; Unit, onDeleteRecord: (String) -&gt; Unit, modifier: Modifier = Modifier )</ID>
+    <ID>LongMethod:CashConfettiEffect.kt$@Composable fun CashConfettiEffect( trigger: Boolean, onFinished: () -&gt; Unit, modifier: Modifier = Modifier )</ID>
+    <ID>LongMethod:CompactGaugeWidgetProvider.kt$CompactGaugeWidgetProvider.Companion$private fun updateWidget( context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int )</ID>
+    <ID>LongMethod:CutoffHelper.kt$CutoffHelper$private fun getSemiMonthlyCutoff( referenceMillis: Long, firstEndDayRaw: Int, secondEndDayRaw: Int, offset: Int // 0 = current, -1 = prev, etc. ): CutoffPeriod</ID>
+    <ID>LongMethod:CutoffScheduleCard.kt$@Composable private fun CutoffCalendarVisualizer( settings: AppSettings )</ID>
+    <ID>LongMethod:CutoffScheduleCard.kt$@Composable private fun DaySelectionDialog( title: String, currentDay: Int, maxDays: Int, allowEndOfMonth: Boolean, onDaySelected: (Int) -&gt; Unit, onDismiss: () -&gt; Unit )</ID>
+    <ID>LongMethod:CutoffScheduleCard.kt$@Composable private fun WeeklyCutoffSection( settings: AppSettings, onSaveSettings: (AppSettings) -&gt; Unit )</ID>
+    <ID>LongMethod:CutoffScheduleCard.kt$@OptIn(ExperimentalLayoutApi::class) @Composable fun CutoffScheduleCard( settings: AppSettings, onSaveSettings: (AppSettings) -&gt; Unit, modifier: Modifier = Modifier )</ID>
+    <ID>LongMethod:CutoffScheduleCard.kt$@OptIn(ExperimentalLayoutApi::class) @Composable private fun MonthlyCutoffSection( settings: AppSettings, onSaveSettings: (AppSettings) -&gt; Unit, onOpenPicker: (target: String, title: String, allowEom: Boolean, maxDays: Int, currentVal: Int) -&gt; Unit )</ID>
+    <ID>LongMethod:CutoffScheduleCard.kt$@OptIn(ExperimentalLayoutApi::class) @Composable private fun SemiMonthlyCutoffSection( settings: AppSettings, onSaveSettings: (AppSettings) -&gt; Unit, onOpenPicker: (target: String, title: String, allowEom: Boolean, maxDays: Int, currentVal: Int) -&gt; Unit )</ID>
+    <ID>LongMethod:DashboardTab.kt$@Composable fun DashboardTab( stats: DashboardStats, records: List&lt;OvertimeRecord&gt;, settings: AppSettings, modifier: Modifier = Modifier )</ID>
+    <ID>LongMethod:EarningsBarChart.kt$@Composable fun EarningsBarChart( cutoffTrends: List&lt;ChartBarData&gt;, monthlyTrends: List&lt;ChartBarData&gt;, currencySymbol: String, modifier: Modifier = Modifier )</ID>
+    <ID>LongMethod:MainScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun MainScreen( targetTab: String? = null, modifier: Modifier = Modifier )</ID>
+    <ID>LongMethod:MainScreenViewModel.kt$MainScreenViewModel$private fun calculateWarehouseStats(records: List&lt;OvertimeRecord&gt;, settings: AppSettings): DashboardStats</ID>
+    <ID>LongMethod:NeoNavigationBar.kt$@Composable fun NeoTopAppBar( title: String, tabSubtitle: String, statusText: String? = null, modifier: Modifier = Modifier )</ID>
+    <ID>LongMethod:NeoNavigationBar.kt$@Composable private fun NeoNavTabButton( modifier: Modifier = Modifier, tab: NeoTabItem, isSelected: Boolean, onClick: () -&gt; Unit )</ID>
+    <ID>LongMethod:OnboardingScreen.kt$@Composable fun OnboardingScreen( onFinished: () -&gt; Unit )</ID>
+    <ID>LongMethod:OnboardingScreen.kt$@Composable private fun AnimatedIconWithOrbit( icon: ImageVector, accentColor: Color, isActive: Boolean )</ID>
+    <ID>LongMethod:OnboardingScreen.kt$@Composable private fun OnboardingPageContent( page: OnboardingPage, pageIndex: Int, isActive: Boolean )</ID>
+    <ID>LongMethod:OtFormTab.kt$@Composable fun OtFormTab( records: List&lt;OvertimeRecord&gt;, stats: DashboardStats, settings: AppSettings, onAddOrUpdateRecord: (OvertimeRecord) -&gt; Unit = {}, onDeleteRecord: (String) -&gt; Unit = {}, modifier: Modifier = Modifier )</ID>
+    <ID>LongMethod:OvertimeGlanceWidget.kt$@Composable private fun OvertimeWidgetContent( cutoffTag: String, cutoffSubtitle: String, payString: String, hoursRenderedText: String, progressBitmap: Bitmap )</ID>
+    <ID>LongMethod:OvertimeGlanceWidget.kt$OvertimeGlanceWidget$override suspend fun provideGlance(context: Context, id: GlanceId)</ID>
+    <ID>LongMethod:SettingsTab.kt$@Composable fun SettingsTab( settings: AppSettings, recordCount: Int = 0, onSaveSettings: (AppSettings) -&gt; Unit, onClearAllData: () -&gt; Unit, onExportBackup: () -&gt; String, onImportBackup: (String, Boolean) -&gt; Result&lt;Int&gt;, modifier: Modifier = Modifier )</ID>
+    <ID>LongMethod:TimeRangeOvertimeDialog.kt$@OptIn(ExperimentalLayoutApi::class) @Composable fun TimeRangeOvertimeDialog( dateMillis: Long, existingRecord: OvertimeRecord? = null, settings: AppSettings, onDismiss: () -&gt; Unit, onSave: (OvertimeRecord) -&gt; Unit, onDelete: ((String) -&gt; Unit)? = null )</ID>
+    <ID>MatchingDeclarationName:GrindLevelBadge.kt$GrindTier</ID>
+    <ID>MatchingDeclarationName:MainScreen.kt$AppTab</ID>
+    <ID>MatchingDeclarationName:NavigationKeys.kt$Main : NavKey</ID>
+    <ID>MatchingDeclarationName:OnboardingScreen.kt$OnboardingPage</ID>
+    <ID>MaximumLineLength:CalendarTab.kt$ </ID>
+    <ID>MaximumLineLength:CutoffScheduleCard.kt$ </ID>
+    <ID>MaximumLineLength:DashboardTab.kt$ </ID>
+    <ID>MaximumLineLength:MainScreen.kt$ </ID>
+    <ID>MaximumLineLength:MainScreenViewModel.kt$MainScreenViewModel$ </ID>
+    <ID>MaximumLineLength:OnboardingScreen.kt$ </ID>
+    <ID>MaximumLineLength:OtFormTab.kt$ </ID>
+    <ID>MaximumLineLength:OvertimeRecord.kt$OvertimeRecord$ </ID>
+    <ID>MaximumLineLength:SettingsTab.kt$ </ID>
+    <ID>MaximumLineLength:TimeRangeOvertimeDialog.kt$ </ID>
+    <ID>ModifierMissing:Navigation.kt$MainNavigation</ID>
+    <ID>ModifierMissing:NeoReceiptCard.kt$PerforatedTearDivider</ID>
+    <ID>ModifierMissing:OnboardingScreen.kt$OnboardingScreen</ID>
+    <ID>MultiLineIfElse:CalendarTab.kt$"No overtime in $monthTitleReadable"</ID>
+    <ID>MultiLineIfElse:CalendarTab.kt$"No overtime on this day"</ID>
+    <ID>MultiLineIfElse:CalendarTab.kt$Modifier</ID>
+    <ID>MultiLineIfElse:CalendarTab.kt$Modifier.border(2.dp, onSurface, RoundedCornerShape(10.dp))</ID>
+    <ID>MultiLineIfElse:EarningsBarChart.kt$"${String.format(Locale.US, "%,.0f", bar.pay)}"</ID>
+    <ID>MultiLineIfElse:EarningsBarChart.kt$"${String.format(Locale.US, "%.1f", bar.pay / 1000)}k"</ID>
+    <ID>MultiLineIfElse:EarningsBarChart.kt$"—"</ID>
+    <ID>MultiLineIfElse:NeoCard.kt$Modifier</ID>
+    <ID>MultiLineIfElse:OnboardingScreen.kt$MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)</ID>
+    <ID>MultiLineIfElse:OnboardingScreen.kt$pages[pagerState.currentPage].accentColor</ID>
+    <ID>MultiLineIfElse:OvertimeRecord.kt$OvertimeRecord.Companion$OvertimeType.REGULAR</ID>
+    <ID>MultiLineIfElse:OvertimeRecord.kt$OvertimeRecord.Companion$OvertimeType.SPECIAL_HOLIDAY</ID>
+    <ID>MultiLineIfElse:TimeRangeOvertimeDialog.kt$cat.accentColor</ID>
+    <ID>MultiLineIfElse:TimeRangeOvertimeDialog.kt$onSurface</ID>
+    <ID>MultiLineIfElse:TimeRangeOvertimeDialog.kt$outline</ID>
+    <ID>MultiLineIfElse:TimeRangeOvertimeDialog.kt$surfaceVariant</ID>
+    <ID>MutableStateAutoboxing:CutoffScheduleCard.kt$mutableStateOf(0)</ID>
+    <ID>MutableStateAutoboxing:CutoffScheduleCard.kt$mutableStateOf(31)</ID>
+    <ID>NestedBlockDepth:CompactGaugeWidgetProvider.kt$CompactGaugeWidgetProvider.Companion$private fun updateWidget( context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int )</ID>
+    <ID>NestedBlockDepth:CutoffHelper.kt$CutoffHelper$private fun getSemiMonthlyCutoff( referenceMillis: Long, firstEndDayRaw: Int, secondEndDayRaw: Int, offset: Int // 0 = current, -1 = prev, etc. ): CutoffPeriod</ID>
+    <ID>NoConsecutiveBlankLines:Color.kt$ </ID>
+    <ID>NoConsecutiveBlankLines:MainScreen.kt$ </ID>
+    <ID>NoEmptyFirstLineInMethodBlock:CalendarTab.kt$ </ID>
+    <ID>NoEmptyFirstLineInMethodBlock:EarningsBarChart.kt$ </ID>
+    <ID>NoMultipleSpaces:Color.kt$ </ID>
+    <ID>NoMultipleSpaces:Theme.kt$ </ID>
+    <ID>NoMultipleSpaces:TimeRangeOvertimeDialog.kt$ </ID>
+    <ID>NoUnusedImports:AnimatedMoneyCounter.kt$com.example.ottracker.ui.components.AnimatedMoneyCounter.kt</ID>
+    <ID>NoUnusedImports:CalendarTab.kt$com.example.ottracker.ui.tabs.CalendarTab.kt</ID>
+    <ID>NoUnusedImports:CashConfettiEffect.kt$com.example.ottracker.ui.components.CashConfettiEffect.kt</ID>
+    <ID>NoUnusedImports:CutoffHelperTest.kt$com.example.ottracker.data.CutoffHelperTest.kt</ID>
+    <ID>NoUnusedImports:CutoffScheduleCard.kt$com.example.ottracker.ui.components.CutoffScheduleCard.kt</ID>
+    <ID>NoUnusedImports:GrindLevelBadge.kt$com.example.ottracker.ui.components.GrindLevelBadge.kt</ID>
+    <ID>NoUnusedImports:MainScreen.kt$com.example.ottracker.ui.main.MainScreen.kt</ID>
+    <ID>NoUnusedImports:NeoNavigationBar.kt$com.example.ottracker.ui.components.NeoNavigationBar.kt</ID>
+    <ID>NoUnusedImports:NeoReceiptCard.kt$com.example.ottracker.ui.components.NeoReceiptCard.kt</ID>
+    <ID>NoUnusedImports:NeoStampBadge.kt$com.example.ottracker.ui.components.NeoStampBadge.kt</ID>
+    <ID>NoUnusedImports:OtFormTab.kt$com.example.ottracker.ui.tabs.OtFormTab.kt</ID>
+    <ID>NoUnusedImports:SettingsTab.kt$com.example.ottracker.ui.tabs.SettingsTab.kt</ID>
+    <ID>NoUnusedImports:TimeRangeOvertimeDialog.kt$com.example.ottracker.ui.components.TimeRangeOvertimeDialog.kt</ID>
+    <ID>ParameterNaming:CashConfettiEffect.kt$onFinished</ID>
+    <ID>ParameterNaming:CutoffScheduleCard.kt$onDaySelected</ID>
+    <ID>ParameterNaming:NeoNavigationBar.kt$onTabSelected</ID>
+    <ID>ParameterNaming:OnboardingScreen.kt$onFinished</ID>
+    <ID>PropertyWrapping:TimeRangeOvertimeDialog.kt$val tempRecord = remember(startCal.timeInMillis, endCal.timeInMillis, selectedOtType, settings.baseHourlyRate, activeNightRate) { OvertimeRecord( dateMillis = dateMillis, startTimeMillis = startCal.timeInMillis, endTimeMillis = endCal.timeInMillis, hourlyRate = settings.baseHourlyRate, overtimeType = selectedOtType, nightDiffRate = activeNightRate ) }</ID>
+    <ID>StringTemplate:CompactGaugeWidgetProvider.kt$CompactGaugeWidgetProvider.Companion$${targetDisplay}</ID>
+    <ID>StringTemplate:MainScreenViewModel.kt$MainScreenViewModel$${recMonth}</ID>
+    <ID>StringTemplate:OvertimeGlanceWidget.kt$OvertimeGlanceWidget$${targetDisplay}</ID>
+    <ID>StringTemplate:OvertimeRecord.kt$OvertimeRecord$${h}</ID>
+    <ID>StringTemplate:OvertimeRecord.kt$OvertimeRecord$${m}</ID>
+    <ID>StringTemplate:TimeRangeOvertimeDialog.kt$${hrs}</ID>
+    <ID>TooGenericExceptionCaught:CompactGaugeWidgetProvider.kt$CompactGaugeWidgetProvider.Companion$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:SettingsTab.kt$e: Exception</ID>
+    <ID>UnusedParameter:NeoCard.kt$contentColor: Color = MaterialTheme.colorScheme.background</ID>
+    <ID>UnusedParameter:NeoReceiptCard.kt$cardBackground: Color</ID>
+    <ID>UnusedParameter:OnboardingScreen.kt$pageIndex: Int</ID>
+    <ID>UnusedPrivateProperty:MainScreenViewModel.kt$MainScreenViewModel$val isFirstHalf = currentDay &lt;= 15</ID>
+    <ID>UnusedPrivateProperty:MainScreenViewModel.kt$MainScreenViewModel$val maxDaysInMonth = now.getActualMaximum(Calendar.DAY_OF_MONTH)</ID>
+    <ID>UseRequire:OvertimeRepository.kt$OvertimeRepository$throw IllegalArgumentException("Invalid backup format: Must be a valid JSON backup.")</ID>
+    <ID>ViewModelInjection:MainScreen.kt$viewModel</ID>
+    <ID>Wrapping:CutoffHelper.kt$CutoffHelper$;</ID>
+    <ID>Wrapping:MainScreenViewModel.kt$MainScreenViewModel$;</ID>
+    <ID>Wrapping:MoneySound.kt$MoneySound$(</ID>
+  </CurrentIssues>
+</SmellBaseline>

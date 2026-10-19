@@ -1,0 +1,60 @@
+build:
+  maxIssues: 0
+  excludeCorrectable: false
+
+naming:
+  FunctionNaming:
+    active: true
+    ignoreAnnotated: ['Composable']
+  TopLevelPropertyNaming:
+    active: true
+    constantPattern: '[A-Z][A-Za-z0-9_]*'
+
+complexity:
+  LongParameterList:
+    active: true
+    functionThreshold: 8
+    constructorThreshold: 8
+    ignoreDefaultParameters: true
+    ignoreDataClasses: true
+    ignoreAnnotatedParameter: []
+  TooManyFunctions:
+    active: false
+  LargeClass:
+    active: false
+
+style:
+  MaxLineLength:
+    active: false
+  MagicNumber:
+    active: false
+  UnusedPrivateMember:
+    active: true
+    allowedNames: '(_|preview.*)'
+
+# Compose static analysis rules (io.nlopez.compose.rules)
+Compose:
+  ComposableNaming:
+    active: true
+  ComposableParamOrder:
+    active: true
+  ContentEmitterReturningValues:
+    active: true
+  ModifierNaming:
+    active: true
+  ModifierNotUsedAtRoot:
+    active: true
+  ModifierParameter:
+    active: true
+  ModifierReused:
+    active: true
+  ModifierWithoutDefault:
+    active: true
+  MultipleEmitters:
+    active: true
+  MutableParams:
+    active: true
+  ReusedModifierInstance:
+    active: true
+  UnstableCollections:
+    active: false
