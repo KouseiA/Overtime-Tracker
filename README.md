@@ -11,7 +11,7 @@
 
 <br/>
 
-[**Download Overtime Tracker (v1.5.4 APK)**](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.5.4/OvertimeTracker-v1.5.4.apk) • [**View Changes**](CHANGELOG.md)
+[**Download Overtime Tracker (v1.5.5 APK)**](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.5.5/OvertimeTracker-v1.5.5.apk) • [**View Changes**](CHANGELOG.md)
 
 </div>
 

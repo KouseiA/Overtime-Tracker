@@ -4,6 +4,18 @@ All notable changes to **Overtime Tracker** are documented here. Releases are pu
 
 ---
 
+## [v1.5.5] - 2026-10-19
+### Changed & Improved
+- **Integrated Detekt & Compose Static Analysis**:
+  - Embedded `detekt` static code analysis and `io.nlopez.compose.rules` directly into Gradle build lifecycle.
+  - Tailored Compose ruleset to eliminate false positives on PascalCase composables and canvas math.
+- **Architectural Compose Refactoring**:
+  - Reordered Composable parameter signatures across 11 key components (`MainScreen`, `NeoTopAppBar`, `CutoffScheduleCard`, `TimeRangeOvertimeDialog`, `OtFormTab`, `SettingsTab`, etc.) following official Compose API guidelines (`modifier: Modifier = Modifier` as primary optional parameter).
+  - Fixed `LambdaParameterInRestartableEffect` in `CashConfettiEffect` using `rememberUpdatedState` to prevent stale animation callbacks.
+  - Added root `modifier` handling to `PerforatedTearDivider`, `MainNavigation`, and `OnboardingScreen`.
+
+---
+
 ## [v1.5.4] - 2026-10-18
 ### Fixed
 - **Dynamic Tip Alignment for Progress Bar (Option 1)**:
