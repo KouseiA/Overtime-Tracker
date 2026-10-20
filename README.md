@@ -36,16 +36,15 @@ Writing down overtime on scratch paper or trying to do the math in your head oft
 
 ---
 
-## Overtime Rates (DOLE Rules)
+## Overtime Rates
 
-The app automatically computes your pay using standard Philippine labor rules:
+The app automatically computes your overtime pay using your configured hourly overtime rate:
 
 | Day Type | Rate Multiplier | Description |
 |---|:---:|---|
-| **Regular Workday** | **125%** (`× 1.25`) | Standard overtime rate |
-| **Rest Day** | **169%** (`× 1.69`) | Work rendered on scheduled rest day |
-| **Special Non-Working Holiday** | **130%** (`× 1.30`) | Special holiday premium |
-| **Regular Holiday** | **200%** (`× 2.00`) | Regular holiday double pay |
+| **Regular Workday** | **100%** (`× 1.00`) | Standard overtime rate (base OT rate) |
+| **Special Non-Working Holiday** | **130%** (`× 1.30`) | Special holiday overtime premium (+30%) |
+| **Regular Holiday** | **200%** (`× 2.00`) | Regular holiday overtime double pay (2×) |
 
 ---
 

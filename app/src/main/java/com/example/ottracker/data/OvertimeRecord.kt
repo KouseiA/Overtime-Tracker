@@ -62,7 +62,7 @@ data class OvertimeRecord(
     // Rounded DOWN to the nearest 0.5 increment (e.g. 35m → 0.5, 3h35m → 3.5)
     val durationHours: Double = kotlin.math.floor(durationMinutes / 30.0).toInt() * 0.5
 
-    /** Category multiplier for display (e.g., 1.25, 1.30, 2.00) */
+    /** Category multiplier for display (e.g., 1.00, 1.30, 2.00) */
     val categoryMultiplier: Double = OvertimeType.multiplierFor(overtimeType)
 
     /** Formatted category label */
