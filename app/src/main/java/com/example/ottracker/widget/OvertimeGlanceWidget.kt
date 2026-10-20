@@ -37,6 +37,7 @@ import com.example.ottracker.R
 import com.example.ottracker.data.AppSettings
 import com.example.ottracker.data.CutoffHelper
 import com.example.ottracker.data.OvertimeRecord
+import com.example.ottracker.data.calculateTotalPay
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.Locale
@@ -76,14 +77,9 @@ class OvertimeGlanceWidget : GlanceAppWidget() {
         val cutoffTitle = "CURRENT CUTOFF"
         val cutoffSubtitle = "${currentPeriod.title.uppercase(Locale.US)} · $daysText"
 
-        var cutoffHours = 0.0
-        var cutoffPay = 0.0
-        for (rec in records) {
-            if (rec.startTimeMillis in currentPeriod.startMillis..currentPeriod.endMillis) {
-                cutoffHours += rec.durationHours
-                cutoffPay += rec.totalPay
-            }
-        }
+        val cutoffRecords = records.filter { it.startTimeMillis in currentPeriod.startMillis..currentPeriod.endMillis }
+        val cutoffHours = cutoffRecords.sumOf { it.durationHours }
+        val cutoffPay = cutoffRecords.calculateTotalPay()
 
         val payString = "${settings.currencySymbol}${String.format(Locale.US, "%,.2f", cutoffPay)}"
         val hoursRenderedText = "${String.format(Locale.US, "%.1f", cutoffHours)} hrs rendered"

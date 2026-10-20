@@ -59,8 +59,8 @@ data class OvertimeRecord(
 
     val durationMinutes: Long = maxOf(0L, (endTimeMillis - startTimeMillis) / (1000 * 60))
 
-    // Rounded DOWN to whole 1-hour increments only (e.g. 1h 30m → 1.0, 35m → 0.0)
-    val durationHours: Double = (durationMinutes / 60).toDouble()
+    // Rounded DOWN to the nearest 0.5 increment (e.g. 35m → 0.5, 3h35m → 3.5)
+    val durationHours: Double = kotlin.math.floor(durationMinutes / 30.0).toInt() * 0.5
 
     /** Category multiplier for display (e.g., 1.25, 1.30, 2.00) */
     val categoryMultiplier: Double = OvertimeType.multiplierFor(overtimeType)
@@ -206,4 +206,21 @@ data class AppSettings(
             )
         }
     }
+}
+
+/**
+ * Computes total pay for a collection of records.
+ * If the sum of hours contains an odd leftover .50 hour (e.g. 7.5 hrs),
+ * the excess .50 hour is dropped from the total pay computation so that only whole hours are paid.
+ * When two .50 hours pair up (e.g. 1.5h + 2.5h = 4.0h), both are fully computed.
+ */
+fun Iterable<OvertimeRecord>.calculateTotalPay(): Double {
+    val totalHours = this.sumOf { it.durationHours }
+    val rawPay = this.sumOf { it.totalPay }
+    val hasLeftoverHalfHour = (totalHours % 1.0) >= 0.5
+    if (!hasLeftoverHalfHour) return rawPay
+
+    val halfHourRecord = this.lastOrNull { (it.durationHours % 1.0) >= 0.5 }
+    val deductionRate = halfHourRecord?.effectiveHourlyRate ?: (this.firstOrNull()?.effectiveHourlyRate ?: 0.0)
+    return maxOf(0.0, rawPay - (0.5 * deductionRate))
 }

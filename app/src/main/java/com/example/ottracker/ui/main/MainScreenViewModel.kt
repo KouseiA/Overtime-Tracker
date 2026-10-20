@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.ottracker.data.AppSettings
 import com.example.ottracker.data.OvertimeRecord
 import com.example.ottracker.data.OvertimeRepository
+import com.example.ottracker.data.calculateTotalPay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -150,17 +151,17 @@ class MainScreenViewModel(private val repository: OvertimeRepository) : ViewMode
         }
 
         // Initialize trend accumulators — 6 cutoff periods and 6 calendar months
-        val cutoffAccum = Array(recentCutoffPeriods.size) { doubleArrayOf(0.0, 0.0) }
-        val monthAccum = HashMap<String, DoubleArray>(12)
-        for (mk in monthPeriods) monthAccum["${mk.year}_${mk.month}"] = doubleArrayOf(0.0, 0.0)
+        val cutoffTrendBuckets = Array(recentCutoffPeriods.size) { mutableListOf<OvertimeRecord>() }
+        val monthTrendBuckets = HashMap<String, MutableList<OvertimeRecord>>(12)
+        for (mk in monthPeriods) monthTrendBuckets["${mk.year}_${mk.month}"] = mutableListOf()
 
-        // ── SINGLE PASS over all records ─────────────────────────────────────
-        var cutoffHours = 0.0; var cutoffPay = 0.0
-        var prevCutoffHours = 0.0; var prevCutoffPay = 0.0
-        var todayH = 0.0; var todayP = 0.0
-        var weekH = 0.0; var weekP = 0.0
-        var monthH = 0.0; var monthP = 0.0
-        var totalH = 0.0; var totalP = 0.0
+        val cutoffRecords = mutableListOf<OvertimeRecord>()
+        val prevCutoffRecords = mutableListOf<OvertimeRecord>()
+        val todayRecords = mutableListOf<OvertimeRecord>()
+        val weekRecords = mutableListOf<OvertimeRecord>()
+        val monthRecords = mutableListOf<OvertimeRecord>()
+
+        var totalH = 0.0
 
         // Reuse a single Calendar instance for all record parsing
         val recCal = Calendar.getInstance()
@@ -170,62 +171,67 @@ class MainScreenViewModel(private val repository: OvertimeRepository) : ViewMode
             val recYear = recCal.get(Calendar.YEAR)
             val recMonth = recCal.get(Calendar.MONTH)
             val hours = rec.durationHours
-            val pay = rec.totalPay
 
             totalH += hours
-            totalP += pay
 
             // Current & Previous Cutoff matching via precise time window
             if (rec.startTimeMillis in currentCutoffPeriod.startMillis..currentCutoffPeriod.endMillis) {
-                cutoffHours += hours
-                cutoffPay += pay
+                cutoffRecords.add(rec)
             }
             if (rec.startTimeMillis in prevCutoffPeriod.startMillis..prevCutoffPeriod.endMillis) {
-                prevCutoffHours += hours
-                prevCutoffPay += pay
+                prevCutoffRecords.add(rec)
             }
 
             // Week check
             if (rec.startTimeMillis in startOfWeekMillis until endOfWeekMillis) {
-                weekH += hours; weekP += pay
+                weekRecords.add(rec)
             }
 
             // Month check (calendar month)
             if (recYear == currentYear && recMonth == currentMonth) {
-                monthH += hours; monthP += pay
+                monthRecords.add(rec)
             }
 
             // Today check
             if (recYear == currentYear && recCal.get(Calendar.DAY_OF_YEAR) == currentDayOfYear) {
-                todayH += hours; todayP += pay
+                todayRecords.add(rec)
             }
 
             // Bucket into cutoff trend periods
             for (i in recentCutoffPeriods.indices) {
                 val period = recentCutoffPeriods[i]
                 if (rec.startTimeMillis in period.startMillis..period.endMillis) {
-                    cutoffAccum[i][0] += hours
-                    cutoffAccum[i][1] += pay
+                    cutoffTrendBuckets[i].add(rec)
                     break
                 }
             }
 
             // Bucket into monthly trend
-            monthAccum["${recYear}_${recMonth}"]?.let { arr ->
-                arr[0] += hours; arr[1] += pay
-            }
+            monthTrendBuckets["${recYear}_${recMonth}"]?.add(rec)
         }
+
+        val cutoffHours = cutoffRecords.sumOf { it.durationHours }
+        val cutoffPay = cutoffRecords.calculateTotalPay()
+        val prevCutoffHours = prevCutoffRecords.sumOf { it.durationHours }
+        val prevCutoffPay = prevCutoffRecords.calculateTotalPay()
+        val todayH = todayRecords.sumOf { it.durationHours }
+        val todayP = todayRecords.calculateTotalPay()
+        val weekH = weekRecords.sumOf { it.durationHours }
+        val weekP = weekRecords.calculateTotalPay()
+        val monthH = monthRecords.sumOf { it.durationHours }
+        val monthP = monthRecords.calculateTotalPay()
+        val totalP = records.calculateTotalPay()
 
         // ── Build cutoff trend list from recentCutoffPeriods ───────────────────
         val cutoffTrends = recentCutoffPeriods.mapIndexed { index, period ->
-            val arr = cutoffAccum[index]
+            val bucket = cutoffTrendBuckets[index]
             ChartBarData(
                 id = "c_$index",
                 label = period.title.substringBefore(" –").trim(),
                 subLabel = period.title.substringAfter("–").trim(),
                 fullTitle = period.title,
-                hours = arr[0],
-                pay = arr[1],
+                hours = bucket.sumOf { it.durationHours },
+                pay = bucket.calculateTotalPay(),
                 isCurrent = (index == recentCutoffPeriods.lastIndex)
             )
         }
@@ -236,15 +242,15 @@ class MainScreenViewModel(private val repository: OvertimeRepository) : ViewMode
             val mCal = Calendar.getInstance().apply {
                 set(Calendar.YEAR, mk.year); set(Calendar.MONTH, mk.month); set(Calendar.DAY_OF_MONTH, 1)
             }
-            val arr = monthAccum["${mk.year}_${mk.month}"] ?: doubleArrayOf(0.0, 0.0)
+            val bucket = monthTrendBuckets["${mk.year}_${mk.month}"] ?: emptyList()
 
             ChartBarData(
                 id = "m_${mk.year}_${mk.month}",
                 label = monthNameFormat.format(mCal.time),
                 subLabel = "${mk.year}",
                 fullTitle = fullMonthFormat.format(mCal.time),
-                hours = arr[0],
-                pay = arr[1],
+                hours = bucket.sumOf { it.durationHours },
+                pay = bucket.calculateTotalPay(),
                 isCurrent = (index == monthPeriods.lastIndex)
             )
         }

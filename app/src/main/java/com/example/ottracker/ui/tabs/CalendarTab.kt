@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.sp
 import com.example.ottracker.data.AppSettings
 import com.example.ottracker.data.OvertimeRecord
 import com.example.ottracker.data.OvertimeType
+import com.example.ottracker.data.calculateTotalPay
 import com.example.ottracker.theme.DangerRed
 import com.example.ottracker.theme.GoldAccent
 import androidx.compose.ui.text.font.FontFamily
@@ -148,7 +149,7 @@ fun CalendarTab(
     }
 
     val totalHours = remember(displayedRecords) { displayedRecords.sumOf { it.durationHours } }
-    val totalPay = remember(displayedRecords) { displayedRecords.sumOf { it.totalPay } }
+    val totalPay = remember(displayedRecords) { displayedRecords.calculateTotalPay() }
 
     val onSurface = MaterialTheme.colorScheme.onSurface
     val onSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant

@@ -4,6 +4,17 @@ All notable changes to **Overtime Tracker** are documented here. Releases are pu
 
 ---
 
+## [v1.5.8] - 2026-10-21
+### Fixed & Improved
+- **Preserved Individual .50 Record Keeping**:
+  - Shifts now retain their exact `.50` duration (e.g. 1.5 hrs, 2.5 hrs) when logged.
+  - When two `.50` shifts pair up in a cutoff (e.g., 1.5h + 2.5h = 4.0h), both are fully computed as whole hours.
+- **Excess .50 Drop on Total Calculation**:
+  - In cutoff totals (Dashboard, DTR Table, Calendar, and Widgets), any odd leftover/sobrang `.50` hour is dropped from the Total Pay calculation so you only get paid for full hours (e.g. 7.5 hrs pays for 7.0 hrs).
+  - Quick presets in the shift dialog restored to 30-minute intervals (`0.5h`, `1h`, `1.5h`, `2h`...).
+
+---
+
 ## [v1.5.7] - 2026-10-21
 ### Changed & Simplified
 - **Whole-Hour Overtime Computation**:

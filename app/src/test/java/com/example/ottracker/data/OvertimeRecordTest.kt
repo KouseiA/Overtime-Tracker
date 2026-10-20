@@ -97,8 +97,8 @@ class OvertimeRecordTest {
     }
 
     @Test
-    fun testHalfHourFractionDropped() {
-        // 5:00 PM to 6:30 PM (1h 30m) -> only 1.0 hour computed (no .50)
+    fun testRecordKeepsHalfHour() {
+        // 5:00 PM to 6:30 PM (90 mins) -> 1.5 hours recorded
         val start = createTimestamp(2026, Calendar.OCTOBER, 15, 17, 0)
         val end = createTimestamp(2026, Calendar.OCTOBER, 15, 18, 30)
         val record = OvertimeRecord(
@@ -109,24 +109,57 @@ class OvertimeRecordTest {
             overtimeType = OvertimeType.REGULAR
         )
         assertEquals(90L, record.durationMinutes)
-        assertEquals(1.0, record.durationHours, 0.001)
-        assertEquals(100.0, record.totalPay, 0.001)
+        assertEquals(1.5, record.durationHours, 0.001)
+        assertEquals(150.0, record.totalPay, 0.001)
     }
 
     @Test
-    fun testUnderOneHourYieldsZero() {
-        // 5:00 PM to 5:45 PM (45m) -> 0.0 hours computed
-        val start = createTimestamp(2026, Calendar.OCTOBER, 15, 17, 0)
-        val end = createTimestamp(2026, Calendar.OCTOBER, 15, 17, 45)
-        val record = OvertimeRecord(
-            dateMillis = start,
-            startTimeMillis = start,
-            endTimeMillis = end,
-            hourlyRate = 100.0,
-            overtimeType = OvertimeType.REGULAR
-        )
-        assertEquals(45L, record.durationMinutes)
-        assertEquals(0.0, record.durationHours, 0.001)
-        assertEquals(0.0, record.totalPay, 0.001)
+    fun testTwoHalfHoursCombineIntoFullHour() {
+        // Shift 1: 1.5 hrs @ 100/hr = 150
+        // Shift 2: 2.5 hrs @ 100/hr = 250
+        // Total = 4.0 hrs -> 400.0 total pay (no leftover .50)
+        val start1 = createTimestamp(2026, Calendar.OCTOBER, 15, 17, 0)
+        val end1 = createTimestamp(2026, Calendar.OCTOBER, 15, 18, 30)
+        val shift1 = OvertimeRecord(dateMillis = start1, startTimeMillis = start1, endTimeMillis = end1, hourlyRate = 100.0)
+
+        val start2 = createTimestamp(2026, Calendar.OCTOBER, 16, 17, 0)
+        val end2 = createTimestamp(2026, Calendar.OCTOBER, 16, 19, 30)
+        val shift2 = OvertimeRecord(dateMillis = start2, startTimeMillis = start2, endTimeMillis = end2, hourlyRate = 100.0)
+
+        val records = listOf(shift1, shift2)
+        assertEquals(4.0, records.sumOf { it.durationHours }, 0.001)
+        assertEquals(400.0, records.calculateTotalPay(), 0.001)
+    }
+
+    @Test
+    fun testLeftoverHalfHourDroppedInTotalCalculation() {
+        // Shift 1: 1.5 hrs @ 100/hr
+        // Shift 2: 2.0 hrs @ 100/hr
+        // Total = 3.5 hrs -> pays for 3.0 hrs = 300.0 (drops sobrang .50)
+        val start1 = createTimestamp(2026, Calendar.OCTOBER, 15, 17, 0)
+        val end1 = createTimestamp(2026, Calendar.OCTOBER, 15, 18, 30)
+        val shift1 = OvertimeRecord(dateMillis = start1, startTimeMillis = start1, endTimeMillis = end1, hourlyRate = 100.0)
+
+        val start2 = createTimestamp(2026, Calendar.OCTOBER, 16, 17, 0)
+        val end2 = createTimestamp(2026, Calendar.OCTOBER, 16, 19, 0)
+        val shift2 = OvertimeRecord(dateMillis = start2, startTimeMillis = start2, endTimeMillis = end2, hourlyRate = 100.0)
+
+        val records = listOf(shift1, shift2)
+        assertEquals(3.5, records.sumOf { it.durationHours }, 0.001)
+        assertEquals(300.0, records.calculateTotalPay(), 0.001)
+    }
+
+    @Test
+    fun testSevenPointFiveHoursPaysForSevenHours() {
+        // Three 2.5h shifts = 7.5 hrs total @ 100/hr
+        // Two .50s combine into 1h (paid), leaving one odd .50 sobra (dropped)
+        // Paid: 7.0 hrs × 100 = 700.0
+        val shifts = (1..3).map { i ->
+            val s = createTimestamp(2026, Calendar.OCTOBER, i, 17, 0)
+            val e = createTimestamp(2026, Calendar.OCTOBER, i, 19, 30)
+            OvertimeRecord(dateMillis = s, startTimeMillis = s, endTimeMillis = e, hourlyRate = 100.0)
+        }
+        assertEquals(7.5, shifts.sumOf { it.durationHours }, 0.001)
+        assertEquals(700.0, shifts.calculateTotalPay(), 0.001)
     }
 }

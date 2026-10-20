@@ -333,10 +333,10 @@ fun TimeRangeOvertimeDialog(
                 val groupedPresets = remember(startHour, startMinute) {
                     val startTotalMin = startHour * 60 + startMinute
                     val minUntilMidnight = ((24 * 60) - startTotalMin).let {
-                        if (it in 60..(12 * 60)) it else (7 * 60)
+                        if (it in 30..(12 * 60)) it else (7 * 60)
                     }
-                    val stepCount = minUntilMidnight / 60
-                    val presetOffsets = (1..stepCount).map { it.toDouble() }
+                    val stepCount = minUntilMidnight / 30
+                    val presetOffsets = (1..stepCount).map { it * 0.5 }
                     val presetTimeFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
                     val hourHeaderFormat = SimpleDateFormat("h a", Locale.getDefault())
                     val cal = Calendar.getInstance()
@@ -347,7 +347,7 @@ fun TimeRangeOvertimeDialog(
                         cal.set(Calendar.HOUR_OF_DAY, h)
                         cal.set(Calendar.MINUTE, m)
                         val timeLabel = presetTimeFormat.format(cal.time)
-                        val hoursLabel = "${hoursOffset.toInt()}h"
+                        val hoursLabel = if (hoursOffset == hoursOffset.toLong().toDouble()) "${hoursOffset.toInt()}h" else "${hoursOffset}h"
                         val groupHeader = if (h == 0 && m == 0) "12 AM" else hourHeaderFormat.format(cal.time)
                         QuickPresetItem(
                             hour = h,

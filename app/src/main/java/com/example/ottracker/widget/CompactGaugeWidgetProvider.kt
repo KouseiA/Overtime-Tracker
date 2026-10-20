@@ -13,6 +13,7 @@ import com.example.ottracker.R
 import com.example.ottracker.data.AppSettings
 import com.example.ottracker.data.CutoffHelper
 import com.example.ottracker.data.OvertimeRecord
+import com.example.ottracker.data.calculateTotalPay
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.Locale
@@ -88,15 +89,9 @@ class CompactGaugeWidgetProvider : AppWidgetProvider() {
                 val nowMillis = System.currentTimeMillis()
                 val currentPeriod = CutoffHelper.getCurrentCutoff(nowMillis, settings)
 
-                var cutoffHours = 0.0
-                var cutoffPay = 0.0
-
-                for (rec in records) {
-                    if (rec.startTimeMillis in currentPeriod.startMillis..currentPeriod.endMillis) {
-                        cutoffHours += rec.durationHours
-                        cutoffPay += rec.totalPay
-                    }
-                }
+                val cutoffRecords = records.filter { it.startTimeMillis in currentPeriod.startMillis..currentPeriod.endMillis }
+                val cutoffHours = cutoffRecords.sumOf { it.durationHours }
+                val cutoffPay = cutoffRecords.calculateTotalPay()
 
                 // 4. Determine Target Hours & Progress
                 val targetHours = if (settings.targetOtHours > 0.0) settings.targetOtHours else 30.0

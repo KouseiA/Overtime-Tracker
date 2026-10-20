@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import com.example.ottracker.data.AppSettings
 import com.example.ottracker.data.OvertimeRecord
 import com.example.ottracker.data.OvertimeType
+import com.example.ottracker.data.calculateTotalPay
 import com.example.ottracker.theme.GoldAccent
 import com.example.ottracker.ui.components.NeoCard
 import com.example.ottracker.ui.components.NeoReceiptCard
@@ -111,7 +112,7 @@ fun OtFormTab(
     }
 
     val totalHours = filteredRecords.sumOf { it.durationHours }
-    val totalPay = filteredRecords.sumOf { it.totalPay }
+    val totalPay = filteredRecords.calculateTotalPay()
 
     val cutoffTitle = when (selectedFilterIndex) {
         0 -> stats.currentCutoff.title
