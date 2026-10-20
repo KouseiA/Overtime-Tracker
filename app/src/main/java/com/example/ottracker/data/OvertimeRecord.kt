@@ -210,17 +210,6 @@ data class AppSettings(
 
 /**
  * Computes total pay for a collection of records.
- * If the sum of hours contains an odd leftover .50 hour (e.g. 7.5 hrs),
- * the excess .50 hour is dropped from the total pay computation so that only whole hours are paid.
- * When two .50 hours pair up (e.g. 1.5h + 2.5h = 4.0h), both are fully computed.
+ * Fully computes all overtime hours including any .50 half-hour increments.
  */
-fun Iterable<OvertimeRecord>.calculateTotalPay(): Double {
-    val totalHours = this.sumOf { it.durationHours }
-    val rawPay = this.sumOf { it.totalPay }
-    val hasLeftoverHalfHour = (totalHours % 1.0) >= 0.5
-    if (!hasLeftoverHalfHour) return rawPay
-
-    val halfHourRecord = this.lastOrNull { (it.durationHours % 1.0) >= 0.5 }
-    val deductionRate = halfHourRecord?.effectiveHourlyRate ?: (this.firstOrNull()?.effectiveHourlyRate ?: 0.0)
-    return maxOf(0.0, rawPay - (0.5 * deductionRate))
-}
+fun Iterable<OvertimeRecord>.calculateTotalPay(): Double = this.sumOf { it.totalPay }

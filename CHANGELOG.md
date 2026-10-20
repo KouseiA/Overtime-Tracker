@@ -4,6 +4,14 @@ All notable changes to **Overtime Tracker** are documented here. Releases are pu
 
 ---
 
+## [v1.5.9] - 2026-10-21
+### Restored & Improved
+- **Full Computation of All Overtime Hours (Including Leftover .50)**:
+  - Brought back complete computation for every `.50` half-hour in totals and pay calculations.
+  - Leftover `.50` hours (e.g. 1.5h, 3.5h, 7.5h) are fully calculated and paid without deductions across Dashboard, DTR Sheet, Calendar, and Widgets.
+
+---
+
 ## [v1.5.8] - 2026-10-21
 ### Fixed & Improved
 - **Preserved Individual .50 Record Keeping**:
