@@ -1,5 +1,6 @@
 package com.example.ottracker.ui.main
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -15,6 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
+@Immutable
 data class CutoffInfo(
     val title: String = "",
     val payday: String = "",
@@ -23,6 +25,7 @@ data class CutoffInfo(
     val daysRemaining: Int = 0
 )
 
+@Immutable
 data class ChartBarData(
     val id: String = "",
     val label: String = "",
@@ -33,6 +36,7 @@ data class ChartBarData(
     val isCurrent: Boolean = false
 )
 
+@Immutable
 data class DashboardStats(
     val currentCutoff: CutoffInfo = CutoffInfo(),
     val previousCutoff: CutoffInfo = CutoffInfo(),
@@ -48,6 +52,7 @@ data class DashboardStats(
     val monthlyTrends: List<ChartBarData> = emptyList()
 )
 
+@Immutable
 data class MainUiState(
     val records: List<OvertimeRecord> = emptyList(),
     val settings: AppSettings = AppSettings(),

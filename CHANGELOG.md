@@ -4,6 +4,22 @@ All notable changes to **Overtime Tracker** are documented here. Releases are pu
 
 ---
 
+## [v1.5.6] - 2026-10-20
+### Performance & Size Optimization
+- **Zero-Allocation Overtime Computations**:
+  - Converted `OvertimeRecord` day/night hour split calculation to a cached `by lazy(LazyThreadSafetyMode.NONE)` property.
+  - Transformed `effectiveDayRate`, `effectiveNightRate`, `categoryMultiplier`, and `categoryLabel` to direct vals, making `dayPay`, `nightPay`, and `totalPay` instant O(1) lookups.
+  - Eliminated repetitive `Calendar.getInstance()` allocations during list scrolling in the Shift Calendar and DTR Sheet.
+- **Compose Stability & Smart Recomposition Skipping**:
+  - Annotated core data models (`OvertimeRecord`, `AppSettings`, `CutoffPeriod`) and UI states (`CutoffInfo`, `ChartBarData`, `DashboardStats`, `MainUiState`) with `@Immutable`.
+  - Enabled Compose compiler to skip recompositions on list items and stats cards when unrelated state changes.
+- **Memoized Calculations**:
+  - Wrapped `totalHours` and `totalPay` in `remember(displayedRecords)` within `CalendarTab` to prevent iterative sum recalculations on every recomposition.
+- **R8 Dead Code Elimination & APK Size Reduction**:
+  - Removed blanket ProGuard `-keep class androidx.compose.** { *; }` rule, enabling R8 to aggressively tree-shake unused `material-icons-extended` icons and Compose framework classes.
+
+---
+
 ## [v1.5.5] - 2026-10-19
 ### Changed & Improved
 - **Integrated Detekt & Compose Static Analysis**:

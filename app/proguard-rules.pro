@@ -14,9 +14,6 @@
 -dontwarn androidx.work.**
 -keep class androidx.work.** { *; }
 
-# Keep Compose — required for R8 full mode
+# Compose optimization: rely on library consumer rules and don't force-retain all icons
 -dontwarn androidx.compose.**
--keep class androidx.compose.** { *; }
-
-# Keep Material3 icons
 -dontwarn androidx.compose.material.icons.**

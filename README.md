@@ -6,12 +6,12 @@
 
 [![Latest Release](https://img.shields.io/github/v/release/KouseiA/Overtime-Tracker?style=flat-square&color=FFD700&label=Release)](https://github.com/KouseiA/Overtime-Tracker/releases/latest)
 [![Platform](https://img.shields.io/badge/Platform-Android_8.0+-3DDC84?style=flat-square&logo=android&logoColor=white)](https://android.com)
-[![Size](https://img.shields.io/badge/Size-Under_8_MB-success?style=flat-square)](https://github.com/KouseiA/Overtime-Tracker/releases/latest)
+[![Size](https://img.shields.io/badge/Size-~3.1_MB-success?style=flat-square)](https://github.com/KouseiA/Overtime-Tracker/releases/latest)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
 
 <br/>
 
-[**Download Overtime Tracker (v1.5.5 APK)**](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.5.5/OvertimeTracker-v1.5.5.apk) • [**View Changes**](CHANGELOG.md)
+[**Download Overtime Tracker (v1.5.6 APK)**](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.5.6/OvertimeTracker-v1.5.6.apk) • [**View Changes**](CHANGELOG.md)
 
 </div>
 

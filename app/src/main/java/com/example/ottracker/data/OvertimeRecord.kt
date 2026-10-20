@@ -1,5 +1,6 @@
 package com.example.ottracker.data
 
+import androidx.compose.runtime.Immutable
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -43,6 +44,7 @@ object OvertimeType {
     }
 }
 
+@Immutable
 data class OvertimeRecord(
     val id: String = UUID.randomUUID().toString(),
     val dateMillis: Long, // timestamp for the day
@@ -54,17 +56,19 @@ data class OvertimeRecord(
     val nightDiffRate: Double = 0.20 // Night Shift Differential rate (default +20%)
 ) {
     // Legacy compatibility alias
-    val isHoliday: Boolean
-        get() = overtimeType != OvertimeType.REGULAR
+    val isHoliday: Boolean = overtimeType != OvertimeType.REGULAR
 
-    val durationMinutes: Long
-        get() = maxOf(0L, (endTimeMillis - startTimeMillis) / (1000 * 60))
+    val durationMinutes: Long = maxOf(0L, (endTimeMillis - startTimeMillis) / (1000 * 60))
 
     // Rounded DOWN to the nearest 0.5 increment (e.g. 35m → 0.5, 3h35m → 3.5)
-    val durationHours: Double
-        get() = kotlin.math.floor(durationMinutes / 30.0).toInt() * 0.5
+    val durationHours: Double = kotlin.math.floor(durationMinutes / 30.0).toInt() * 0.5
 
     // Splitting 30-min increments between Day OT (06:00 - 22:00) and Night OT (22:00 - 06:00)
+    // Cached once per record instance: eliminates repeated Calendar allocations during list scroll
+    private val otSplit: Pair<Double, Double> by lazy(LazyThreadSafetyMode.NONE) {
+        computeOtSplit()
+    }
+
     private fun computeOtSplit(): Pair<Double, Double> {
         val totalBlocks = (durationMinutes / 30).toInt()
         if (totalBlocks <= 0) return Pair(0.0, 0.0)
@@ -86,43 +90,32 @@ data class OvertimeRecord(
         return Pair(dayBlocks * 0.5, nightBlocks * 0.5)
     }
 
-    val dayOtHours: Double
-        get() = computeOtSplit().first
+    val dayOtHours: Double get() = otSplit.first
 
-    val nightOtHours: Double
-        get() = computeOtSplit().second
+    val nightOtHours: Double get() = otSplit.second
 
-    val hasNightDifferential: Boolean
-        get() = nightOtHours > 0.0
+    val hasNightDifferential: Boolean get() = nightOtHours > 0.0
 
     /** Day rate = base OT rate × category multiplier */
-    val effectiveDayRate: Double
-        get() = hourlyRate * OvertimeType.multiplierFor(overtimeType)
+    val effectiveDayRate: Double = hourlyRate * OvertimeType.multiplierFor(overtimeType)
 
     /** Backward-compat alias used by widgets and dashboard */
-    val effectiveHourlyRate: Double
-        get() = effectiveDayRate
+    val effectiveHourlyRate: Double get() = effectiveDayRate
 
     /** Night rate = day rate × (1 + NSD%) */
-    val effectiveNightRate: Double
-        get() = effectiveDayRate * (1.0 + nightDiffRate)
+    val effectiveNightRate: Double = effectiveDayRate * (1.0 + nightDiffRate)
 
-    val dayPay: Double
-        get() = dayOtHours * effectiveDayRate
+    val dayPay: Double get() = dayOtHours * effectiveDayRate
 
-    val nightPay: Double
-        get() = nightOtHours * effectiveNightRate
+    val nightPay: Double get() = nightOtHours * effectiveNightRate
 
-    val totalPay: Double
-        get() = dayPay + nightPay
+    val totalPay: Double get() = dayPay + nightPay
 
     /** Category multiplier for display (e.g., "×1.30") */
-    val categoryMultiplier: Double
-        get() = OvertimeType.multiplierFor(overtimeType)
+    val categoryMultiplier: Double = OvertimeType.multiplierFor(overtimeType)
 
     /** Formatted category label */
-    val categoryLabel: String
-        get() = OvertimeType.labelFor(overtimeType)
+    val categoryLabel: String = OvertimeType.labelFor(overtimeType)
 
     val formattedFormula: String
         get() = String.format(Locale.US, "₱%.2f × %.2f = ₱%.2f/hr", effectiveDayRate, 1.0 + nightDiffRate, effectiveNightRate)
@@ -195,6 +188,7 @@ data class OvertimeRecord(
     }
 }
 
+@Immutable
 data class AppSettings(
     val baseHourlyRate: Double = 93.75, // Default OT rate ₱93.75 / hr
     val currencySymbol: String = "₱",

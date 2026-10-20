@@ -147,8 +147,8 @@ fun CalendarTab(
         }
     }
 
-    val totalHours = displayedRecords.sumOf { it.durationHours }
-    val totalPay = displayedRecords.sumOf { it.totalPay }
+    val totalHours = remember(displayedRecords) { displayedRecords.sumOf { it.durationHours } }
+    val totalPay = remember(displayedRecords) { displayedRecords.sumOf { it.totalPay } }
 
     val onSurface = MaterialTheme.colorScheme.onSurface
     val onSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant

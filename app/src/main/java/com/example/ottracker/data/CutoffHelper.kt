@@ -1,9 +1,11 @@
 package com.example.ottracker.data
 
+import androidx.compose.runtime.Immutable
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
+@Immutable
 data class CutoffPeriod(
     val startMillis: Long,
     val endMillis: Long, // inclusive end of the cutoff day (23:59:59.999)
