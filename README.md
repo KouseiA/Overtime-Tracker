@@ -11,7 +11,7 @@
 
 <br/>
 
-[**Download Overtime Tracker (v1.5.6 APK)**](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.5.6/OvertimeTracker-v1.5.6.apk) • [**View Changes**](CHANGELOG.md)
+[**Download Overtime Tracker (v1.5.9 APK)**](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.5.9/OvertimeTracker-v1.5.9.apk) • [**View Changes**](CHANGELOG.md)
 
 </div>
 
@@ -31,7 +31,7 @@
 Writing down overtime on scratch paper or trying to do the math in your head often leads to mistakes. **Overtime Tracker** makes it simple:
 
 - **100% Offline & Private**: No sign-up, no login, and no internet needed. All your hours stay saved only on your phone.
-- **Accurate DOLE Rates**: Automatically computes regular overtime, holiday pay, and night differential.
+- **Accurate DOLE Rates**: Automatically computes regular overtime and holiday pay rates.
 - **Keep Your Own Records**: Keep a personal log of your overtime hours and estimated pay so you have a copy to reference when your payslip arrives.
 
 ---
@@ -63,16 +63,12 @@ The app automatically computes your pay using standard Philippine labor rules:
 - Easy to copy onto your paper form before passing it to HR or your supervisor.
 - Filter by **Current Cutoff**, **Previous Cutoff**, or **All Records**.
 
-### 3. Automatic Night Differential
-- If your overtime extends past 10:00 PM, the app automatically splits your hours into Day OT and Night OT.
-- No need to do the math yourself.
-
-### 4. Home Screen Widgets
+### 3. Home Screen Widgets
 Check your hours and earnings right on your home screen without opening the app:
 - **Glance Cutoff Card (4×2)**: Declarative Jetpack Glance widget showing your live cutoff dates, earnings in bold gold, hours rendered, and a 1-tap `+ LOG OT` action button.
 - **Compact Circular Gauge (2×2)**: Tactile gauge displaying your cutoff progress and earnings at a glance.
 
-### 5. Backup & Transfer
+### 4. Backup & Transfer
 - Save your shift records to a backup file anytime.
 - Easily restore your data if you buy a new phone.
 
@@ -80,7 +76,7 @@ Check your hours and earnings right on your home screen without opening the app:
 
 ## How to Install
 
-1. Download the APK file: [**Download OvertimeTracker-v1.5.4.apk**](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.5.4/OvertimeTracker-v1.5.4.apk)
+1. Download the APK file: [**Download OvertimeTracker-v1.5.9.apk**](https://github.com/KouseiA/Overtime-Tracker/releases/download/v1.5.9/OvertimeTracker-v1.5.9.apk)
 2. Tap the downloaded file on your Android phone.
 3. If asked, tap **Allow install from unknown sources**.
 4. Open the app and set your hourly rate!
