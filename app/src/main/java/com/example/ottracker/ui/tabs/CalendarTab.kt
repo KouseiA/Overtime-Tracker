@@ -514,14 +514,12 @@ fun CalendarTab(
                                 Spacer(modifier = Modifier.width(6.dp))
                                 OvertimeCategoryStamp(
                                     overtimeType = record.overtimeType,
-                                    hasNightDiff = record.hasNightDifferential,
                                     rotation = -1.5f
                                 )
                             }
                             Spacer(modifier = Modifier.height(2.dp))
-                            val nightBreakdownText = if (record.hasNightDifferential) " (${String.format(Locale.US, "%.1f", record.dayOtHours)}h Day + ${String.format(Locale.US, "%.1f", record.nightOtHours)}h Night)" else ""
                             Text(
-                                text = "${record.formattedTimeRange}  ·  ${record.formattedHoursDecimal}$nightBreakdownText${if (record.overtimeType != OvertimeType.REGULAR) "  ·  @ ${settings.currencySymbol}${String.format(Locale.US, "%.2f", record.effectiveHourlyRate)}/hr" else ""}",
+                                text = "${record.formattedTimeRange}  ·  ${record.formattedHoursDecimal}${if (record.overtimeType != OvertimeType.REGULAR) "  ·  @ ${settings.currencySymbol}${String.format(Locale.US, "%.2f", record.effectiveHourlyRate)}/hr" else ""}",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = onSurfaceVariant
                             )

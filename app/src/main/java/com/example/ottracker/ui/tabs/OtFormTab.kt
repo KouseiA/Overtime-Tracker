@@ -111,8 +111,6 @@ fun OtFormTab(
     }
 
     val totalHours = filteredRecords.sumOf { it.durationHours }
-    val totalDayHours = filteredRecords.sumOf { it.dayOtHours }
-    val totalNightHours = filteredRecords.sumOf { it.nightOtHours }
     val totalPay = filteredRecords.sumOf { it.totalPay }
 
     val cutoffTitle = when (selectedFilterIndex) {
@@ -502,15 +500,6 @@ fun OtFormTab(
                                     maxLines = 1,
                                     color = onSurface
                                 )
-                                if (record.hasNightDifferential) {
-                                    Text(
-                                        text = "🌙 ${String.format(Locale.US, "%.1f", record.nightOtHours)}h",
-                                        fontWeight = FontWeight.ExtraBold,
-                                        fontSize = 8.5.sp,
-                                        maxLines = 1,
-                                        color = Color(0xFFA5B4FC)
-                                    )
-                                }
                             }
 
                             VerticalDivider(modifier = Modifier.fillMaxHeight(), thickness = 1.dp, color = outline)
@@ -535,21 +524,12 @@ fun OtFormTab(
                                     val mult = OvertimeType.multiplierFor(record.overtimeType)
                                     val isRegHoliday = record.overtimeType == OvertimeType.REGULAR_HOLIDAY
                                     val bonusPercent = ((mult - 1.0) * 100).toInt()
-                                    val nsdSuffix = if (record.hasNightDifferential) "+NSD" else " OT"
                                     Text(
-                                        text = "+$bonusPercent%$nsdSuffix",
+                                        text = "+$bonusPercent% OT",
                                         fontWeight = FontWeight.Black,
                                         fontSize = 8.5.sp,
                                         maxLines = 1,
                                         color = if (isRegHoliday) Color(0xFFF59E0B) else Color(0xFF818CF8)
-                                    )
-                                } else if (record.hasNightDifferential) {
-                                    Text(
-                                        text = "+20% NSD",
-                                        fontWeight = FontWeight.Black,
-                                        fontSize = 8.5.sp,
-                                        maxLines = 1,
-                                        color = Color(0xFFA5B4FC)
                                     )
                                 }
                             }
@@ -683,15 +663,6 @@ fun OtFormTab(
                                 fontFamily = FontFamily.Monospace,
                                 color = onSurface
                             )
-                            if (totalNightHours > 0.0) {
-                                Text(
-                                    text = "${String.format(Locale.US, "%.1f", totalDayHours)}h Day · ${String.format(Locale.US, "%.1f", totalNightHours)}h Night (+20%)",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    fontFamily = FontFamily.Monospace,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color(0xFFA5B4FC)
-                                )
-                            }
                             Text(
                                 text = "${filteredRecords.size} Total Shifts Logged",
                                 style = MaterialTheme.typography.bodySmall,

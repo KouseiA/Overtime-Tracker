@@ -131,15 +131,13 @@ fun TimeRangeOvertimeDialog(
         }
     }
 
-    val activeNightRate = if (settings.nightDiffEnabled) settings.nightDiffRate else 0.0
-    val tempRecord = remember(startCal.timeInMillis, endCal.timeInMillis, selectedOtType, settings.baseHourlyRate, activeNightRate) {
+    val tempRecord = remember(startCal.timeInMillis, endCal.timeInMillis, selectedOtType, settings.baseHourlyRate) {
         OvertimeRecord(
             dateMillis = dateMillis,
             startTimeMillis = startCal.timeInMillis,
             endTimeMillis = endCal.timeInMillis,
             hourlyRate = settings.baseHourlyRate,
-            overtimeType = selectedOtType,
-            nightDiffRate = activeNightRate
+            overtimeType = selectedOtType
         )
     }
     val durationMinutes = tempRecord.durationMinutes
@@ -335,10 +333,10 @@ fun TimeRangeOvertimeDialog(
                 val groupedPresets = remember(startHour, startMinute) {
                     val startTotalMin = startHour * 60 + startMinute
                     val minUntilMidnight = ((24 * 60) - startTotalMin).let {
-                        if (it in 30..(12 * 60)) it else (7 * 60)
+                        if (it in 60..(12 * 60)) it else (7 * 60)
                     }
-                    val stepCount = minUntilMidnight / 30
-                    val presetOffsets = (1..stepCount).map { it * 0.5 }
+                    val stepCount = minUntilMidnight / 60
+                    val presetOffsets = (1..stepCount).map { it.toDouble() }
                     val presetTimeFormat = SimpleDateFormat("h:mm a", Locale.getDefault())
                     val hourHeaderFormat = SimpleDateFormat("h a", Locale.getDefault())
                     val cal = Calendar.getInstance()
@@ -349,7 +347,7 @@ fun TimeRangeOvertimeDialog(
                         cal.set(Calendar.HOUR_OF_DAY, h)
                         cal.set(Calendar.MINUTE, m)
                         val timeLabel = presetTimeFormat.format(cal.time)
-                        val hoursLabel = if (hoursOffset == hoursOffset.toLong().toDouble()) "${hoursOffset.toInt()}h" else "${hoursOffset}h"
+                        val hoursLabel = "${hoursOffset.toInt()}h"
                         val groupHeader = if (h == 0 && m == 0) "12 AM" else hourHeaderFormat.format(cal.time)
                         QuickPresetItem(
                             hour = h,
@@ -626,127 +624,23 @@ fun TimeRangeOvertimeDialog(
                                     color = GoldAccent
                                 )
                                 val rateSubtext = when {
-                                    tempRecord.hasNightDifferential ->
-                                        "${String.format(Locale.US, "%.1f", tempRecord.dayOtHours)}h Day + ${String.format(Locale.US, "%.1f", tempRecord.nightOtHours)}h Night"
                                     selectedOtType != OvertimeType.REGULAR ->
                                         "@ ${settings.currencySymbol}${String.format(Locale.US, "%.2f", effectiveRate)}/h (${OvertimeType.shortLabelFor(selectedOtType)})"
                                     else ->
                                         "@ ${settings.currencySymbol}${String.format(Locale.US, "%.2f", effectiveRate)}/hr"
                                 }
-                                val subtextColor = when {
-                                    tempRecord.hasNightDifferential -> Color(0xFFA5B4FC)
-                                    selectedOtType == OvertimeType.SPECIAL_HOLIDAY -> SpecialHolidayColor
-                                    selectedOtType == OvertimeType.REGULAR_HOLIDAY -> RegularHolidayColor
+                                val subtextColor = when (selectedOtType) {
+                                    OvertimeType.SPECIAL_HOLIDAY -> SpecialHolidayColor
+                                    OvertimeType.REGULAR_HOLIDAY -> RegularHolidayColor
                                     else -> onSurfaceVariant
                                 }
                                 Text(
                                     text = rateSubtext,
                                     style = MaterialTheme.typography.bodySmall,
-                                    fontWeight = if (tempRecord.hasNightDifferential || selectedOtType != OvertimeType.REGULAR) FontWeight.Bold else FontWeight.Normal,
+                                    fontWeight = if (selectedOtType != OvertimeType.REGULAR) FontWeight.Bold else FontWeight.Normal,
                                     maxLines = 1,
                                     color = subtextColor
                                 )
-                            }
-                        }
-
-                        // ── NIGHT SHIFT FORMULA BREAKDOWN ──────────────────────────────
-                        if (tempRecord.hasNightDifferential) {
-                            Spacer(modifier = Modifier.height(14.dp))
-                            Surface(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .border(1.dp, Color(0xFF3730A3), RoundedCornerShape(12.dp)),
-                                color = Color(0xFF171926),
-                                shape = RoundedCornerShape(12.dp)
-                            ) {
-                                Column(modifier = Modifier.padding(12.dp)) {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Row(verticalAlignment = Alignment.CenterVertically) {
-                                            Text("🌙", fontSize = 13.sp)
-                                            Spacer(modifier = Modifier.width(6.dp))
-                                            Text(
-                                                text = "NIGHT SHIFT DIFFERENTIAL (+${(settings.nightDiffRate * 100).toInt()}%)",
-                                                style = MaterialTheme.typography.labelSmall,
-                                                fontWeight = FontWeight.Black,
-                                                color = Color(0xFFA5B4FC),
-                                                letterSpacing = 0.5.sp
-                                            )
-                                        }
-                                        Surface(
-                                            color = Color(0xFF312E81).copy(alpha = 0.5f),
-                                            shape = RoundedCornerShape(4.dp)
-                                        ) {
-                                            Text(
-                                                text = "10 PM - 6 AM",
-                                                fontSize = 9.sp,
-                                                fontWeight = FontWeight.ExtraBold,
-                                                color = Color(0xFFA5B4FC),
-                                                modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp)
-                                            )
-                                        }
-                                    }
-
-                                    Spacer(modifier = Modifier.height(8.dp))
-
-                                    // Explicit Math Formula
-                                    Text(
-                                        text = "Rate: ${settings.currencySymbol}${String.format(Locale.US, "%.2f", tempRecord.effectiveDayRate)} × ${String.format(Locale.US, "%.2f", 1.0 + settings.nightDiffRate)} = ${settings.currencySymbol}${String.format(Locale.US, "%.2f", tempRecord.effectiveNightRate)}/hr",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        fontFamily = FontFamily.Monospace,
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 11.sp,
-                                        color = GoldAccent
-                                    )
-
-                                    Spacer(modifier = Modifier.height(8.dp))
-                                    HorizontalDivider(color = Color(0xFF312E81).copy(alpha = 0.5f))
-                                    Spacer(modifier = Modifier.height(8.dp))
-
-                                    // Itemized Lines
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.SpaceBetween
-                                    ) {
-                                        Text(
-                                            text = "• Day OT: ${String.format(Locale.US, "%.1f", tempRecord.dayOtHours)} hrs × ${settings.currencySymbol}${String.format(Locale.US, "%.2f", tempRecord.effectiveDayRate)}",
-                                            style = MaterialTheme.typography.bodySmall,
-                                            fontSize = 11.sp,
-                                            color = onSurfaceVariant
-                                        )
-                                        Text(
-                                            text = "${settings.currencySymbol}${String.format(Locale.US, "%.2f", tempRecord.dayPay)}",
-                                            style = MaterialTheme.typography.bodySmall,
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 11.sp,
-                                            color = onSurface
-                                        )
-                                    }
-
-                                    Spacer(modifier = Modifier.height(4.dp))
-
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.SpaceBetween
-                                    ) {
-                                        Text(
-                                            text = "• Night OT: ${String.format(Locale.US, "%.1f", tempRecord.nightOtHours)} hrs × ${settings.currencySymbol}${String.format(Locale.US, "%.2f", tempRecord.effectiveNightRate)}",
-                                            style = MaterialTheme.typography.bodySmall,
-                                            fontSize = 11.sp,
-                                            color = Color(0xFFA5B4FC)
-                                        )
-                                        Text(
-                                            text = "${settings.currencySymbol}${String.format(Locale.US, "%.2f", tempRecord.nightPay)}",
-                                            style = MaterialTheme.typography.bodySmall,
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 11.sp,
-                                            color = GoldAccent
-                                        )
-                                    }
-                                }
                             }
                         }
                     }
@@ -806,8 +700,7 @@ fun TimeRangeOvertimeDialog(
                                     endTimeMillis = endCal.timeInMillis,
                                     hourlyRate = settings.baseHourlyRate,
                                     overtimeType = selectedOtType,
-                                    notes = existingRecord?.notes ?: "",
-                                    nightDiffRate = activeNightRate
+                                    notes = existingRecord?.notes ?: ""
                                 )
                                 onSave(record)
                                 onDismiss()

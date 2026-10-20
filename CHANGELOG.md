@@ -4,6 +4,19 @@ All notable changes to **Overtime Tracker** are documented here. Releases are pu
 
 ---
 
+## [v1.5.7] - 2026-10-21
+### Changed & Simplified
+- **Whole-Hour Overtime Computation**:
+  - Overtime hours are now computed strictly in whole 1-hour increments (`1h`, `2h`, `3h`...).
+  - Half-hour fractions (`.50` / 30-minute blocks) and minutes under 1 full hour are dropped from calculations, matching company cutoff overtime policies.
+  - Shift logging dialog quick presets updated to 1-hour intervals (`1h`, `2h`, `3h`...).
+- **Removed Night Shift Differential (NSD)**:
+  - Completely streamlined calculation formulas: total pay is now directly `durationHours × effectiveHourlyRate`.
+  - Removed night differential split calculation, night differential settings toggle and rate chips, `+NSD` badges, and dialog night formula card for a faster, simpler experience.
+  - Cleaned DOLE rate table across the DTR ledger and documentation.
+
+---
+
 ## [v1.5.6] - 2026-10-20
 ### Performance & Size Optimization
 - **Zero-Allocation Overtime Computations**:

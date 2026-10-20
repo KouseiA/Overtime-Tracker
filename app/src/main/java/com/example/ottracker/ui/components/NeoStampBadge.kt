@@ -79,7 +79,6 @@ fun NeoStampBadge(
 fun OvertimeCategoryStamp(
     overtimeType: String,
     modifier: Modifier = Modifier,
-    hasNightDiff: Boolean = false,
     rotation: Float = 0f
 ) {
     val onSurface = MaterialTheme.colorScheme.onSurface
@@ -126,19 +125,6 @@ fun OvertimeCategoryStamp(
                     borderWidth = 1.5.dp
                 )
             }
-        }
-
-        if (hasNightDiff) {
-            // Night Differential Tag
-            NeoStampBadge(
-                text = "+NSD",
-                emoji = "🌙",
-                rotation = if (rotation != 0f) -rotation else 0f,
-                containerColor = onSurface.copy(alpha = 0.12f),
-                contentColor = onSurface,
-                borderColor = onSurface,
-                borderWidth = 1.dp
-            )
         }
     }
 }

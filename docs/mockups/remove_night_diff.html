@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Removal of Night Differential - Visual Preview & Comparison</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #0A0A0A;
+      color: #F5F5F5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 32px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .header {
+      text-align: center;
+      max-width: 680px;
+      margin-bottom: 28px;
+    }
+    h1 {
+      color: #FFD700;
+      font-size: 24px;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+    p.subtitle {
+      color: #94A3B8;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .badge-bar {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 14px;
+    }
+    .pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .pill-remove { background: #3B1B1B; color: #F87171; border: 1px solid #7F1D1D; }
+    .pill-keep { background: #1B2E1E; color: #4ADE80; border: 1px solid #14532D; }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      background: #141414;
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid #222;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: #888;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: #FFD700;
+      color: #000;
+    }
+
+    .view-section {
+      display: none;
+      width: 100%;
+      max-width: 820px;
+      gap: 24px;
+    }
+    .view-section.active {
+      display: flex;
+      flex-direction: row;
+    }
+    @media (max-width: 768px) {
+      .view-section.active {
+        flex-direction: column;
+      }
+    }
+
+    .device-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .column-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 6px;
+    }
+    .title-before { color: #A5B4FC; }
+    .title-after { color: #4ADE80; }
+
+    /* PHONE FRAME */
+    .phone-frame {
+      background: #000000;
+      border: 2px solid #222;
+      border-radius: 28px;
+      padding: 20px 16px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.8);
+      position: relative;
+    }
+
+    /* DIALOG STYLES */
+    .dialog-sheet {
+      background: #141414;
+      border: 2px solid #282828;
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 8px 0 #000;
+    }
+    .dialog-header {
+      font-size: 16px;
+      font-weight: 800;
+      color: #FFF;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chip-date {
+      font-size: 11px;
+      background: #202020;
+      color: #FFD700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: monospace;
+    }
+    .time-selector-box {
+      background: #1C1C1C;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .time-label { font-size: 10px; color: #777; text-transform: uppercase; font-weight: 700; }
+    .time-val { font-size: 15px; font-weight: 800; color: #FFF; margin-top: 2px; }
+
+    /* SUMMARY BANNER */
+    .summary-box {
+      background: #1C1C1C;
+      border: 2px solid #333;
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .summary-hours-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .hours-large {
+      font-size: 20px;
+      font-weight: 800;
+      color: #FFF;
+      font-family: monospace;
+    }
+    .category-chip {
+      background: #252525;
+      color: #FFD700;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid #3A3A3A;
+    }
+    .payout-hero {
+      font-size: 26px;
+      font-weight: 900;
+      color: #FFD700;
+      font-family: monospace;
+      letter-spacing: -0.5px;
+      margin: 4px 0;
+    }
+    .formula-row {
+      font-size: 11px;
+      color: #888;
+      font-family: monospace;
+    }
+
+    /* PURPLE NIGHT DIFF CARD (BEFORE) */
+    .nsd-card {
+      background: #1E1B2E;
+      border: 1.5px solid #4338CA;
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-top: 10px;
+    }
+    .nsd-header {
+      font-size: 11px;
+      font-weight: 800;
+      color: #A5B4FC;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .nsd-split {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #C7D2FE;
+      font-family: monospace;
+    }
+
+    /* CLEAN CARD (AFTER) */
+    .clean-callout {
+      background: #152219;
+      border: 1.5px solid #166534;
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-top: 10px;
+      font-size: 11px;
+      color: #86EFAC;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* SAVE BUTTON */
+    .btn-save {
+      background: #FFD700;
+      color: #000;
+      font-weight: 800;
+      font-size: 13px;
+      text-align: center;
+      padding: 12px;
+      border-radius: 12px;
+      border: 2px solid #B89600;
+      box-shadow: 0 4px 0 #7A6300;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 14px;
+    }
+
+    /* LIST CARD STYLES */
+    .record-card {
+      background: #141414;
+      border: 2px solid #282828;
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 4px 0 #000;
+      margin-bottom: 12px;
+    }
+    .record-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .date-label { font-size: 13px; font-weight: 800; color: #FFF; }
+    .badge-nsd {
+      background: #2E1B3B;
+      color: #C084FC;
+      border: 1px solid #7E22CE;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+    .badge-clean {
+      background: #222;
+      color: #FFD700;
+      border: 1px solid #333;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+    .record-time { font-size: 12px; color: #888; font-family: monospace; }
+    .record-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed #282828;
+    }
+    .hours-sub { font-size: 11px; color: #94A3B8; font-family: monospace; }
+    .pay-value { font-size: 18px; font-weight: 900; color: #FFD700; font-family: monospace; }
+
+    /* SETTINGS STYLES */
+    .setting-item {
+      background: #141414;
+      border: 1px solid #282828;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+    .setting-label { font-size: 13px; font-weight: 700; color: #FFF; margin-bottom: 4px; }
+    .setting-sub { font-size: 11px; color: #777; line-height: 1.4; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Removal of Night Differential Feature</h1>
+    <p class="subtitle">
+      Comparing current behavior with the proposed streamlined overtime calculation.
+      With Night Differential removed, all hours (regardless of time of day) are paid directly based on your standard rate and category multiplier.
+    </p>
+    <div class="badge-bar">
+      <span class="pill pill-remove">❌ Night Diff (+20% / 10PM-6AM) Removed</span>
+      <span class="pill pill-keep">✅ Pure Category Multipliers (1.25x / 1.30x / 1.69x / 2.0x)</span>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('dialog')">1. Log OT Dialog</button>
+    <button class="tab-btn" onclick="switchTab('cards')">2. Shift Cards (Calendar & DTR)</button>
+    <button class="tab-btn" onclick="switchTab('settings')">3. Settings Tab</button>
+  </div>
+
+  <!-- TAB 1: LOG OT DIALOG -->
+  <div id="tab-dialog" class="view-section active">
+    <!-- BEFORE -->
+    <div class="device-column">
+      <div class="column-title title-before">
+        <span>CURRENT (With Night Diff)</span>
+        <span>v1.5.6</span>
+      </div>
+      <div class="phone-frame">
+        <div class="dialog-sheet">
+          <div class="dialog-header">
+            <span>LOG OVERTIME</span>
+            <span class="chip-date">Oct 20, 2026</span>
+          </div>
+
+          <div class="time-selector-box">
+            <div>
+              <div class="time-label">Start Time</div>
+              <div class="time-val">08:00 PM</div>
+            </div>
+            <div style="color: #444; align-self: center;">➔</div>
+            <div>
+              <div class="time-label">End Time</div>
+              <div class="time-val">12:00 AM</div>
+            </div>
+          </div>
+
+          <div class="summary-box">
+            <div class="summary-hours-row">
+              <span class="hours-large">4.00 hrs</span>
+              <span class="category-chip">REGULAR ×1.25</span>
+            </div>
+            <div class="payout-hero">₱525.00</div>
+            <div class="formula-row">2.0h Day @ ₱125.00 + 2.0h Night @ ₱150.00</div>
+
+            <!-- PURPLE NIGHT DIFF CARD -->
+            <div class="nsd-card">
+              <div class="nsd-header">
+                <span>🌙 NIGHT SHIFT DIFFERENTIAL (+20%)</span>
+              </div>
+              <div class="nsd-split">
+                <span>Day (8-10 PM): 2.0 hrs</span>
+                <span>Night (10-12 AM): 2.0 hrs</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-save">Save Overtime</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AFTER -->
+    <div class="device-column">
+      <div class="column-title title-after">
+        <span>PROPOSED (Night Diff Removed)</span>
+        <span>Streamlined & Clean</span>
+      </div>
+      <div class="phone-frame">
+        <div class="dialog-sheet">
+          <div class="dialog-header">
+            <span>LOG OVERTIME</span>
+            <span class="chip-date">Oct 20, 2026</span>
+          </div>
+
+          <div class="time-selector-box">
+            <div>
+              <div class="time-label">Start Time</div>
+              <div class="time-val">08:00 PM</div>
+            </div>
+            <div style="color: #444; align-self: center;">➔</div>
+            <div>
+              <div class="time-label">End Time</div>
+              <div class="time-val">12:00 AM</div>
+            </div>
+          </div>
+
+          <div class="summary-box">
+            <div class="summary-hours-row">
+              <span class="hours-large">4.00 hrs</span>
+              <span class="category-chip">REGULAR ×1.25</span>
+            </div>
+            <div class="payout-hero">₱500.00</div>
+            <div class="formula-row">₱100.00/hr × 1.25 × 4.0 hrs = ₱500.00</div>
+
+            <!-- CLEAN CALLOUT -->
+            <div class="clean-callout">
+              <span>⚡ Direct calculation: 100% based on hourly rate & OT multiplier.</span>
+            </div>
+          </div>
+
+          <div class="btn-save">Save Overtime</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: SHIFT CARDS -->
+  <div id="tab-cards" class="view-section">
+    <!-- BEFORE -->
+    <div class="device-column">
+      <div class="column-title title-before">
+        <span>CURRENT (With Night Diff)</span>
+      </div>
+      <div class="phone-frame">
+        <div class="record-card">
+          <div class="record-top">
+            <span class="date-label">Tue, Oct 20</span>
+            <span class="badge-nsd">REGULAR +NSD</span>
+          </div>
+          <div class="record-time">08:00 PM – 12:00 AM</div>
+          <div class="record-bottom">
+            <div>
+              <div style="font-weight: 700; color: #FFF; font-size: 13px;">4.0 hrs</div>
+              <div class="hours-sub">(2.0h Day + 2.0h Night)</div>
+            </div>
+            <div class="pay-value">₱525.00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AFTER -->
+    <div class="device-column">
+      <div class="column-title title-after">
+        <span>PROPOSED (Without Night Diff)</span>
+      </div>
+      <div class="phone-frame">
+        <div class="record-card">
+          <div class="record-top">
+            <span class="date-label">Tue, Oct 20</span>
+            <span class="badge-clean">REGULAR WORKDAY ×1.25</span>
+          </div>
+          <div class="record-time">08:00 PM – 12:00 AM</div>
+          <div class="record-bottom">
+            <div>
+              <div style="font-weight: 700; color: #FFF; font-size: 13px;">4.0 hrs</div>
+              <div class="hours-sub">Rate: ₱125.00/hr</div>
+            </div>
+            <div class="pay-value">₱500.00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: SETTINGS TAB -->
+  <div id="tab-settings" class="view-section">
+    <!-- BEFORE -->
+    <div class="device-column">
+      <div class="column-title title-before">
+        <span>CURRENT SETTINGS (Has Night Diff Section)</span>
+      </div>
+      <div class="phone-frame">
+        <div class="setting-item">
+          <div class="setting-label">Base Hourly Rate</div>
+          <div class="setting-sub">₱100.00 / hour</div>
+        </div>
+        <div class="setting-item" style="border: 1px solid #4338CA; background: #181528;">
+          <div class="setting-label" style="color: #A5B4FC;">Night Shift Differential</div>
+          <div class="setting-sub">Applies +20% between 10:00 PM and 6:00 AM</div>
+        </div>
+        <div class="setting-item">
+          <div class="setting-label">Cutoff Schedule</div>
+          <div class="setting-sub">Semi-Monthly (15th & End of month)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AFTER -->
+    <div class="device-column">
+      <div class="column-title title-after">
+        <span>PROPOSED SETTINGS (Clean & Streamlined)</span>
+      </div>
+      <div class="phone-frame">
+        <div class="setting-item">
+          <div class="setting-label">Base Hourly Rate</div>
+          <div class="setting-sub">₱100.00 / hour</div>
+        </div>
+        <div class="setting-item">
+          <div class="setting-label">Cutoff Schedule</div>
+          <div class="setting-sub">Semi-Monthly (15th & End of month)</div>
+        </div>
+        <div class="setting-item">
+          <div class="setting-label">Target OT Hours</div>
+          <div class="setting-sub">30.0 hrs per cutoff</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+      
+      const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+      if (activeBtn) activeBtn.classList.add('active');
+      
+      const activeSection = document.getElementById('tab-' + tabId);
+      if (activeSection) activeSection.classList.add('active');
+    }
+  </script>
+</body>
+</html>

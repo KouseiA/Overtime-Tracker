@@ -40,13 +40,12 @@ Writing down overtime on scratch paper or trying to do the math in your head oft
 
 The app automatically computes your pay using standard Philippine labor rules:
 
-| Day Type | Rate | With Night Differential (10 PM – 6 AM) |
-|---|:---:|:---:|
-| **Regular Workday** | **125%** (`× 1.25`) | **150%** (`× 1.50`) |
-| **Rest Day** | **169%** (`× 1.69`) | **202.8%** (`× 2.028`) |
-| **Special Non-Working Holiday** | **130%** (`× 1.30`) | **156%** (`× 1.56`) |
-| **Regular Holiday** | **200%** (Double Pay) | **240%** (`× 2.40`) |
-| **Night Shift Differential** | **+20%** standard | Automatically applied between 10:00 PM and 6:00 AM |
+| Day Type | Rate Multiplier | Description |
+|---|:---:|---|
+| **Regular Workday** | **125%** (`× 1.25`) | Standard overtime rate |
+| **Rest Day** | **169%** (`× 1.69`) | Work rendered on scheduled rest day |
+| **Special Non-Working Holiday** | **130%** (`× 1.30`) | Special holiday premium |
+| **Regular Holiday** | **200%** (`× 2.00`) | Regular holiday double pay |
 
 ---
 

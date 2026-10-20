@@ -52,73 +52,33 @@ data class OvertimeRecord(
     val endTimeMillis: Long,
     val hourlyRate: Double = 93.75, // Default warehouse OT rate
     val overtimeType: String = OvertimeType.REGULAR, // DOLE OT category
-    val notes: String = "",
-    val nightDiffRate: Double = 0.20 // Night Shift Differential rate (default +20%)
+    val notes: String = ""
 ) {
     // Legacy compatibility alias
     val isHoliday: Boolean = overtimeType != OvertimeType.REGULAR
 
     val durationMinutes: Long = maxOf(0L, (endTimeMillis - startTimeMillis) / (1000 * 60))
 
-    // Rounded DOWN to the nearest 0.5 increment (e.g. 35m → 0.5, 3h35m → 3.5)
-    val durationHours: Double = kotlin.math.floor(durationMinutes / 30.0).toInt() * 0.5
+    // Rounded DOWN to whole 1-hour increments only (e.g. 1h 30m → 1.0, 35m → 0.0)
+    val durationHours: Double = (durationMinutes / 60).toDouble()
 
-    // Splitting 30-min increments between Day OT (06:00 - 22:00) and Night OT (22:00 - 06:00)
-    // Cached once per record instance: eliminates repeated Calendar allocations during list scroll
-    private val otSplit: Pair<Double, Double> by lazy(LazyThreadSafetyMode.NONE) {
-        computeOtSplit()
-    }
-
-    private fun computeOtSplit(): Pair<Double, Double> {
-        val totalBlocks = (durationMinutes / 30).toInt()
-        if (totalBlocks <= 0) return Pair(0.0, 0.0)
-
-        var dayBlocks = 0
-        var nightBlocks = 0
-        val cal = java.util.Calendar.getInstance()
-
-        for (i in 0 until totalBlocks) {
-            val midpointMillis = startTimeMillis + (i * 30L + 15L) * 60L * 1000L
-            cal.timeInMillis = midpointMillis
-            val hour = cal.get(java.util.Calendar.HOUR_OF_DAY)
-            if (hour >= 22 || hour < 6) {
-                nightBlocks++
-            } else {
-                dayBlocks++
-            }
-        }
-        return Pair(dayBlocks * 0.5, nightBlocks * 0.5)
-    }
-
-    val dayOtHours: Double get() = otSplit.first
-
-    val nightOtHours: Double get() = otSplit.second
-
-    val hasNightDifferential: Boolean get() = nightOtHours > 0.0
-
-    /** Day rate = base OT rate × category multiplier */
-    val effectiveDayRate: Double = hourlyRate * OvertimeType.multiplierFor(overtimeType)
-
-    /** Backward-compat alias used by widgets and dashboard */
-    val effectiveHourlyRate: Double get() = effectiveDayRate
-
-    /** Night rate = day rate × (1 + NSD%) */
-    val effectiveNightRate: Double = effectiveDayRate * (1.0 + nightDiffRate)
-
-    val dayPay: Double get() = dayOtHours * effectiveDayRate
-
-    val nightPay: Double get() = nightOtHours * effectiveNightRate
-
-    val totalPay: Double get() = dayPay + nightPay
-
-    /** Category multiplier for display (e.g., "×1.30") */
+    /** Category multiplier for display (e.g., 1.25, 1.30, 2.00) */
     val categoryMultiplier: Double = OvertimeType.multiplierFor(overtimeType)
 
     /** Formatted category label */
     val categoryLabel: String = OvertimeType.labelFor(overtimeType)
 
+    /** Effective hourly rate = base rate × category multiplier */
+    val effectiveHourlyRate: Double = hourlyRate * categoryMultiplier
+
+    /** Backward-compat alias used by widgets and dashboard */
+    val effectiveDayRate: Double get() = effectiveHourlyRate
+
+    /** Total pay is duration in hours multiplied by effective hourly rate */
+    val totalPay: Double get() = durationHours * effectiveHourlyRate
+
     val formattedFormula: String
-        get() = String.format(Locale.US, "₱%.2f × %.2f = ₱%.2f/hr", effectiveDayRate, 1.0 + nightDiffRate, effectiveNightRate)
+        get() = String.format(Locale.US, "₱%.2f/hr × %.2f = ₱%.2f/hr", hourlyRate, categoryMultiplier, effectiveHourlyRate)
 
     val formattedHoursDecimal: String
         get() = String.format(Locale.US, "%.2f hrs", durationHours)
@@ -154,7 +114,6 @@ data class OvertimeRecord(
             // Legacy field kept for older app versions reading the backup
             put("isHoliday", isHoliday)
             put("notes", notes)
-            put("nightDiffRate", nightDiffRate)
         }
     }
 
@@ -181,8 +140,7 @@ data class OvertimeRecord(
                 endTimeMillis = json.optLong("endTimeMillis", System.currentTimeMillis()),
                 hourlyRate = json.optDouble("hourlyRate", 93.75),
                 overtimeType = overtimeType,
-                notes = json.optString("notes", ""),
-                nightDiffRate = json.optDouble("nightDiffRate", 0.20)
+                notes = json.optString("notes", "")
             )
         }
     }
@@ -209,10 +167,7 @@ data class AppSettings(
     // Weekly: start day of week (Calendar.MONDAY = 2, Calendar.SUNDAY = 1, etc.)
     val cutoffWeeklyStartDay: Int = java.util.Calendar.MONDAY,
     // Target OT Hours per Cutoff (for progress tracking & 2x2 widget circular gauge)
-    val targetOtHours: Double = 30.0,
-    // Night Shift Differential settings (10:00 PM - 6:00 AM)
-    val nightDiffEnabled: Boolean = true,
-    val nightDiffRate: Double = 0.20
+    val targetOtHours: Double = 30.0
 ) {
     fun toJsonObject(): JSONObject {
         return JSONObject().apply {
@@ -229,8 +184,6 @@ data class AppSettings(
             put("cutoffMonthlyEndDay", cutoffMonthlyEndDay)
             put("cutoffWeeklyStartDay", cutoffWeeklyStartDay)
             put("targetOtHours", targetOtHours)
-            put("nightDiffEnabled", nightDiffEnabled)
-            put("nightDiffRate", nightDiffRate)
         }
     }
 
@@ -249,9 +202,7 @@ data class AppSettings(
                 cutoffSecondEndDay = json.optInt("cutoffSecondEndDay", 0),
                 cutoffMonthlyEndDay = json.optInt("cutoffMonthlyEndDay", 0),
                 cutoffWeeklyStartDay = json.optInt("cutoffWeeklyStartDay", java.util.Calendar.MONDAY),
-                targetOtHours = json.optDouble("targetOtHours", 30.0),
-                nightDiffEnabled = json.optBoolean("nightDiffEnabled", true),
-                nightDiffRate = json.optDouble("nightDiffRate", 0.20)
+                targetOtHours = json.optDouble("targetOtHours", 30.0)
             )
         }
     }
