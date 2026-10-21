@@ -1,119 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="4dp"
-    android:paddingTop="4dp"
-    android:paddingEnd="10dp"
-    android:paddingBottom="10dp">
+    android:background="@drawable/widget_terminal_gold_border"
+    android:orientation="vertical"
+    android:paddingStart="16dp"
+    android:paddingTop="14dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="14dp">
 
-    <!-- 1. SOLID BLACK OFFSET SHADOW LAYER -->
-    <RelativeLayout
+    <!-- ── Row 1: Badge + Subtitle ── -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="6dp"
-        android:background="@drawable/widget_shadow_bg" />
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-    <!-- 2. FRONT CARD LAYER (Neo-Brutalist White Card with 2.5dp Black Stroke) -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginEnd="6dp"
-        android:layout_marginBottom="6dp"
-        android:background="@drawable/widget_bg"
-        android:paddingStart="16dp"
-        android:paddingTop="14dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="14dp">
-
-        <!-- Top Header: CURRENT CUTOFF Badge -->
         <TextView
             android:id="@+id/widget_badge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:background="@drawable/widget_badge_bg"
-            android:letterSpacing="0.08"
-            android:paddingStart="10dp"
-            android:paddingTop="4dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="4dp"
+            android:background="@drawable/widget_gold_pill_badge"
+            android:includeFontPadding="false"
+            android:paddingStart="8dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="3dp"
             android:text="CURRENT CUTOFF"
-            android:textColor="@color/widget_badge_text"
+            android:textColor="#0F141C"
             android:textSize="10sp"
             android:textStyle="bold" />
 
-        <!-- Subtitle: Full Month Range & Days Left (e.g. OCTOBER 1 – 15 · 4 DAYS LEFT) -->
         <TextView
-            android:id="@+id/widget_cutoff_title"
-            android:layout_width="match_parent"
+            android:id="@+id/widget_cutoff_subtitle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/widget_badge"
-            android:layout_marginTop="8dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="CUTOFF SUMMARY"
-            android:textColor="@color/widget_text_secondary"
-            android:textSize="13sp"
-            android:textStyle="bold" />
-
-        <!-- Hero Massive Payout Amount in Gold -->
-        <TextView
-            android:id="@+id/widget_total_pay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/widget_cutoff_title"
-            android:layout_marginTop="1dp"
+            android:layout_marginStart="8dp"
             android:ellipsize="end"
             android:includeFontPadding="false"
             android:maxLines="1"
-            android:text="₱0.00"
-            android:textColor="@color/widget_gold"
-            android:textSize="38sp"
+            android:text="OCT 16 – 31 · 10 DAYS LEFT"
+            android:textColor="#CBD5E1"
+            android:textSize="10.5sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- ── Row 2: Hero Payout Readout ── -->
+    <TextView
+        android:id="@+id/widget_total_pay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:text="₱0.00"
+        android:textColor="#FFD700"
+        android:textSize="40sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- ── Row 3: Dynamic Progress Bar ── -->
+    <ImageView
+        android:id="@+id/widget_progress_bar_img"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:contentDescription="Cutoff Progress"
+        android:scaleType="fitXY" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- ── Row 4: Hours Rendered + "+ LOG OT" Button ── -->
+    <RelativeLayout
+        android:id="@+id/widget_bottom_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/widget_hours_rendered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="0.0 hrs rendered"
+            android:textColor="#FFD700"
+            android:textSize="14sp"
             android:textStyle="bold" />
 
-        <!-- Bottom Info & Action Row -->
-        <RelativeLayout
-            android:id="@+id/widget_bottom_row"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/widget_action_btn"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
-
-            <TextView
-                android:id="@+id/widget_hours_rendered"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/widget_action_btn"
-                android:layout_marginEnd="8dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="0.0 Hours Rendered"
-                android:textColor="@color/widget_text_primary"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/widget_action_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/widget_btn_bg"
-                android:letterSpacing="0.06"
-                android:paddingStart="12dp"
-                android:paddingTop="7dp"
-                android:paddingEnd="12dp"
-                android:paddingBottom="7dp"
-                android:text="LOG OT +"
-                android:textColor="#0F172A"
-                android:textSize="11sp"
-                android:textStyle="bold" />
-        </RelativeLayout>
-
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/widget_gold_btn_pill"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:paddingStart="16dp"
+            android:paddingTop="7dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="7dp"
+            android:text="+ LOG OT"
+            android:textColor="#0F141C"
+            android:textSize="12sp"
+            android:textStyle="bold" />
     </RelativeLayout>
-</FrameLayout>
+
+</LinearLayout>

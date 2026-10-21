@@ -6,26 +6,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
-import androidx.glance.appwidget.GlanceAppWidgetManager
-import androidx.glance.appwidget.state.updateAppWidgetState
-import androidx.glance.appwidget.updateAll
 import com.example.ottracker.widget.CompactGaugeWidgetProvider
-import com.example.ottracker.widget.OvertimeGlanceWidget
 import com.example.ottracker.widget.OvertimeGlanceWidgetReceiver
 import org.json.JSONArray
 import org.json.JSONObject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 
 class OvertimeRepository(context: Context) {
     private val appContext = context.applicationContext
     private val prefs: SharedPreferences = context.getSharedPreferences("ot_tracker_prefs", Context.MODE_PRIVATE)
-    private val widgetScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private val _records = MutableStateFlow<List<OvertimeRecord>>(emptyList())
     val records: StateFlow<List<OvertimeRecord>> = _records.asStateFlow()
@@ -99,10 +90,13 @@ class OvertimeRepository(context: Context) {
     }
 
     private fun updateAllWidgets() {
-        // 1. Immediately update RemoteViews widgets (Compact Circular Gauge)
+        // 1. Immediately update 4x2 Cutoff Terminal widget (Concept 1) via RemoteViews
+        OvertimeGlanceWidgetReceiver.updateAllWidgets(appContext)
+
+        // 2. Immediately update 2x2 Compact Circular Gauge widget via RemoteViews
         CompactGaugeWidgetProvider.updateAllWidgets(appContext)
 
-        // 2. Direct Android OS broadcast to wake glance receiver immediately
+        // 3. Send OS broadcast for any external launcher cache invalidation
         try {
             val appWidgetManager = AppWidgetManager.getInstance(appContext)
             if (appWidgetManager != null) {
@@ -117,31 +111,7 @@ class OvertimeRepository(context: Context) {
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to broadcast update to Glance receiver", e)
-        }
-
-        // 3. Update Jetpack Glance widgets with state invalidation to bypass session throttling
-        widgetScope.launch {
-            try {
-                val glanceManager = GlanceAppWidgetManager(appContext)
-                val glanceIds = glanceManager.getGlanceIds(OvertimeGlanceWidget::class.java)
-                val timestamp = System.currentTimeMillis()
-
-                for (glanceId in glanceIds) {
-                    try {
-                        updateAppWidgetState(appContext, glanceId) { prefs ->
-                            prefs[OvertimeGlanceWidget.KEY_UPDATE_TIME] = timestamp
-                        }
-                        OvertimeGlanceWidget().update(appContext, glanceId)
-                    } catch (e: Exception) {
-                        Log.e(TAG, "Failed to update Glance widget instance: $glanceId", e)
-                    }
-                }
-                // Fallback catch-all
-                OvertimeGlanceWidget().updateAll(appContext)
-            } catch (e: Exception) {
-                Log.e(TAG, "Failed updating Glance widgets in scope", e)
-            }
+            Log.e(TAG, "Failed to broadcast update to widget receiver", e)
         }
     }
 

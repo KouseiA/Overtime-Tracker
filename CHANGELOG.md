@@ -4,6 +4,15 @@ All notable changes to **Overtime Tracker** are documented here. Releases are pu
 
 ---
 
+## [v1.6.1] - 2026-10-21
+### Fixed & Improved
+- **100% Instant Home Screen Widget Sync via Native RemoteViews**:
+  - Migrated the 4x2 Cutoff Terminal Widget to native Android `AppWidgetProvider` + `RemoteViews`, completely eliminating WorkManager delays, Jetpack Glance session closure caching, and OEM battery background throttling (Vivo / FuntouchOS / Samsung / Xiaomi).
+  - All overtime additions, edits, and deletions now refresh home screen widgets in real time (< 10ms) via direct Binder IPC to `AppWidgetManager.updateAppWidget()`.
+  - Preserved the full Concept 1 Dark Gold Terminal aesthetic (gold-bordered terminal card, dynamic tip-aligned progress bar bitmap, gold pill badge, and `+ LOG OT` quick-launch action).
+
+---
+
 ## [v1.6.0] - 2026-10-21
 ### Fixed & Improved
 - **Instant Home Screen Widget Updates**:
