@@ -6,6 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.Image
@@ -17,6 +19,7 @@ import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.color.ColorProvider
+import androidx.glance.currentState
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
@@ -28,6 +31,8 @@ import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.width
+import androidx.glance.state.GlanceStateDefinition
+import androidx.glance.state.PreferencesGlanceStateDefinition
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
@@ -43,6 +48,8 @@ import org.json.JSONObject
 import java.util.Locale
 
 class OvertimeGlanceWidget : GlanceAppWidget() {
+
+    override val stateDefinition: GlanceStateDefinition<*> = PreferencesGlanceStateDefinition
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         // Read data from SharedPreferences (lightweight, no Room dependency)
@@ -104,6 +111,10 @@ class OvertimeGlanceWidget : GlanceAppWidget() {
         )
 
         provideContent {
+            // Subscribe Composable to Glance Preferences state updates
+            val prefsState = currentState<Preferences>()
+            prefsState[KEY_UPDATE_TIME]
+
             OvertimeWidgetContent(
                 cutoffTag = cutoffTitle,
                 cutoffSubtitle = cutoffSubtitle,
@@ -118,6 +129,7 @@ class OvertimeGlanceWidget : GlanceAppWidget() {
         private const val PREFS_NAME = "ot_tracker_prefs"
         private const val KEY_RECORDS = "records_json"
         private const val KEY_SETTINGS = "settings_json"
+        val KEY_UPDATE_TIME = longPreferencesKey("widget_update_timestamp")
     }
 }
 

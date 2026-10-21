@@ -4,6 +4,16 @@ All notable changes to **Overtime Tracker** are documented here. Releases are pu
 
 ---
 
+## [v1.6.0] - 2026-10-21
+### Fixed & Improved
+- **Instant Home Screen Widget Updates**:
+  - Fixed an issue where adding and quickly deleting or editing overtime shifts left widgets showing stale values.
+  - Implemented Jetpack Glance state definition (`PreferencesGlanceStateDefinition`) with active timestamp mutation to bypass Glance's internal 45-second session lock and force immediate recomposition.
+  - Upgraded repository SharedPreferences commits from asynchronous `.apply()` to synchronous `.commit()`, guaranteeing disk persistence before widget refresh triggers.
+  - Added OS broadcast dispatch via `AppWidgetManager.ACTION_APPWIDGET_UPDATE` to ensure launcher RemoteViews update without delay.
+
+---
+
 ## [v1.5.9] - 2026-10-21
 ### Restored & Improved
 - **Full Computation of All Overtime Hours (Including Leftover .50)**:

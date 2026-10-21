@@ -1,10 +1,19 @@
 package com.example.ottracker.data
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.util.Log
+import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.glance.appwidget.state.updateAppWidgetState
+import androidx.glance.appwidget.updateAll
 import com.example.ottracker.widget.CompactGaugeWidgetProvider
 import com.example.ottracker.widget.OvertimeGlanceWidget
-import androidx.glance.appwidget.updateAll
+import com.example.ottracker.widget.OvertimeGlanceWidgetReceiver
+import org.json.JSONArray
+import org.json.JSONObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -12,8 +21,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.json.JSONArray
-import org.json.JSONObject
 
 class OvertimeRepository(context: Context) {
     private val appContext = context.applicationContext
@@ -42,7 +49,7 @@ class OvertimeRepository(context: Context) {
 
     fun updateSettings(newSettings: AppSettings) {
         _settings.value = newSettings
-        prefs.edit().putString(KEY_SETTINGS, newSettings.toJsonObject().toString()).apply()
+        prefs.edit().putString(KEY_SETTINGS, newSettings.toJsonObject().toString()).commit()
         updateAllWidgets()
     }
 
@@ -87,17 +94,54 @@ class OvertimeRepository(context: Context) {
         _records.value = list
         val array = JSONArray()
         list.forEach { array.put(it.toJsonObject()) }
-        prefs.edit().putString(KEY_RECORDS, array.toString()).apply()
+        prefs.edit().putString(KEY_RECORDS, array.toString()).commit()
         updateAllWidgets()
     }
 
     private fun updateAllWidgets() {
+        // 1. Immediately update RemoteViews widgets (Compact Circular Gauge)
         CompactGaugeWidgetProvider.updateAllWidgets(appContext)
-        // Update Glance widget via coroutines (required by Glance API)
+
+        // 2. Direct Android OS broadcast to wake glance receiver immediately
+        try {
+            val appWidgetManager = AppWidgetManager.getInstance(appContext)
+            if (appWidgetManager != null) {
+                val glanceComponent = ComponentName(appContext, OvertimeGlanceWidgetReceiver::class.java)
+                val glanceIds = appWidgetManager.getAppWidgetIds(glanceComponent)
+                if (glanceIds != null && glanceIds.isNotEmpty()) {
+                    val updateIntent = Intent(appContext, OvertimeGlanceWidgetReceiver::class.java).apply {
+                        action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+                        putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, glanceIds)
+                    }
+                    appContext.sendBroadcast(updateIntent)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to broadcast update to Glance receiver", e)
+        }
+
+        // 3. Update Jetpack Glance widgets with state invalidation to bypass session throttling
         widgetScope.launch {
             try {
+                val glanceManager = GlanceAppWidgetManager(appContext)
+                val glanceIds = glanceManager.getGlanceIds(OvertimeGlanceWidget::class.java)
+                val timestamp = System.currentTimeMillis()
+
+                for (glanceId in glanceIds) {
+                    try {
+                        updateAppWidgetState(appContext, glanceId) { prefs ->
+                            prefs[OvertimeGlanceWidget.KEY_UPDATE_TIME] = timestamp
+                        }
+                        OvertimeGlanceWidget().update(appContext, glanceId)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Failed to update Glance widget instance: $glanceId", e)
+                    }
+                }
+                // Fallback catch-all
                 OvertimeGlanceWidget().updateAll(appContext)
-            } catch (_: Exception) {}
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed updating Glance widgets in scope", e)
+            }
         }
     }
 
@@ -161,6 +205,7 @@ class OvertimeRepository(context: Context) {
     }
 
     companion object {
+        private const val TAG = "OvertimeRepository"
         private const val KEY_RECORDS = "records_json"
         private const val KEY_SETTINGS = "settings_json"
         private const val KEY_ONBOARDING_COMPLETE = "onboarding_complete"
