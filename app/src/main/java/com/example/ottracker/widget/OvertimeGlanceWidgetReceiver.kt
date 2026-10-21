@@ -138,7 +138,7 @@ class OvertimeGlanceWidgetReceiver : AppWidgetProvider() {
                     }
                     val pendingIntent = PendingIntent.getActivity(
                         context,
-                        0,
+                        appWidgetId,
                         launchIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                     )

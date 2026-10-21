@@ -4,6 +4,14 @@ All notable changes to **Overtime Tracker** are documented here. Releases are pu
 
 ---
 
+## [v1.6.2] - 2026-10-21
+### Fixed
+- **4x2 Cutoff Widget Inflation & Instant Updates**:
+  - Fixed an `InflateException` in launcher `RemoteViews` caused by disallowed generic `<View>` spacers in `widget_overtime_cutoff.xml`. Replaced with RemoteViews-compliant `<FrameLayout>` elements to ensure clean, error-free inflation on all launchers.
+  - Assigned distinct `appWidgetId` request codes to widget `PendingIntent`s to avoid intent collision across multiple widget sizes.
+
+---
+
 ## [v1.6.1] - 2026-10-21
 ### Fixed & Improved
 - **100% Instant Home Screen Widget Sync via Native RemoteViews**:

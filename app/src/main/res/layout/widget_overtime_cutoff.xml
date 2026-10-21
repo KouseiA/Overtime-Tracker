@@ -12,6 +12,7 @@
 
     <!-- ── Row 1: Badge + Subtitle ── -->
     <LinearLayout
+        android:id="@+id/widget_top_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -46,7 +47,7 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <View
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
@@ -61,10 +62,10 @@
         android:maxLines="1"
         android:text="₱0.00"
         android:textColor="#FFD700"
-        android:textSize="40sp"
+        android:textSize="38sp"
         android:textStyle="bold" />
 
-    <View
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
@@ -77,7 +78,7 @@
         android:contentDescription="Cutoff Progress"
         android:scaleType="fitXY" />
 
-    <View
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
